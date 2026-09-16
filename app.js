@@ -124,6 +124,9 @@ const el = {
   lernmodusCloseBtn: document.getElementById("lernmodus-close"),
   lernmodusPrevBtn: document.getElementById("lernmodus-prev"),
   lernmodusNextBtn: document.getElementById("lernmodus-next"),
+  panelBildnachweise: document.getElementById("bildnachweise"),
+  bildnachweiseListe: document.getElementById("bildnachweise-liste"),
+  bildnachweiseLink: document.getElementById("bildnachweise-link"),
 };
 
 // ---------------------------------------------------------------------------
@@ -350,6 +353,7 @@ function setzeModus(neuerModus) {
   el.panelUebung.classList.toggle("hidden", !["karte-name", "foto-name", "freitext"].includes(neuerModus));
   el.panelFortschritt.classList.toggle("hidden", neuerModus !== "fortschritt");
   el.panelLernmodus.classList.toggle("hidden", neuerModus !== "lernmodus");
+  el.panelBildnachweise.classList.toggle("hidden", neuerModus !== "bildnachweise");
 
   if (neuerModus === "uebersicht") {
     renderUebersichtsKarte();
@@ -357,6 +361,8 @@ function setzeModus(neuerModus) {
     renderFortschritt();
   } else if (neuerModus === "lernmodus") {
     starteLernmodus();
+  } else if (neuerModus === "bildnachweise") {
+    renderBildnachweise();
   } else {
     state.sessionRichtig = 0;
     state.sessionGesamt = 0;
@@ -584,6 +590,28 @@ function fortschrittZuruecksetzen() {
 }
 
 // ---------------------------------------------------------------------------
+// Bildnachweise (Attribution für CC-lizenzierte Fotos, siehe bildQuelle in
+// data.js). Begriffe ohne bildQuelle (Platzhalterbilder) werden ausgelassen.
+// ---------------------------------------------------------------------------
+function renderBildnachweise() {
+  el.bildnachweiseListe.innerHTML = "";
+  BEGRIFFE.filter((b) => b.bildQuelle).forEach((b) => {
+    const q = b.bildQuelle;
+    const li = document.createElement("li");
+    li.className = "bildnachweise-zeile";
+    const lizenzTeil = q.lizenzUrl
+      ? `<a href="${q.lizenzUrl}" target="_blank" rel="noopener">${q.lizenz}</a>`
+      : q.lizenz;
+    li.innerHTML = `
+      <span class="begriff-name">${b.name}</span>:
+      Foto von ${q.urheber}, Lizenz ${lizenzTeil}
+      (<a href="${q.quelle}" target="_blank" rel="noopener">Quelle</a>)
+    `;
+    el.bildnachweiseListe.appendChild(li);
+  });
+}
+
+// ---------------------------------------------------------------------------
 // Lernmodus: Slideshow mit Ort, Foto, Region und Karte
 // ---------------------------------------------------------------------------
 function zeigeAktuelleLernmodusSeite() {
@@ -669,6 +697,8 @@ el.lernmodusNextBtn.addEventListener("click", () => {
     zeigeAktuelleLernmodusSeite();
   }
 });
+
+el.bildnachweiseLink.addEventListener("click", () => setzeModus("bildnachweise"));
 
 // ---------------------------------------------------------------------------
 // Start

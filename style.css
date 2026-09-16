@@ -335,6 +335,40 @@ body {
   font-size: 0.85rem;
   padding: 1rem;
 }
+.footer-link-btn {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.3rem;
+}
+.footer-link-btn:hover { color: #666; }
+
+/* --- Bildnachweise --- */
+.bildnachweise-hinweis {
+  color: #666;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+.bildnachweise-liste {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.bildnachweise-zeile {
+  padding: 0.6rem 0.8rem;
+  background: #f9f9f9;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+.bildnachweise-zeile .begriff-name { font-weight: bold; }
+.bildnachweise-zeile a { color: #219ebc; }
 
 /* --- Lernmodus --- */
 .lernmodus-kopf {
