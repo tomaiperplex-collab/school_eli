@@ -336,6 +336,79 @@ body {
   padding: 1rem;
 }
 
+/* --- Lernmodus --- */
+.lernmodus-kopf {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+.lernmodus-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s ease;
+}
+.lernmodus-close-btn:hover { background: #eee; }
+
+.lernmodus-inhalt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.lernmodus-foto-bereich {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: var(--radius);
+}
+#lernmodus-foto {
+  max-width: 100%;
+  max-height: 250px;
+  border-radius: var(--radius);
+  margin-bottom: 0.8rem;
+  object-fit: cover;
+}
+#lernmodus-name {
+  margin: 0.5rem 0 0;
+  font-size: 1.3rem;
+}
+#lernmodus-region {
+  margin: 0.3rem 0 0;
+  font-size: 0.95rem;
+  color: #666;
+  font-style: italic;
+}
+.leaflet-lernmodus-karte {
+  width: 100%;
+  height: 350px;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.lernmodus-controls {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+}
+.lernmodus-controls .big-btn {
+  flex: 1;
+  max-width: 200px;
+}
+
 /* --- Mobile --- */
 @media (max-width: 600px) {
   body { font-size: 16px; }
@@ -348,4 +421,11 @@ body {
   .leaflet-mini-karte { height: 100px; }
   #foto-frage-bild { max-height: 240px; }
   .mode-btn { padding: 0.8rem 1.1rem; font-size: 0.95rem; }
+
+  .lernmodus-inhalt {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+  #lernmodus-foto { max-height: 200px; }
+  .leaflet-lernmodus-karte { height: 250px; }
 }
