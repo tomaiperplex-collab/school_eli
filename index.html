@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Kanton Bern lernen</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="app-header">
+  <h1>🏔️ Kanton Bern entdecken</h1>
+  <p class="subtitle">Übe Orte, Berge, Seen und Flüsse für die NMG-Prüfung</p>
+</header>
+
+<nav class="mode-bar" id="mode-bar">
+  <button class="mode-btn" data-mode="uebersicht">🗺️ Karte ansehen</button>
+  <button class="mode-btn" data-mode="karte-name">📍 Karte → Name</button>
+  <button class="mode-btn" data-mode="foto-name">📷 Foto → Name</button>
+  <button class="mode-btn" data-mode="freitext">⌨️ Freitext</button>
+  <button class="mode-btn" data-mode="fortschritt">📊 Fortschritt</button>
+</nav>
+
+<section class="filter-bar" id="filter-bar" aria-label="Kategorie-Filter">
+  <span class="filter-label">Kategorien:</span>
+  <label class="filter-chip filter-orte">
+    <input type="checkbox" data-kategorie="orte" checked /> Orte
+  </label>
+  <label class="filter-chip filter-berge">
+    <input type="checkbox" data-kategorie="berge" checked /> Berge
+  </label>
+  <label class="filter-chip filter-seen">
+    <input type="checkbox" data-kategorie="seen" checked /> Seen
+  </label>
+  <label class="filter-chip filter-fluesse">
+    <input type="checkbox" data-kategorie="fluesse" checked /> Flüsse
+  </label>
+</section>
+
+<main id="app-main">
+
+  <!-- Kartenansicht (immer sichtbare Übersichtskarte + Legende) -->
+  <section id="karten-uebersicht" class="panel">
+    <h2>Karte des Kantons Bern</h2>
+    <div class="karte-wrapper">
+      <svg id="karte-svg" viewBox="0 0 1000 700" role="img" aria-label="Karte Kanton Bern">
+        <!--
+          PLATZHALTER-POLYGON für den Umriss des Kantons Bern.
+          -> Ersetze die "points"-Liste unten mit echten Umriss-Koordinaten
+             (z.B. aus einer GeoJSON-Datei, in die gleiche Projektion
+             umgerechnet wie in data.js / KARTE_BOUNDS, oder direkt als
+             SVG-Pfad). Die Punkte der Begriffe (aus data.js) werden separat
+             per JavaScript über dieses Polygon gelegt.
+        -->
+        <polygon id="kanton-umriss"
+          points="180,80 420,40 620,90 780,180 900,260 860,420 760,560 600,640 420,660 260,600 140,480 100,320 130,180"
+          fill="#eef6e9" stroke="#5a8f4a" stroke-width="4" />
+        <g id="punkte-gruppe"><!-- Punkte werden von app.js eingefügt --></g>
+      </svg>
+      <p class="karte-hinweis">
+        Platzhalter-Umriss – die echte Form des Kantons Bern trägst du in
+        <code>index.html</code> (Element <code>#kanton-umriss</code>) und die
+        echten Koordinaten in <code>data.js</code> ein.
+      </p>
+    </div>
+    <ul id="legende" class="legende"></ul>
+  </section>
+
+  <!-- Übungsbereich: hier läuft Karte→Name, Foto→Name und Freitext -->
+  <section id="uebung" class="panel hidden">
+    <div class="uebung-kopf">
+      <span id="frage-zaehler"></span>
+      <span id="punktestand"></span>
+    </div>
+
+    <div id="frage-bereich">
+      <div id="foto-frage-bild-wrapper" class="hidden">
+        <img id="foto-frage-bild" alt="Zu erratendes Foto" />
+        <div class="mini-karte-wrapper">
+          <svg id="mini-karte-svg" viewBox="0 0 1000 700" role="img" aria-label="Mini-Karte mit markiertem Ort">
+            <use href="#kanton-umriss-mini" />
+          </svg>
+        </div>
+      </div>
+
+      <div id="karte-frage-bereich" class="hidden">
+        <p class="frage-hinweis-text">Welcher Begriff ist markiert?</p>
+        <svg id="quiz-karte-svg" viewBox="0 0 1000 700" role="img" aria-label="Karte mit markiertem Punkt">
+          <use href="#kanton-umriss-mini" />
+          <g id="quiz-punkte-gruppe"></g>
+        </svg>
+      </div>
+    </div>
+
+    <div id="multiple-choice" class="mc-grid hidden"></div>
+
+    <form id="freitext-form" class="hidden">
+      <input type="text" id="freitext-input" placeholder="Antwort eintippen…" autocomplete="off" />
+      <button type="submit" class="big-btn">Prüfen</button>
+    </form>
+
+    <p id="feedback" class="feedback" aria-live="polite"></p>
+
+    <button id="weiter-btn" class="big-btn hidden">Weiter →</button>
+  </section>
+
+  <!-- Fortschrittsanzeige -->
+  <section id="fortschritt" class="panel hidden">
+    <h2>📊 Dein Fortschritt</h2>
+    <div id="fortschritt-liste"></div>
+    <p class="gesamt-punkte">Gesamtpunkte: <span id="gesamt-punkte">0</span></p>
+    <button id="reset-btn" class="big-btn warnung">Fortschritt zurücksetzen</button>
+  </section>
+
+</main>
+
+<!-- Verstecktes Original-Polygon zur Wiederverwendung in der Mini-Karte -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <polygon id="kanton-umriss-mini"
+      points="180,80 420,40 620,90 780,180 900,260 860,420 760,560 600,640 420,660 260,600 140,480 100,320 130,180"
+      fill="#eef6e9" stroke="#5a8f4a" stroke-width="4" />
+  </defs>
+</svg>
+
+<footer class="app-footer">
+  <p>Erstellt zur NMG-Prüfungsvorbereitung · läuft komplett lokal im Browser</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
