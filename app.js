@@ -47,13 +47,29 @@ const state = {
 };
 
 // ---------------------------------------------------------------------------
-// Geo-Projektion: lat/lon -> x/y im SVG viewBox (0..1000 / 0..700)
+// Kartenkacheln (Leaflet): OpenStreetMap als Standard, swisstopo als
+// Alternative über den Ebenen-Schalter auf der Übersichtskarte. Beide
+// Dienste sind kostenlos nutzbar, benötigen aber eine Internetverbindung
+// zur Laufzeit (die Kacheln werden nicht mitgeliefert/offline gecacht).
 // ---------------------------------------------------------------------------
-function projiziere(lat, lon) {
-  const x = ((lon - KARTE_BOUNDS.lonMin) / (KARTE_BOUNDS.lonMax - KARTE_BOUNDS.lonMin)) * 1000;
-  const y = (1 - (lat - KARTE_BOUNDS.latMin) / (KARTE_BOUNDS.latMax - KARTE_BOUNDS.latMin)) * 700;
-  return { x, y };
+function erzeugeOsmLayer() {
+  return L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende',
+    maxZoom: 19,
+  });
 }
+
+function erzeugeSwisstopoLayer() {
+  return L.tileLayer(
+    "https://wmts20.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
+    { attribution: "&copy; swisstopo", maxZoom: 18 }
+  );
+}
+
+const KANTON_BOUNDS_LATLNG = L.latLngBounds(
+  [KARTE_BOUNDS.latMin, KARTE_BOUNDS.lonMin],
+  [KARTE_BOUNDS.latMax, KARTE_BOUNDS.lonMax]
+);
 
 // Kurzer Legenden-Code pro Begriff, z.B. "O1", "B3", "S2", "F4"
 const KATEGORIE_PRAEFIX = { orte: "O", berge: "B", seen: "S", fluesse: "F" };
@@ -79,16 +95,16 @@ const el = {
   panelUebersicht: document.getElementById("karten-uebersicht"),
   panelUebung: document.getElementById("uebung"),
   panelFortschritt: document.getElementById("fortschritt"),
-  punkteGruppe: document.getElementById("punkte-gruppe"),
+  karteLeaflet: document.getElementById("karte-leaflet"),
   legende: document.getElementById("legende"),
   frageZaehler: document.getElementById("frage-zaehler"),
   punktestand: document.getElementById("punktestand"),
   fotoWrapper: document.getElementById("foto-frage-bild-wrapper"),
   fotoBild: document.getElementById("foto-frage-bild"),
   karteFrageBereich: document.getElementById("karte-frage-bereich"),
-  quizPunkteGruppe: document.getElementById("quiz-punkte-gruppe"),
+  quizKarteLeaflet: document.getElementById("quiz-karte-leaflet"),
   miniKarteWrapper: document.querySelector(".mini-karte-wrapper"),
-  miniKarteSvg: document.getElementById("mini-karte-svg"),
+  miniKarteLeaflet: document.getElementById("mini-karte-leaflet"),
   mcGrid: document.getElementById("multiple-choice"),
   freitextForm: document.getElementById("freitext-form"),
   freitextInput: document.getElementById("freitext-input"),
@@ -127,36 +143,91 @@ function normalisiereText(t) {
 }
 
 // ---------------------------------------------------------------------------
+// Leaflet-Kartenverwaltung: alle drei Karten (Übersicht, Karte→Name-Quiz,
+// Foto→Name-Mini-Karte) werden träge (erst bei Bedarf) erzeugt, damit
+// Leaflet die Containergrösse korrekt bestimmen kann (nur bei sichtbarem
+// Container möglich) und keine unnötigen Kacheln geladen werden.
+// ---------------------------------------------------------------------------
+const karten = {
+  uebersicht: null,
+  uebersichtEbenen: null,
+  uebersichtMarker: null,
+  quiz: null,
+  quizMarker: null,
+  mini: null,
+  miniMarker: null,
+};
+
+function holeUebersichtsKarte() {
+  if (karten.uebersicht) return karten.uebersicht;
+
+  const karte = L.map(el.karteLeaflet);
+  const osm = erzeugeOsmLayer().addTo(karte);
+  const swisstopo = erzeugeSwisstopoLayer();
+  L.control.layers({ OpenStreetMap: osm, swisstopo: swisstopo }).addTo(karte);
+  karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
+
+  karten.uebersicht = karte;
+  karten.uebersichtMarker = L.layerGroup().addTo(karte);
+  return karte;
+}
+
+function holeQuizKarte() {
+  if (karten.quiz) return karten.quiz;
+
+  const karte = L.map(el.quizKarteLeaflet, { attributionControl: true });
+  erzeugeOsmLayer().addTo(karte);
+  karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
+
+  karten.quiz = karte;
+  karten.quizMarker = L.layerGroup().addTo(karte);
+  return karte;
+}
+
+function holeMiniKarte() {
+  if (karten.mini) return karten.mini;
+
+  const karte = L.map(el.miniKarteLeaflet, {
+    zoomControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    attributionControl: false,
+  });
+  erzeugeOsmLayer().addTo(karte);
+
+  karten.mini = karte;
+  karten.miniMarker = L.layerGroup().addTo(karte);
+  return karte;
+}
+
+function neuZeichnenNaechstenTick(karte) {
+  window.requestAnimationFrame(() => karte.invalidateSize());
+}
+
+// ---------------------------------------------------------------------------
 // Übersichtskarte rendern (Modus "uebersicht")
 // ---------------------------------------------------------------------------
 function renderUebersichtsKarte() {
-  el.punkteGruppe.innerHTML = "";
+  const karte = holeUebersichtsKarte();
+  karten.uebersichtMarker.clearLayers();
   el.legende.innerHTML = "";
 
   const sichtbar = gefilterteBegriffe();
   const mitKoordinaten = sichtbar.filter(hatKoordinaten);
 
   mitKoordinaten.forEach((b) => {
-    const { x, y } = projiziere(b.lat, b.lon);
     const farbe = KATEGORIEN[b.kategorie].farbe;
-
-    const kreis = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    kreis.setAttribute("cx", x);
-    kreis.setAttribute("cy", y);
-    kreis.setAttribute("r", 16);
-    kreis.setAttribute("fill", farbe);
-    kreis.classList.add("punkt");
-    kreis.setAttribute("data-name", b.name);
-
-    const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
-    label.setAttribute("x", x);
-    label.setAttribute("y", y);
-    label.classList.add("punkt-label");
-    label.setAttribute("font-size", "16");
-    label.textContent = b._code;
-
-    el.punkteGruppe.appendChild(kreis);
-    el.punkteGruppe.appendChild(label);
+    L.circleMarker([b.lat, b.lon], {
+      radius: 14,
+      fillColor: farbe,
+      fillOpacity: 1,
+      color: "#fff",
+      weight: 3,
+    })
+      .bindTooltip(b._code, { permanent: true, direction: "center", className: "punkt-tooltip" })
+      .bindPopup(`<strong>${b.name}</strong><br>${b.kurzfakt || ""}`)
+      .addTo(karten.uebersichtMarker);
   });
 
   if (sichtbar.length && mitKoordinaten.length === 0) {
@@ -180,6 +251,8 @@ function renderUebersichtsKarte() {
         el.legende.appendChild(li);
       });
   });
+
+  neuZeichnenNaechstenTick(karte);
 }
 
 // ---------------------------------------------------------------------------
@@ -276,24 +349,23 @@ function naechsteFrage() {
 
 function zeigeKarteFrage(begriff) {
   el.karteFrageBereich.classList.remove("hidden");
-  el.quizPunkteGruppe.innerHTML = "";
+  const karte = holeQuizKarte();
+  karten.quizMarker.clearLayers();
 
   const sichtbar = gefilterteBegriffe().filter(hatKoordinaten);
   sichtbar.forEach((b) => {
-    const { x, y } = projiziere(b.lat, b.lon);
     const istZiel = b.name === begriff.name;
-
-    const kreis = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    kreis.setAttribute("cx", x);
-    kreis.setAttribute("cy", y);
-    kreis.setAttribute("r", istZiel ? 22 : 12);
-    kreis.setAttribute("fill", istZiel ? "#ffb703" : "#999");
-    kreis.classList.add("punkt");
-    if (istZiel) kreis.classList.add("hervorgehoben");
-    else kreis.classList.add("punkt-blass");
-
-    el.quizPunkteGruppe.appendChild(kreis);
+    L.circleMarker([b.lat, b.lon], {
+      radius: istZiel ? 20 : 10,
+      fillColor: istZiel ? "#ffb703" : "#999",
+      fillOpacity: istZiel ? 1 : 0.6,
+      color: istZiel ? "#222" : "#fff",
+      weight: istZiel ? 4 : 2,
+    }).addTo(karten.quizMarker);
   });
+
+  karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
+  neuZeichnenNaechstenTick(karte);
 }
 
 function zeigeFotoFrage(begriff) {
@@ -304,26 +376,19 @@ function zeigeFotoFrage(begriff) {
     el.fotoBild.alt = "Bild fehlt: " + begriff.bildpfad;
   };
 
-  el.miniKarteWrapper.innerHTML = "";
   if (hatKoordinaten(begriff)) {
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("viewBox", "0 0 1000 700");
-    const umriss = document.getElementById("kanton-umriss-mini").cloneNode(true);
-    umriss.removeAttribute("id");
-    svg.appendChild(umriss);
-
-    const { x, y } = projiziere(begriff.lat, begriff.lon);
-    const kreis = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    kreis.setAttribute("cx", x);
-    kreis.setAttribute("cy", y);
-    kreis.setAttribute("r", 26);
-    kreis.setAttribute("fill", "#ffb703");
-    kreis.setAttribute("stroke", "#222");
-    kreis.setAttribute("stroke-width", "6");
-    svg.appendChild(kreis);
-
-    el.miniKarteWrapper.appendChild(svg);
     el.miniKarteWrapper.classList.remove("hidden");
+    const karte = holeMiniKarte();
+    karten.miniMarker.clearLayers();
+    L.circleMarker([begriff.lat, begriff.lon], {
+      radius: 12,
+      fillColor: "#ffb703",
+      fillOpacity: 1,
+      color: "#222",
+      weight: 3,
+    }).addTo(karten.miniMarker);
+    karte.setView([begriff.lat, begriff.lon], 10);
+    neuZeichnenNaechstenTick(karte);
   } else {
     el.miniKarteWrapper.classList.add("hidden");
   }

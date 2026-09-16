@@ -1,8 +1,15 @@
 # Kanton Bern lernen 🏔️
 
-Kleine, lokal lauffähige Web-App zum Üben von Geografie-Begriffen des Kantons
-Bern (NMG-Prüfungsvorbereitung, 5. Klasse). Reines HTML/CSS/JavaScript, kein
-Framework, kein Backend, kein Internetzugriff nötig.
+Kleine Web-App zum Üben von Geografie-Begriffen des Kantons Bern
+(NMG-Prüfungsvorbereitung, 5. Klasse). Reines HTML/CSS/JavaScript, kein
+Framework, kein Backend.
+
+**Internetzugriff:** Die Kartenansichten laden echte Kartenkacheln von
+OpenStreetMap bzw. swisstopo live über das Internet (siehe Abschnitt
+"Karte: OpenStreetMap / swisstopo" unten) — dafür ist beim Anschauen der
+Karte eine Internetverbindung nötig. Quiz-Logik und Fortschritt
+(`localStorage`) funktionieren weiterhin ohne Internet, sobald die Seite
+einmal geladen ist.
 
 ## Starten
 
@@ -45,26 +52,23 @@ deine eigenen lokalen Dateien.
 4. Ein Begriff erscheint auf der Karte und im Übungsmodus "Karte → Name" erst,
    sobald **beide** Werte (`lat` und `lon`) gesetzt sind.
 
-Die Konstante `KARTE_BOUNDS` (ebenfalls in `data.js`) definiert den
-Kartenausschnitt, auf den die Koordinaten projiziert werden. Die
-Voreinstellung deckt den Kanton Bern grosszügig ab und muss normalerweise
-nicht verändert werden.
+Die Konstante `KARTE_BOUNDS` (ebenfalls in `data.js`) definiert nur noch den
+groben Kartenausschnitt, auf den die Leaflet-Karten beim Start zentriert
+werden (`fitBounds`) — sie muss normalerweise nicht verändert werden.
 
-## Echten Kantons-Umriss eintragen
+## Karte: OpenStreetMap / swisstopo
 
-Aktuell zeigt die Karte ein einfaches Platzhalter-Vieleck. Um die echte Form
-des Kantons Bern zu verwenden:
+Die Kartenansichten nutzen [Leaflet](https://leafletjs.com/) (vendored unter
+`vendor/leaflet/`, BSD-2-Clause) mit echten Kartenkacheln:
 
-1. Öffne `index.html`.
-2. Suche das Element `<polygon id="kanton-umriss" ...>` (Kartenübersicht) und
-   das inhaltsgleiche `<polygon id="kanton-umriss-mini" ...>` (Vorlage für die
-   kleinen Karten in den Übungsmodi).
-3. Ersetze die `points`-Liste durch echte Umriss-Koordinaten, projiziert in
-   dasselbe Koordinatensystem wie die Punkte (0–1000 in x, 0–700 in y — siehe
-   Funktion `projiziere()` in `app.js` bzw. `KARTE_BOUNDS` in `data.js`).
-   Am einfachsten: Kantonsgrenze als GeoJSON besorgen, jeden Punkt mit der
-   gleichen Formel wie in `projiziere()` umrechnen und als `x,y`-Liste
-   einsetzen.
+- **Standard:** OpenStreetMap
+- **Umschaltbar:** swisstopo (Ebenen-Schalter oben rechts auf der
+  Übersichtskarte, dem Quadrate-Symbol)
+
+Beide Dienste sind kostenlos und benötigen keinen API-Key, laden ihre Kacheln
+aber live über das Internet — ohne Internetverbindung bleibt die Kartenfläche
+grau. Die Marker-Positionen kommen direkt aus den `lat`/`lon`-Werten in
+`data.js`, es gibt keine eigene Projektion mehr zu pflegen.
 
 ## Funktionen
 
@@ -89,8 +93,9 @@ des Kantons Bern zu verwenden:
 ```
 index.html      Grundgerüst und alle Ansichten
 style.css       Kindgerechtes, responsives Design
-data.js         Begriffsliste + Kategorie-Farben + Karten-Projektion
-app.js          Gesamte App-Logik (Karte, Quiz-Modi, Fortschritt)
+data.js         Begriffsliste + Kategorie-Farben + Kartenausschnitt
+app.js          Gesamte App-Logik (Leaflet-Karten, Quiz-Modi, Fortschritt)
+vendor/leaflet/ Vendorte Leaflet-Bibliothek (BSD-2-Clause)
 images/
   orte/         Eigene Fotos für Orte (Dateiname siehe data.js)
   berge/        Eigene Fotos für Berge
@@ -98,4 +103,6 @@ images/
   fluesse/      Eigene Fotos für Flüsse
 ```
 
-Kein Build-Schritt, keine Abhängigkeiten, keine Internetverbindung nötig.
+Kein Build-Schritt, keine weiteren Abhängigkeiten. Für die Kartenansichten ist
+eine Internetverbindung nötig (siehe oben), alles andere läuft lokal im
+Browser.
