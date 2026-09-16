@@ -44,6 +44,8 @@ const state = {
   beantwortet: false,
   sessionRichtig: 0,
   sessionGesamt: 0,
+  lernmodusBegriffe: [],
+  lernmodusIndex: 0,
 };
 
 // ---------------------------------------------------------------------------
@@ -113,6 +115,15 @@ const el = {
   fortschrittListe: document.getElementById("fortschritt-liste"),
   gesamtPunkte: document.getElementById("gesamt-punkte"),
   resetBtn: document.getElementById("reset-btn"),
+  panelLernmodus: document.getElementById("lernmodus"),
+  lernmodusKarte: document.getElementById("lernmodus-karte"),
+  lernmodusZaehler: document.getElementById("lernmodus-zaehler"),
+  lernmodusFoto: document.getElementById("lernmodus-foto"),
+  lernmodusName: document.getElementById("lernmodus-name"),
+  lernmodusRegion: document.getElementById("lernmodus-region"),
+  lernmodusCloseBtn: document.getElementById("lernmodus-close"),
+  lernmodusPrevBtn: document.getElementById("lernmodus-prev"),
+  lernmodusNextBtn: document.getElementById("lernmodus-next"),
 };
 
 // ---------------------------------------------------------------------------
@@ -156,6 +167,8 @@ const karten = {
   quizMarker: null,
   mini: null,
   miniMarker: null,
+  lernmodus: null,
+  lernmodusRegion: null,
 };
 
 // Zeichnet die 5 Verwaltungsregionen als eingefärbte Flächen + Namens-Label
@@ -229,6 +242,46 @@ function holeMiniKarte() {
   return karte;
 }
 
+function holeLernmodusKarte() {
+  if (karten.lernmodus) return karten.lernmodus;
+
+  const karte = L.map(el.lernmodusKarte);
+  erzeugeOsmLayer().addTo(karte);
+  karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
+
+  karten.lernmodus = karte;
+  karten.lernmodusRegion = L.layerGroup().addTo(karte);
+  return karte;
+}
+
+// Zeichnet eine Region mit eingefärbter Fläche und Marker für den Ort auf die Karte
+function zeichneRegionMitOrt(region, ort) {
+  karten.lernmodusRegion.clearLayers();
+
+  region.teile.forEach(teil => {
+    L.polygon(teil, {
+      color: region.farbe,
+      weight: 3,
+      fillColor: region.farbe,
+      fillOpacity: 0.3,
+      interactive: false,
+    }).addTo(karten.lernmodusRegion);
+  });
+
+  // Marker für den Ort
+  L.circleMarker([ort.lat, ort.lon], {
+    radius: 12,
+    fillColor: KATEGORIEN[ort.kategorie].farbe,
+    fillOpacity: 1,
+    color: "#fff",
+    weight: 3,
+  }).addTo(karten.lernmodusRegion);
+
+  // Zoom so dass die ganze Region sichtbar ist
+  const regionPoly = L.polygon(region.teile);
+  karten.lernmodus.fitBounds(regionPoly.getBounds(), { padding: [30, 30] });
+}
+
 function neuZeichnenNaechstenTick(karte) {
   window.requestAnimationFrame(() => karte.invalidateSize());
 }
@@ -296,11 +349,14 @@ function setzeModus(neuerModus) {
   el.panelUebersicht.classList.toggle("hidden", neuerModus !== "uebersicht");
   el.panelUebung.classList.toggle("hidden", !["karte-name", "foto-name", "freitext"].includes(neuerModus));
   el.panelFortschritt.classList.toggle("hidden", neuerModus !== "fortschritt");
+  el.panelLernmodus.classList.toggle("hidden", neuerModus !== "lernmodus");
 
   if (neuerModus === "uebersicht") {
     renderUebersichtsKarte();
   } else if (neuerModus === "fortschritt") {
     renderFortschritt();
+  } else if (neuerModus === "lernmodus") {
+    starteLernmodus();
   } else {
     state.sessionRichtig = 0;
     state.sessionGesamt = 0;
@@ -528,6 +584,58 @@ function fortschrittZuruecksetzen() {
 }
 
 // ---------------------------------------------------------------------------
+// Lernmodus: Slideshow mit Ort, Foto, Region und Karte
+// ---------------------------------------------------------------------------
+function zeigeAktuelleLernmodusSeite() {
+  if (!state.lernmodusBegriffe.length) return;
+
+  const ort = state.lernmodusBegriffe[state.lernmodusIndex];
+  const region = REGIONEN.find(r =>
+    r.teile.some(teil => pointInPolygon([ort.lat, ort.lon], teil))
+  ) || REGIONEN[0]; // Fallback zur ersten Region
+
+  const karte = holeLernmodusKarte();
+  zeichneRegionMitOrt(region, ort);
+  neuZeichnenNaechstenTick(karte);
+
+  el.lernmodusFoto.src = ort.bildpfad;
+  el.lernmodusFoto.alt = ort.name;
+  el.lernmodusName.textContent = ort.name;
+  el.lernmodusRegion.textContent = region.name;
+
+  el.lernmodusZaehler.textContent = `${state.lernmodusIndex + 1} / ${state.lernmodusBegriffe.length}`;
+
+  el.lernmodusPrevBtn.disabled = state.lernmodusIndex === 0;
+  el.lernmodusNextBtn.disabled = state.lernmodusIndex === state.lernmodusBegriffe.length - 1;
+}
+
+function pointInPolygon(point, polygon) {
+  const [px, py] = point;
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const [x1, y1] = polygon[i];
+    const [x2, y2] = polygon[j];
+    const intersect = (y1 > py) !== (y2 > py) && px < (x2 - x1) * (py - y1) / (y2 - y1) + x1;
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+function starteLernmodus() {
+  state.lernmodusBegriffe = mischen(gefilterteBegriffe().filter(hatKoordinaten));
+  state.lernmodusIndex = 0;
+  if (!state.lernmodusBegriffe.length) {
+    alert("Keine Orte mit Koordinaten verfügbar. Bitte Filter anpassen.");
+    return;
+  }
+  zeigeAktuelleLernmodusSeite();
+}
+
+function schliesseLernmodus() {
+  setzeModus("uebersicht");
+}
+
+// ---------------------------------------------------------------------------
 // Event-Listener
 // ---------------------------------------------------------------------------
 el.modeBar.addEventListener("click", (ev) => {
@@ -547,6 +655,20 @@ el.filterBar.addEventListener("change", (ev) => {
 
 el.freitextForm.addEventListener("submit", beantworteFreitext);
 el.resetBtn.addEventListener("click", fortschrittZuruecksetzen);
+
+el.lernmodusCloseBtn.addEventListener("click", schliesseLernmodus);
+el.lernmodusPrevBtn.addEventListener("click", () => {
+  if (state.lernmodusIndex > 0) {
+    state.lernmodusIndex--;
+    zeigeAktuelleLernmodusSeite();
+  }
+});
+el.lernmodusNextBtn.addEventListener("click", () => {
+  if (state.lernmodusIndex < state.lernmodusBegriffe.length - 1) {
+    state.lernmodusIndex++;
+    zeigeAktuelleLernmodusSeite();
+  }
+});
 
 // ---------------------------------------------------------------------------
 // Start

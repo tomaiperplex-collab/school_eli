@@ -19,6 +19,7 @@
 
 <nav class="mode-bar" id="mode-bar">
   <button class="mode-btn" data-mode="uebersicht">🗺️ Karte ansehen</button>
+  <button class="mode-btn" data-mode="lernmodus">📚 Lernmodus</button>
   <button class="mode-btn" data-mode="karte-name">📍 Karte → Name</button>
   <button class="mode-btn" data-mode="foto-name">📷 Foto → Name</button>
   <button class="mode-btn" data-mode="freitext">⌨️ Freitext</button>
@@ -96,6 +97,29 @@
     <p id="feedback" class="feedback" aria-live="polite"></p>
 
     <button id="weiter-btn" class="big-btn hidden">Weiter →</button>
+  </section>
+
+  <!-- Lernmodus: Slideshow mit Ort, Foto, Region und Karte -->
+  <section id="lernmodus" class="panel hidden">
+    <div class="lernmodus-kopf">
+      <span id="lernmodus-zaehler"></span>
+      <button id="lernmodus-close" class="lernmodus-close-btn">✕</button>
+    </div>
+
+    <div class="lernmodus-inhalt">
+      <div class="lernmodus-foto-bereich">
+        <img id="lernmodus-foto" alt="Ort-Foto" />
+        <h3 id="lernmodus-name"></h3>
+        <p id="lernmodus-region"></p>
+      </div>
+
+      <div id="lernmodus-karte" class="leaflet-lernmodus-karte" role="img" aria-label="Karte mit Region"></div>
+    </div>
+
+    <div class="lernmodus-controls">
+      <button id="lernmodus-prev" class="big-btn">← Zurück</button>
+      <button id="lernmodus-next" class="big-btn">Weiter →</button>
+    </div>
   </section>
 
   <!-- Fortschrittsanzeige -->
