@@ -49,6 +49,68 @@ const KARTE_BOUNDS = {
 };
 
 // ---------------------------------------------------------------------------
+// Die 5 Verwaltungsregionen des Kantons Bern (seit 2010): Seeland,
+// Berner Jura, Bern-Mittelland, Emmental-Oberaargau, Oberland.
+//
+// HERKUNFT & GENAUIGKEIT: Die äusseren Ränder stammen vom echten,
+// generalisierten Kantons-Umriss (dieselbe swisstopo-swissBOUNDARIES3D-Quelle
+// wie die Begriffs-Koordinaten, via github.com/severinlandolt/map-switzerland).
+// Die inneren Grenzen zwischen den Regionen sind aber KEINE offiziellen
+// Verwaltungsgrenzen, sondern grob angenäherte Trennlinien (einfache
+// Breiten-/Längengrad-Schnitte), so gewählt, dass alle 37 Begriffe aus
+// BEGRIFFE in der jeweils richtigen Region landen. Für den NMG-Unterricht
+// (grobe Orientierung: "in welcher Ecke des Kantons liegt das?") reicht das;
+// für exakte Gemeindezuordnungen an den Rändern nicht.
+// -> Bessere Daten? Ersetze die Koordinatenlisten unten durch echte
+//    Verwaltungskreis-Polygone (opendata.swiss: "Verwaltungsregionen,
+//    Verwaltungskreise und Amtsbezirke"), gruppiert zu den 5 Regionen.
+// ---------------------------------------------------------------------------
+const REGIONEN = [
+  {
+    name: "Seeland",
+    farbe: "#4fb8b0",
+    // zwei Teilflächen (die Region ist an dieser Kante nicht konvex)
+    teile: [
+      [[46.9791,7.1],[47.0076,7.2184],[46.9105,7.2087],[46.8883,7.35],[46.8796,7.35],[46.85,7.3337],[46.85,7.35],[47.2131,7.35],[47.2189,7.3414],[47.2216,7.35],[47.3037,7.35],[47.2917,7.3179],[47.2959,7.1697],[47.2552,7.1501],[47.2491,7.1]],
+      [[46.9812,7.0411],[46.9775,7.0932],[46.9791,7.1],[47.08,7.1],[47.08,7.0653],[47.0324,7.0348],[46.9812,7.0411]],
+    ],
+    label: [47.1094, 7.2366],
+  },
+  {
+    name: "Berner Jura",
+    farbe: "#a98ed6",
+    teile: [
+      [[47.08,7.1],[47.2491,7.1],[47.2446,7.0625],[47.1971,7.0243],[47.167,6.8624],[47.1105,6.9275],[47.1188,6.99],[47.0976,7.0766],[47.08,7.0653]],
+    ],
+    label: [47.1586, 7.0164],
+  },
+  {
+    name: "Bern-Mittelland",
+    farbe: "#e8c94a",
+    teile: [
+      [[46.8883,7.35],[46.8876,7.3544],[46.8796,7.35],[46.85,7.35],[46.85,7.6],[47.2802,7.6],[47.2777,7.5811],[47.2606,7.6],[47.1451,7.6],[47.1018,7.435],[47.1518,7.4409],[47.2131,7.35],[47.2216,7.35],[47.2443,7.4218],[47.3237,7.5593],[47.3035,7.497],[47.3154,7.3813],[47.3037,7.35]],
+    ],
+    label: [47.0309, 7.4641],
+  },
+  {
+    name: "Emmental-Oberaargau",
+    farbe: "#e08a4c",
+    teile: [
+      [[46.85,7.6],[46.85,7.8736],[46.8866,7.8596],[46.9826,7.9535],[47.0548,7.867],[47.1421,7.8911],[47.2362,7.8397],[47.2669,7.8261],[47.2605,7.7337],[47.2918,7.6896],[47.2802,7.6],[47.2606,7.6],[47.1923,7.6756],[47.1588,7.6523],[47.1451,7.6]],
+    ],
+    label: [47.0493, 7.7467],
+  },
+  {
+    name: "Oberland",
+    farbe: "#5b9bd5",
+    teile: [
+      [[46.85,7.3337],[46.7746,7.2922],[46.7194,7.3108],[46.694,7.3779],[46.6559,7.3221],[46.5931,7.3217],[46.5551,7.238],[46.5118,7.2492],[46.3802,7.1946],[46.3305,7.2224],[46.3595,7.2632],[46.352,7.3559],[46.3777,7.4003],[46.3759,7.5279],[46.4112,7.5353],[46.4463,7.6271],[46.4152,7.7095],[46.4794,7.8453],[46.4879,7.9122],[46.5646,8.0171],[46.5243,8.1922],[46.5307,8.2591],[46.5837,8.3658],[46.6542,8.4114],[46.69,8.4534],[46.7647,8.4494],[46.7728,8.3963],[46.7892,8.37],[46.7545,8.2846],[46.7709,8.2401],[46.7561,8.148],[46.7884,8.048],[46.7763,7.9856],[46.8384,7.8781],[46.85,7.8736]],
+    ],
+    label: [46.6313, 7.7479],
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Begriffsliste
 // Jeder Eintrag: { name, kategorie, lat, lon, bildpfad, kurzfakt }
 // ---------------------------------------------------------------------------
