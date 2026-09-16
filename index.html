@@ -45,22 +45,24 @@
     <div class="karte-wrapper">
       <svg id="karte-svg" viewBox="0 0 1000 700" role="img" aria-label="Karte Kanton Bern">
         <!--
-          PLATZHALTER-POLYGON für den Umriss des Kantons Bern.
-          -> Ersetze die "points"-Liste unten mit echten Umriss-Koordinaten
-             (z.B. aus einer GeoJSON-Datei, in die gleiche Projektion
-             umgerechnet wie in data.js / KARTE_BOUNDS, oder direkt als
-             SVG-Pfad). Die Punkte der Begriffe (aus data.js) werden separat
-             per JavaScript über dieses Polygon gelegt.
+          Umriss des Kantons Bern, generalisiert (67 Stützpunkte) aus offenen
+          Geodaten: swisstopo swissBOUNDARIES3D, via
+          github.com/severinlandolt/map-switzerland (Datei
+          "CH_Kantonsgrenzen_025_geo.json", Feature NAME=Bern/KT_TEIL=1),
+          projiziert mit derselben Formel wie app.js#projiziere() und den
+          Grenzwerten aus data.js#KARTE_BOUNDS. Kleine Berner Exklaven
+          (KT_TEIL 2-4) sind für diese vereinfachte Lernkarte weggelassen.
+          -> Willst du eine exaktere Kontur, ersetze die "points"-Liste durch
+             neu projizierte Koordinaten aus einer aktuelleren GeoJSON-Quelle.
         -->
         <polygon id="kanton-umriss"
-          points="180,80 420,40 620,90 780,180 900,260 860,420 760,560 600,640 420,660 260,600 140,480 100,320 130,180"
+          points="141.8,234.7 172.5,237.1 246.1,217.9 240.4,279.7 326.1,294.2 289.5,366.1 300.5,401.3 339.9,417.5 307.1,441.7 306.9,481.6 257.6,505.9 264.3,533.4 232.1,617.2 248.5,648.8 272.5,630.3 327,635.1 353.1,618.7 428.2,619.9 432.5,597.4 486.5,575.1 535,594.9 614.9,554 654.2,548.6 715.9,499.8 819,525.4 858.3,521.4 921,487.6 947.9,442.8 972.6,420 970.3,372.5 939,367.3 923.5,356.9 873.3,379 847.1,368.5 792.9,377.9 734.1,357.4 697.4,365.1 634.2,325.6 623.3,294.9 678.5,233.8 627.7,187.9 641.8,132.3 611.6,72.4 603.6,52.9 549.2,57 523.3,37 459.5,46 515.1,100.4 501.3,121.7 373.5,157.9 377,126.1 318.4,83.4 365.8,67.3 446.7,16.7 410,29.6 342,22 304.7,37.1 217.5,34.4 206,60.3 154.4,67.1 132,97.3 36.7,116.5 75,152.4 111.8,147.2 162.7,160.6 138.1,202.1 141.8,234.7"
           fill="#eef6e9" stroke="#5a8f4a" stroke-width="4" />
         <g id="punkte-gruppe"><!-- Punkte werden von app.js eingefügt --></g>
       </svg>
       <p class="karte-hinweis">
-        Platzhalter-Umriss – die echte Form des Kantons Bern trägst du in
-        <code>index.html</code> (Element <code>#kanton-umriss</code>) und die
-        echten Koordinaten in <code>data.js</code> ein.
+        Umriss aus offenen swisstopo-Geodaten (vereinfacht). Echte
+        Ortskoordinaten stammen aus <code>data.js</code>.
       </p>
     </div>
     <ul id="legende" class="legende"></ul>
@@ -118,7 +120,7 @@
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <polygon id="kanton-umriss-mini"
-      points="180,80 420,40 620,90 780,180 900,260 860,420 760,560 600,640 420,660 260,600 140,480 100,320 130,180"
+      points="141.8,234.7 172.5,237.1 246.1,217.9 240.4,279.7 326.1,294.2 289.5,366.1 300.5,401.3 339.9,417.5 307.1,441.7 306.9,481.6 257.6,505.9 264.3,533.4 232.1,617.2 248.5,648.8 272.5,630.3 327,635.1 353.1,618.7 428.2,619.9 432.5,597.4 486.5,575.1 535,594.9 614.9,554 654.2,548.6 715.9,499.8 819,525.4 858.3,521.4 921,487.6 947.9,442.8 972.6,420 970.3,372.5 939,367.3 923.5,356.9 873.3,379 847.1,368.5 792.9,377.9 734.1,357.4 697.4,365.1 634.2,325.6 623.3,294.9 678.5,233.8 627.7,187.9 641.8,132.3 611.6,72.4 603.6,52.9 549.2,57 523.3,37 459.5,46 515.1,100.4 501.3,121.7 373.5,157.9 377,126.1 318.4,83.4 365.8,67.3 446.7,16.7 410,29.6 342,22 304.7,37.1 217.5,34.4 206,60.3 154.4,67.1 132,97.3 36.7,116.5 75,152.4 111.8,147.2 162.7,160.6 138.1,202.1 141.8,234.7"
       fill="#eef6e9" stroke="#5a8f4a" stroke-width="4" />
   </defs>
 </svg>
