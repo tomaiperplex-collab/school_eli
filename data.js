@@ -34,13 +34,12 @@ const KATEGORIEN = {
 };
 
 // ---------------------------------------------------------------------------
-// Kartengrenzen des Kantons Bern (WGS84), passend zur echten Umriss-Kontur
-// in index.html (#kanton-umriss), die aus offenen swisstopo-Geodaten
-// (swissBOUNDARIES3D, via github.com/severinlandolt/map-switzerland)
-// projiziert wurde. Bounding Box des Kantons Bern (Hauptteil) plus etwas
-// Rand: Lon 6.86-8.45, Lat 46.33-47.32.
-// -> Wenn du die Umriss-Punkte in index.html ersetzt, passe diese Werte
-//    entsprechend an, damit Orte/Berge/Seen/Flüsse weiterhin zur Kontur passen.
+// Ausschnitt des Kantons Bern (WGS84), den app.js benutzt, um die
+// Leaflet-Karten (Übersicht + Karte→Name-Quiz) beim Start per fitBounds()
+// auf den Kanton zu zentrieren. Die eigentliche Kartendarstellung kommt aus
+// echten OpenStreetMap-/swisstopo-Kacheln (siehe app.js), nicht mehr aus
+// einem gezeichneten Umriss — diese Box ist nur noch ein grober
+// Bounding-Box-Richtwert für den Kartenausschnitt.
 // ---------------------------------------------------------------------------
 const KARTE_BOUNDS = {
   lonMin: 6.80,
