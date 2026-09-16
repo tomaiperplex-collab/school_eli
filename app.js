@@ -158,13 +158,41 @@ const karten = {
   miniMarker: null,
 };
 
+// Zeichnet die 5 Verwaltungsregionen als eingefärbte Flächen + Namens-Label
+// auf die übergebene Leaflet-Karte (siehe REGIONEN in data.js).
+function erzeugeRegionenEbene() {
+  const ebene = L.layerGroup();
+  REGIONEN.forEach((region) => {
+    L.polygon(region.teile, {
+      color: region.farbe,
+      weight: 2,
+      fillColor: region.farbe,
+      fillOpacity: 0.22,
+      interactive: false,
+    }).addTo(ebene);
+
+    L.marker(region.label, {
+      icon: L.divIcon({
+        className: "regionen-label",
+        html: region.name,
+        iconSize: [0, 0],
+      }),
+      interactive: false,
+    }).addTo(ebene);
+  });
+  return ebene;
+}
+
 function holeUebersichtsKarte() {
   if (karten.uebersicht) return karten.uebersicht;
 
   const karte = L.map(el.karteLeaflet);
   const osm = erzeugeOsmLayer().addTo(karte);
   const swisstopo = erzeugeSwisstopoLayer();
-  L.control.layers({ OpenStreetMap: osm, swisstopo: swisstopo }).addTo(karte);
+  const regionen = erzeugeRegionenEbene().addTo(karte);
+  L.control
+    .layers({ OpenStreetMap: osm, swisstopo: swisstopo }, { "5 Regionen": regionen })
+    .addTo(karte);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
 
   karten.uebersicht = karte;
