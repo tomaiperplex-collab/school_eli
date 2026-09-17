@@ -814,6 +814,7 @@ el.filterBar.addEventListener("change", (ev) => {
   else state.aktiveKategorien.delete(checkbox.dataset.kategorie);
 
   if (state.modus === "uebersicht") renderUebersichtsKarte();
+  else if (state.modus === "lernmodus") starteLernmodus();
   else if (state.modus !== "fortschritt") naechsteFrage();
 });
 
