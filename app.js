@@ -46,6 +46,7 @@ const state = {
   sessionGesamt: 0,
   lernmodusBegriffe: [],
   lernmodusIndex: 0,
+  lernmodusBildIndex: 0,
   lernmodusHintergrundAn: false,
 };
 
@@ -89,6 +90,12 @@ function hatKoordinaten(begriff) {
   return typeof begriff.lat === "number" && typeof begriff.lon === "number";
 }
 
+// Begriffe mit mehreren Fotos haben ein bildpfade-Array (siehe data.js,
+// z.B. die Sehenswürdigkeiten); alle anderen nur das einzelne bildpfad.
+function holeBildpfade(begriff) {
+  return begriff.bildpfade && begriff.bildpfade.length ? begriff.bildpfade : [begriff.bildpfad];
+}
+
 // ---------------------------------------------------------------------------
 // DOM-Referenzen
 // ---------------------------------------------------------------------------
@@ -120,6 +127,9 @@ const el = {
   lernmodusKarte: document.getElementById("lernmodus-karte"),
   lernmodusZaehler: document.getElementById("lernmodus-zaehler"),
   lernmodusFoto: document.getElementById("lernmodus-foto"),
+  lernmodusFotoPrev: document.getElementById("lernmodus-foto-prev"),
+  lernmodusFotoNext: document.getElementById("lernmodus-foto-next"),
+  lernmodusFotoPunkte: document.getElementById("lernmodus-foto-punkte"),
   lernmodusName: document.getElementById("lernmodus-name"),
   lernmodusRegion: document.getElementById("lernmodus-region"),
   lernmodusCloseBtn: document.getElementById("lernmodus-close"),
@@ -727,8 +737,8 @@ function zeigeAktuelleLernmodusSeite() {
   zeichneRegionMitOrt(region, ort);
   neuZeichnenNaechstenTick(karte);
 
-  el.lernmodusFoto.src = ort.bildpfad;
-  el.lernmodusFoto.alt = ort.name;
+  state.lernmodusBildIndex = 0;
+  zeigeLernmodusBild();
   el.lernmodusName.textContent = ort.name;
   el.lernmodusRegion.textContent = region.name;
 
@@ -736,6 +746,39 @@ function zeigeAktuelleLernmodusSeite() {
 
   el.lernmodusPrevBtn.disabled = state.lernmodusIndex === 0;
   el.lernmodusNextBtn.disabled = state.lernmodusIndex === state.lernmodusBegriffe.length - 1;
+}
+
+// Zeigt das aktuell ausgewählte Foto (state.lernmodusBildIndex) des Ortes
+// und baut die Punkte-Navigation neu auf. Bei nur einem Foto werden Pfeile
+// und Punkte ausgeblendet.
+function zeigeLernmodusBild() {
+  const ort = state.lernmodusBegriffe[state.lernmodusIndex];
+  const bildpfade = holeBildpfade(ort);
+
+  el.lernmodusFoto.src = bildpfade[state.lernmodusBildIndex];
+  el.lernmodusFoto.alt = ort.name;
+
+  const mehrereBilder = bildpfade.length > 1;
+  el.lernmodusFotoPrev.classList.toggle("hidden", !mehrereBilder);
+  el.lernmodusFotoNext.classList.toggle("hidden", !mehrereBilder);
+  el.lernmodusFotoPunkte.classList.toggle("hidden", !mehrereBilder);
+  el.lernmodusFotoPrev.disabled = state.lernmodusBildIndex === 0;
+  el.lernmodusFotoNext.disabled = state.lernmodusBildIndex === bildpfade.length - 1;
+
+  el.lernmodusFotoPunkte.innerHTML = "";
+  if (mehrereBilder) {
+    bildpfade.forEach((_, i) => {
+      const punkt = document.createElement("button");
+      punkt.className = "foto-galerie-punkt";
+      punkt.classList.toggle("aktiv", i === state.lernmodusBildIndex);
+      punkt.setAttribute("aria-label", `Foto ${i + 1} von ${bildpfade.length}`);
+      punkt.addEventListener("click", () => {
+        state.lernmodusBildIndex = i;
+        zeigeLernmodusBild();
+      });
+      el.lernmodusFotoPunkte.appendChild(punkt);
+    });
+  }
 }
 
 function pointInPolygon(point, polygon) {
@@ -832,6 +875,19 @@ el.lernmodusNextBtn.addEventListener("click", () => {
   if (state.lernmodusIndex < state.lernmodusBegriffe.length - 1) {
     state.lernmodusIndex++;
     zeigeAktuelleLernmodusSeite();
+  }
+});
+el.lernmodusFotoPrev.addEventListener("click", () => {
+  if (state.lernmodusBildIndex > 0) {
+    state.lernmodusBildIndex--;
+    zeigeLernmodusBild();
+  }
+});
+el.lernmodusFotoNext.addEventListener("click", () => {
+  const bildpfade = holeBildpfade(state.lernmodusBegriffe[state.lernmodusIndex]);
+  if (state.lernmodusBildIndex < bildpfade.length - 1) {
+    state.lernmodusBildIndex++;
+    zeigeLernmodusBild();
   }
 });
 

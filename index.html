@@ -113,7 +113,12 @@
 
     <div class="lernmodus-inhalt">
       <div class="lernmodus-foto-bereich">
-        <img id="lernmodus-foto" alt="Ort-Foto" />
+        <div class="lernmodus-foto-galerie">
+          <button id="lernmodus-foto-prev" class="foto-galerie-pfeil foto-galerie-pfeil-links hidden" aria-label="Voriges Foto">‹</button>
+          <img id="lernmodus-foto" alt="Ort-Foto" />
+          <button id="lernmodus-foto-next" class="foto-galerie-pfeil foto-galerie-pfeil-rechts hidden" aria-label="Nächstes Foto">›</button>
+        </div>
+        <div id="lernmodus-foto-punkte" class="foto-galerie-punkte hidden"></div>
         <h3 id="lernmodus-name"></h3>
         <p id="lernmodus-region"></p>
       </div>

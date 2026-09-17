@@ -416,13 +416,56 @@ body {
   padding: 1rem;
   border-radius: var(--radius);
 }
+.lernmodus-foto-galerie {
+  position: relative;
+  max-width: 100%;
+  margin-bottom: 0.4rem;
+}
 #lernmodus-foto {
   max-width: 100%;
   max-height: 250px;
   border-radius: var(--radius);
-  margin-bottom: 0.8rem;
   object-fit: cover;
+  display: block;
 }
+.foto-galerie-pfeil {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+.foto-galerie-pfeil:hover { background: rgba(0, 0, 0, 0.65); }
+.foto-galerie-pfeil:disabled { opacity: 0.35; cursor: default; }
+.foto-galerie-pfeil-links { left: 8px; }
+.foto-galerie-pfeil-rechts { right: 8px; }
+.foto-galerie-punkte {
+  display: flex;
+  justify-content: center;
+  gap: 0.4rem;
+  margin: 0.6rem 0 0.2rem;
+}
+.foto-galerie-punkt {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: #d0d0d0;
+  cursor: pointer;
+  padding: 0;
+}
+.foto-galerie-punkt.aktiv { background: #e08a4c; }
 #lernmodus-name {
   margin: 0.5rem 0 0;
   font-size: 1.3rem;
