@@ -75,7 +75,7 @@ const KANTON_BOUNDS_LATLNG = L.latLngBounds(
 );
 
 // Kurzer Legenden-Code pro Begriff, z.B. "O1", "B3", "S2", "F4"
-const KATEGORIE_PRAEFIX = { orte: "O", berge: "B", seen: "S", fluesse: "F" };
+const KATEGORIE_PRAEFIX = { orte: "O", berge: "B", seen: "S", fluesse: "F", sehenswuerdigkeiten: "SW" };
 function berechneCodes() {
   const zaehler = {};
   BEGRIFFE.forEach((b) => {
@@ -135,6 +135,13 @@ const el = {
 // ---------------------------------------------------------------------------
 function gefilterteBegriffe() {
   return BEGRIFFE.filter((b) => state.aktiveKategorien.has(b.kategorie));
+}
+
+// Orte mit mehr als GROSSSTADT_SCHWELLE Einwohnern bekommen eine eigene,
+// dunklere Farbe statt der normalen Orte-Farbe (siehe data.js).
+function holeMarkerFarbe(b) {
+  if (b.kategorie === "orte" && b.einwohner > GROSSSTADT_SCHWELLE) return GROSSSTADT_FARBE;
+  return KATEGORIEN[b.kategorie].farbe;
 }
 
 function zufallsElement(liste) {
@@ -370,7 +377,7 @@ function zeichneRegionMitOrt(region, ort) {
   // Marker für den Ort
   L.circleMarker([ort.lat, ort.lon], {
     radius: 12,
-    fillColor: KATEGORIEN[ort.kategorie].farbe,
+    fillColor: holeMarkerFarbe(ort),
     fillOpacity: 1,
     color: "#fff",
     weight: 3,
@@ -397,7 +404,7 @@ function renderUebersichtsKarte() {
   const mitKoordinaten = sichtbar.filter(hatKoordinaten);
 
   mitKoordinaten.forEach((b) => {
-    const farbe = KATEGORIEN[b.kategorie].farbe;
+    const farbe = holeMarkerFarbe(b);
     L.circleMarker([b.lat, b.lon], {
       radius: 14,
       fillColor: farbe,
@@ -425,7 +432,7 @@ function renderUebersichtsKarte() {
         const li = document.createElement("li");
         const swatch = document.createElement("span");
         swatch.className = "swatch";
-        swatch.style.background = KATEGORIEN[katKey].farbe;
+        swatch.style.background = holeMarkerFarbe(b);
         li.appendChild(swatch);
         li.append(`${b._code} = ${b.name}`);
         el.legende.appendChild(li);

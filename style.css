@@ -5,6 +5,7 @@
   --farbe-berge: #8a5a30;
   --farbe-seen: #3d84c6;
   --farbe-fluesse: #2a9d5c;
+  --farbe-sehenswuerdigkeiten: #d4a017;
 
   --hintergrund: #fdfaf3;
   --karte-flaeche: #333;
@@ -95,6 +96,7 @@ body {
 .filter-berge { border-color: var(--farbe-berge); }
 .filter-seen { border-color: var(--farbe-seen); }
 .filter-fluesse { border-color: var(--farbe-fluesse); }
+.filter-sehenswuerdigkeiten { border-color: var(--farbe-sehenswuerdigkeiten); }
 
 /* --- Layout --- */
 #app-main {
