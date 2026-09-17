@@ -125,7 +125,6 @@ const el = {
   lernmodusCloseBtn: document.getElementById("lernmodus-close"),
   lernmodusPrevBtn: document.getElementById("lernmodus-prev"),
   lernmodusNextBtn: document.getElementById("lernmodus-next"),
-  lernmodusHintergrundToggle: document.getElementById("lernmodus-hintergrund-toggle"),
   panelBildnachweise: document.getElementById("bildnachweise"),
   bildnachweiseListe: document.getElementById("bildnachweise-liste"),
   bildnachweiseLink: document.getElementById("bildnachweise-link"),
@@ -174,7 +173,6 @@ const karten = {
   miniMarker: null,
   lernmodus: null,
   lernmodusRegion: null,
-  lernmodusTiles: null,
 };
 
 // Deckkraft der Regionen-Flächen: dezent über Kartenkacheln, kräftig wenn
@@ -250,24 +248,34 @@ function sperreAufKanton(karte) {
   karte.setMinZoom(karte.getZoom());
 }
 
+// Fügt JEDER Karte denselben Ebenen-Schalter hinzu: OpenStreetMap / swisstopo /
+// Kein Hintergrund als Basis-Layer (Standard: Kein Hintergrund, nur Shapes),
+// plus die übergebenen Overlays (z.B. Regionen, Seen & Flüsse). Reagiert ein
+// Callback auf den Basis-Layer-Wechsel (z.B. um Regionen-Füllung anzupassen),
+// kann er über onBaselayerChange übergeben werden.
+function fuegeEbenenSchalterHinzu(karte, overlays, onBaselayerChange) {
+  const osm = erzeugeOsmLayer();
+  const swisstopo = erzeugeSwisstopoLayer();
+  const keinHintergrund = L.layerGroup().addTo(karte);
+  L.control
+    .layers({ OpenStreetMap: osm, swisstopo: swisstopo, "Kein Hintergrund": keinHintergrund }, overlays)
+    .addTo(karte);
+  if (onBaselayerChange) {
+    karte.on("baselayerchange", (ev) => onBaselayerChange(ev.name === "Kein Hintergrund"));
+  }
+}
+
 function holeUebersichtsKarte() {
   if (karten.uebersicht) return karten.uebersicht;
 
   const karte = L.map(el.karteLeaflet);
-  const osm = erzeugeOsmLayer();
-  const swisstopo = erzeugeSwisstopoLayer();
-  const keinHintergrund = L.layerGroup().addTo(karte); // Standard: nur die Regionen
   const regionen = erzeugeRegionenEbene().addTo(karte);
   const gewaesser = erzeugeGewaesserEbene().addTo(karte);
-  L.control
-    .layers(
-      { OpenStreetMap: osm, swisstopo: swisstopo, "Kein Hintergrund": keinHintergrund },
-      { "5 Regionen": regionen, "Seen & Flüsse": gewaesser }
-    )
-    .addTo(karte);
-  karte.on("baselayerchange", (ev) => {
-    setzeRegionenFuellung(regionen, ev.name === "Kein Hintergrund");
-  });
+  fuegeEbenenSchalterHinzu(
+    karte,
+    { "5 Regionen": regionen, "Seen & Flüsse": gewaesser },
+    (ohneHintergrund) => setzeRegionenFuellung(regionen, ohneHintergrund)
+  );
   setzeRegionenFuellung(regionen, true);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
@@ -281,20 +289,13 @@ function holeQuizKarte() {
   if (karten.quiz) return karten.quiz;
 
   const karte = L.map(el.quizKarteLeaflet, { attributionControl: true });
-  const osm = erzeugeOsmLayer();
-  const swisstopo = erzeugeSwisstopoLayer();
-  const keinHintergrund = L.layerGroup().addTo(karte); // Standard: nur die Regionen
   const regionen = erzeugeRegionenEbene().addTo(karte);
   const gewaesser = erzeugeGewaesserEbene().addTo(karte);
-  L.control
-    .layers(
-      { OpenStreetMap: osm, swisstopo: swisstopo, "Kein Hintergrund": keinHintergrund },
-      { "5 Regionen": regionen, "Seen & Flüsse": gewaesser }
-    )
-    .addTo(karte);
-  karte.on("baselayerchange", (ev) => {
-    setzeRegionenFuellung(regionen, ev.name === "Kein Hintergrund");
-  });
+  fuegeEbenenSchalterHinzu(
+    karte,
+    { "5 Regionen": regionen, "Seen & Flüsse": gewaesser },
+    (ohneHintergrund) => setzeRegionenFuellung(regionen, ohneHintergrund)
+  );
   setzeRegionenFuellung(regionen, true);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
@@ -315,8 +316,13 @@ function holeMiniKarte() {
     attributionControl: false,
   });
   const regionen = erzeugeRegionenEbene().addTo(karte);
-  setzeRegionenFuellung(regionen, true); // kein Kartenhintergrund -> kräftige Füllung
-  erzeugeGewaesserEbene().addTo(karte);
+  const gewaesser = erzeugeGewaesserEbene().addTo(karte);
+  fuegeEbenenSchalterHinzu(
+    karte,
+    { "5 Regionen": regionen, "Seen & Flüsse": gewaesser },
+    (ohneHintergrund) => setzeRegionenFuellung(regionen, ohneHintergrund)
+  );
+  setzeRegionenFuellung(regionen, true);
 
   karten.mini = karte;
   karten.miniMarker = L.layerGroup().addTo(karte);
@@ -327,13 +333,20 @@ function holeLernmodusKarte() {
   if (karten.lernmodus) return karten.lernmodus;
 
   const karte = L.map(el.lernmodusKarte);
-  karten.lernmodusTiles = erzeugeOsmLayer(); // Standard: nicht hinzugefügt, nur Region sichtbar
-  erzeugeGewaesserEbene().addTo(karte);
+  karten.lernmodus = karte; // vor fuegeEbenenSchalterHinzu setzen (siehe Kommentar unten)
+  karten.lernmodusRegion = L.layerGroup().addTo(karte);
+
+  const gewaesser = erzeugeGewaesserEbene().addTo(karte);
+  fuegeEbenenSchalterHinzu(karte, { "Seen & Flüsse": gewaesser }, (ohneHintergrund) => {
+    state.lernmodusHintergrundAn = !ohneHintergrund;
+    // baselayerchange kann synchron beim Erzeugen des Controls feuern, noch bevor
+    // holeLernmodusKarte() zurückkehrt - karten.lernmodus muss daher schon gesetzt
+    // sein, sonst würde zeigeAktuelleLernmodusSeite() hier erneut L.map() aufrufen.
+    if (state.lernmodusBegriffe.length) zeigeAktuelleLernmodusSeite();
+  });
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
 
-  karten.lernmodus = karte;
-  karten.lernmodusRegion = L.layerGroup().addTo(karte);
   return karte;
 }
 
@@ -746,24 +759,6 @@ function schliesseLernmodus() {
   setzeModus("uebersicht");
 }
 
-function toggleLernmodusHintergrund() {
-  state.lernmodusHintergrundAn = !state.lernmodusHintergrundAn;
-  const karte = holeLernmodusKarte();
-
-  if (state.lernmodusHintergrundAn) {
-    karten.lernmodusTiles.addTo(karte);
-  } else {
-    karte.removeLayer(karten.lernmodusTiles);
-  }
-  el.lernmodusHintergrundToggle.textContent = state.lernmodusHintergrundAn
-    ? "🗺️ Hintergrund aus"
-    : "🗺️ Hintergrund an";
-  el.lernmodusHintergrundToggle.classList.toggle("aktiv", !state.lernmodusHintergrundAn);
-
-  // Region neu zeichnen, damit die Füllfarbe an den neuen Zustand angepasst wird
-  if (state.lernmodusBegriffe.length) zeigeAktuelleLernmodusSeite();
-}
-
 // ---------------------------------------------------------------------------
 // Event-Listener
 // ---------------------------------------------------------------------------
@@ -798,7 +793,6 @@ el.lernmodusNextBtn.addEventListener("click", () => {
     zeigeAktuelleLernmodusSeite();
   }
 });
-el.lernmodusHintergrundToggle.addEventListener("click", toggleLernmodusHintergrund);
 
 el.bildnachweiseLink.addEventListener("click", () => setzeModus("bildnachweise"));
 
