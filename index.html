@@ -8,9 +8,24 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+<link rel="stylesheet" href="shared/shell.css" />
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<!--
+  Jedes Fach ist eine eigenständige Seite (kein SPA-Umschalten) mit
+  eigenem data.js/app.js im globalen Scope -- so kollidieren neue Fächer
+  nie mit bereits bestehenden. Gemeinsame Chrome (Tabs, Header, Footer,
+  .panel/.hidden) kommt aus shared/shell.css. Neues Fach hinzufügen:
+  Ordner anlegen (z.B. /physik/index.html), shared/shell.css einbinden,
+  Tab-Link hier und in den anderen Fach-Seiten ergänzen.
+-->
+<nav class="fach-tabs">
+  <a class="fach-tab aktiv" href="index.html">🏔️ NMG</a>
+  <a class="fach-tab" href="deutsch/index.html">📖 Deutsch</a>
+  <a class="fach-tab" href="mathe/index.html">➗ Mathe</a>
+</nav>
 
 <header class="app-header">
   <h1>🏔️ Kanton Bern entdecken</h1>

@@ -1,0 +1,111 @@
+/* shared/shell.css — Chrome, die jede Fach-Seite lädt: Grundlayout, Fach-
+   Tabs, Header, Footer, generische Panel-Bausteine. Fach-spezifisches
+   Styling (Farben, Kartenmodi, Filter, Quiz-UI, ...) bleibt in der
+   jeweiligen Fach-eigenen CSS-Datei, z.B. style.css für NMG. */
+
+:root {
+  --hintergrund: #fdfaf3;
+  --radius: 18px;
+  --font: "Nunito", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--hintergrund);
+  color: #2b2b2b;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.hidden { display: none !important; }
+
+.panel {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+/* --- Header --- */
+.app-header {
+  text-align: center;
+  padding: 1.2rem 1rem 0.6rem;
+}
+.app-header h1 {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+}
+.subtitle {
+  margin: 0.3rem 0 0;
+  color: #555;
+  font-size: 1.05rem;
+}
+
+/* --- Fach-Tabs (oberste Navigationsebene, z.B. NMG / Deutsch / Mathe) ---
+   Jede Fach-Seite ist eine eigenständige HTML-Seite (kein SPA-Umschalten),
+   damit neue Fächer einfach als weiterer Ordner + eigenes app.js/data.js
+   dazukommen, ohne mit anderen Fächern im selben globalen JS-Scope zu
+   kollidieren. Die Tabs sind deshalb normale <a>-Links; welcher Tab aktiv
+   ist, markiert jede Seite selbst mit der Klasse "aktiv". */
+.fach-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.3rem;
+  background: #402900;
+  padding: 0.5rem 0.5rem 0;
+}
+.fach-tab {
+  display: inline-block;
+  border: none;
+  background: transparent;
+  color: #ffe3b3;
+  opacity: 0.7;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0.7rem 1.3rem;
+  border-radius: var(--radius) var(--radius) 0 0;
+  cursor: pointer;
+}
+.fach-tab:hover { opacity: 0.9; }
+.fach-tab.aktiv {
+  background: var(--hintergrund);
+  color: #402900;
+  opacity: 1;
+}
+
+/* --- "Kommt bald"-Seite für noch leere Fächer --- */
+.fach-coming-soon {
+  max-width: 900px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+  text-align: center;
+}
+.fach-coming-soon-text {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+/* --- Footer --- */
+.app-footer {
+  text-align: center;
+  color: #999;
+  font-size: 0.85rem;
+  padding: 1rem;
+}
+.footer-link-btn {
+  background: transparent;
+  border: none;
+  color: #999;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.3rem;
+}
+.footer-link-btn:hover { color: #666; }
