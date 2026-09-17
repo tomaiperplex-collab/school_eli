@@ -216,6 +216,31 @@ function setzeRegionenFuellung(ebene, ohneHintergrund) {
   ebene.regionenPolygone.forEach((p) => p.setStyle({ fillOpacity: fuellung }));
 }
 
+// Zeichnet die echten Umrisse der 6 Seen (Polygone mit Insel-Löchern) und
+// die Verläufe der 9 Flüsse (Linien) aus SEEN_SHAPES/FLUSS_LINIEN (data.js).
+function erzeugeGewaesserEbene() {
+  const ebene = L.layerGroup();
+  Object.values(SEEN_SHAPES).forEach((teile) => {
+    teile.forEach((polygon) => {
+      L.polygon(polygon, {
+        color: "#1f5c8b",
+        weight: 1,
+        fillColor: KATEGORIEN.seen.farbe,
+        fillOpacity: 0.65,
+        interactive: false,
+      }).addTo(ebene);
+    });
+  });
+  Object.values(FLUSS_LINIEN).forEach((linie) => {
+    L.polyline(linie, {
+      color: KATEGORIEN.fluesse.farbe,
+      weight: 3,
+      interactive: false,
+    }).addTo(ebene);
+  });
+  return ebene;
+}
+
 // Sperrt eine Karte auf den Kanton Bern: nicht wegscrollbar und nicht weiter
 // wegzoombar als die aktuelle (Kanton-)Ansicht, damit Kinder sich nicht in
 // der ganzen Schweiz verlieren. Reinzoomen bleibt uneingeschränkt möglich.
@@ -233,10 +258,11 @@ function holeUebersichtsKarte() {
   const swisstopo = erzeugeSwisstopoLayer();
   const keinHintergrund = L.layerGroup().addTo(karte); // Standard: nur die Regionen
   const regionen = erzeugeRegionenEbene().addTo(karte);
+  const gewaesser = erzeugeGewaesserEbene().addTo(karte);
   L.control
     .layers(
       { OpenStreetMap: osm, swisstopo: swisstopo, "Kein Hintergrund": keinHintergrund },
-      { "5 Regionen": regionen }
+      { "5 Regionen": regionen, "Seen & Flüsse": gewaesser }
     )
     .addTo(karte);
   karte.on("baselayerchange", (ev) => {
@@ -259,10 +285,11 @@ function holeQuizKarte() {
   const swisstopo = erzeugeSwisstopoLayer();
   const keinHintergrund = L.layerGroup().addTo(karte); // Standard: nur die Regionen
   const regionen = erzeugeRegionenEbene().addTo(karte);
+  const gewaesser = erzeugeGewaesserEbene().addTo(karte);
   L.control
     .layers(
       { OpenStreetMap: osm, swisstopo: swisstopo, "Kein Hintergrund": keinHintergrund },
-      { "5 Regionen": regionen }
+      { "5 Regionen": regionen, "Seen & Flüsse": gewaesser }
     )
     .addTo(karte);
   karte.on("baselayerchange", (ev) => {
@@ -289,6 +316,7 @@ function holeMiniKarte() {
   });
   const regionen = erzeugeRegionenEbene().addTo(karte);
   setzeRegionenFuellung(regionen, true); // kein Kartenhintergrund -> kräftige Füllung
+  erzeugeGewaesserEbene().addTo(karte);
 
   karten.mini = karte;
   karten.miniMarker = L.layerGroup().addTo(karte);
@@ -300,6 +328,7 @@ function holeLernmodusKarte() {
 
   const karte = L.map(el.lernmodusKarte);
   karten.lernmodusTiles = erzeugeOsmLayer(); // Standard: nicht hinzugefügt, nur Region sichtbar
+  erzeugeGewaesserEbene().addTo(karte);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
 
