@@ -287,7 +287,8 @@ function holeMiniKarte() {
     doubleClickZoom: false,
     attributionControl: false,
   });
-  erzeugeOsmLayer().addTo(karte);
+  const regionen = erzeugeRegionenEbene().addTo(karte);
+  setzeRegionenFuellung(regionen, true); // kein Kartenhintergrund -> kräftige Füllung
 
   karten.mini = karte;
   karten.miniMarker = L.layerGroup().addTo(karte);
