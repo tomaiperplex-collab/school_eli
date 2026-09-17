@@ -199,6 +199,15 @@ function erzeugeRegionenEbene() {
   return ebene;
 }
 
+// Sperrt eine Karte auf den Kanton Bern: nicht wegscrollbar und nicht weiter
+// wegzoombar als die aktuelle (Kanton-)Ansicht, damit Kinder sich nicht in
+// der ganzen Schweiz verlieren. Reinzoomen bleibt uneingeschränkt möglich.
+function sperreAufKanton(karte) {
+  karte.setMaxBounds(KANTON_BOUNDS_LATLNG.pad(0.15));
+  karte.options.maxBoundsViscosity = 1.0;
+  karte.setMinZoom(karte.getZoom());
+}
+
 function holeUebersichtsKarte() {
   if (karten.uebersicht) return karten.uebersicht;
 
@@ -210,6 +219,7 @@ function holeUebersichtsKarte() {
     .layers({ OpenStreetMap: osm, swisstopo: swisstopo }, { "5 Regionen": regionen })
     .addTo(karte);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
+  sperreAufKanton(karte);
 
   karten.uebersicht = karte;
   karten.uebersichtMarker = L.layerGroup().addTo(karte);
@@ -222,6 +232,7 @@ function holeQuizKarte() {
   const karte = L.map(el.quizKarteLeaflet, { attributionControl: true });
   erzeugeOsmLayer().addTo(karte);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
+  sperreAufKanton(karte);
 
   karten.quiz = karte;
   karten.quizMarker = L.layerGroup().addTo(karte);
@@ -251,6 +262,7 @@ function holeLernmodusKarte() {
   const karte = L.map(el.lernmodusKarte);
   erzeugeOsmLayer().addTo(karte);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
+  sperreAufKanton(karte);
 
   karten.lernmodus = karte;
   karten.lernmodusRegion = L.layerGroup().addTo(karte);
