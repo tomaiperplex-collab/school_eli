@@ -46,7 +46,7 @@ const state = {
   sessionGesamt: 0,
   lernmodusBegriffe: [],
   lernmodusIndex: 0,
-  lernmodusHintergrundAn: true,
+  lernmodusHintergrundAn: false,
 };
 
 // ---------------------------------------------------------------------------
@@ -229,9 +229,9 @@ function holeUebersichtsKarte() {
   if (karten.uebersicht) return karten.uebersicht;
 
   const karte = L.map(el.karteLeaflet);
-  const osm = erzeugeOsmLayer().addTo(karte);
+  const osm = erzeugeOsmLayer();
   const swisstopo = erzeugeSwisstopoLayer();
-  const keinHintergrund = L.layerGroup(); // leer: zeigt nur weisse Fläche
+  const keinHintergrund = L.layerGroup().addTo(karte); // Standard: nur die Regionen
   const regionen = erzeugeRegionenEbene().addTo(karte);
   L.control
     .layers(
@@ -242,6 +242,7 @@ function holeUebersichtsKarte() {
   karte.on("baselayerchange", (ev) => {
     setzeRegionenFuellung(regionen, ev.name === "Kein Hintergrund");
   });
+  setzeRegionenFuellung(regionen, true);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
 
@@ -254,7 +255,20 @@ function holeQuizKarte() {
   if (karten.quiz) return karten.quiz;
 
   const karte = L.map(el.quizKarteLeaflet, { attributionControl: true });
-  erzeugeOsmLayer().addTo(karte);
+  const osm = erzeugeOsmLayer();
+  const swisstopo = erzeugeSwisstopoLayer();
+  const keinHintergrund = L.layerGroup().addTo(karte); // Standard: nur die Regionen
+  const regionen = erzeugeRegionenEbene().addTo(karte);
+  L.control
+    .layers(
+      { OpenStreetMap: osm, swisstopo: swisstopo, "Kein Hintergrund": keinHintergrund },
+      { "5 Regionen": regionen }
+    )
+    .addTo(karte);
+  karte.on("baselayerchange", (ev) => {
+    setzeRegionenFuellung(regionen, ev.name === "Kein Hintergrund");
+  });
+  setzeRegionenFuellung(regionen, true);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
 
@@ -284,7 +298,7 @@ function holeLernmodusKarte() {
   if (karten.lernmodus) return karten.lernmodus;
 
   const karte = L.map(el.lernmodusKarte);
-  karten.lernmodusTiles = erzeugeOsmLayer().addTo(karte);
+  karten.lernmodusTiles = erzeugeOsmLayer(); // Standard: nicht hinzugefügt, nur Region sichtbar
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
 
