@@ -1,5 +1,5 @@
 """
-Lädt echte Wikimedia-Commons-Fotos für 11 Begriffe, die aktuell noch
+Lädt echte Wikimedia-Commons-Fotos für 14 Begriffe, die aktuell noch
 Platzhalterbilder haben, und legt sie direkt an der von data.js erwarteten
 Stelle im Projekt ab.
 
@@ -31,6 +31,9 @@ FILES = [
     ('https://commons.wikimedia.org/wiki/Special:Redirect/file/Ring%20Pfau.jpg', 'images/sehenswuerdigkeiten/Altstadt_Biel.jpg'),
     ('https://commons.wikimedia.org/wiki/Special:Redirect/file/Taubenlochschlucht%2001%2010.jpg', 'images/sehenswuerdigkeiten/Taubenlochschlucht.jpg'),
     ('https://commons.wikimedia.org/wiki/Special:Redirect/file/Omega-Museum%20Biel.jpg', 'images/sehenswuerdigkeiten/Omega_Museum.jpg'),
+    ('https://commons.wikimedia.org/wiki/Special:Redirect/file/Niesen%20with%20Niesenbahn.jpg', 'images/berge/Niesen.jpg'),
+    ('https://commons.wikimedia.org/wiki/Special:Redirect/file/GstaadPanoramaVillage.jpg', 'images/orte/Gstaad.jpg'),
+    ('https://commons.wikimedia.org/wiki/Special:Redirect/file/Tour%20de%20Moron%202018.jpg', 'images/berge/Moron.jpg'),
 ]
 
 for url, rel in FILES:
@@ -42,4 +45,4 @@ for url, rel in FILES:
     target.write_bytes(data)
     print(f'{rel}: {len(data):,} bytes')
 
-print('\nFertig. images/berge/Moron.jpg bleibt Platzhalter (keine verifizierte Lizenz gefunden).')
+print('\nFertig.')
