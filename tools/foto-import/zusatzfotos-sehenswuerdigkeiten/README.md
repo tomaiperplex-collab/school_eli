@@ -1,22 +1,27 @@
-# Zusatzfotos SW1–SW9: 3 Alternativbilder pro Sehenswürdigkeit
+# Zusatzfotos SW1–SW9: Foto-Karussell im Lernmodus
 
 27 zusätzliche, lizenzgeprüfte Wikimedia-Commons-Fotos für die 9
-Sehenswürdigkeiten (je 3 pro Begriff, siehe `quellen.json`). Anders als das
-Hauptpaket in `tools/foto-import/` sind diese **nicht** für die einzelne
-`bildpfad`-Zuordnung in `data.js` gedacht — die App zeigt pro Begriff aktuell
-genau ein Foto, keine Galerie.
+Sehenswürdigkeiten (je 3 pro Begriff, siehe `quellen.json`), verwendet als
+Galerie-Bilder 2–4 im Lernmodus-Foto-Karussell (Bild 1 ist weiterhin das
+Hauptbild aus `tools/foto-import/`).
 
-Wikimedia Commons ist aus der Cloud-Sandbox weiterhin gesperrt, daher liegt
-hier nur `download_bilder.py` bereit (lokal ausführen, siehe Kopfkommentar
-im Skript).
+Aktuell zeigen alle vier Galerie-Plätze pro Sehenswürdigkeit noch
+Platzhalter (`images/sehenswuerdigkeiten/<Name>.jpg` sowie `_2`/`_3`/`_4`).
+Die Karussell-Funktion selbst (Pfeile, Punkte-Navigation, Reset beim
+Begriffwechsel) ist bereits fertig in `app.js`/`index.html`/`style.css`
+umgesetzt und funktioniert unabhängig davon, ob echte Fotos oder
+Platzhalter angezeigt werden.
 
-**Offene Frage, bevor diese Bilder eingebaut werden:** Wofür sollen die drei
-Alternativbilder pro Begriff verwendet werden? Zum Beispiel:
-- als Foto-Karussell/Galerie in Lernmodus und Sehenswürdigkeiten-Karte, oder
-- als zusätzliche Bildvarianten im "Foto → Name"-Quiz (damit nicht immer
-  dasselbe Foto abgefragt wird), oder
-- einfach nur als Auswahl, um das bisher einzige Hauptbild bei Bedarf zu
-  ersetzen.
+## Bilder herunterladen
 
-Je nach Antwort braucht es eine kleine Erweiterung an `data.js` (z.B. ein
-`bildpfade`-Array statt `bildpfad`) und an `app.js` (Foto-Anzeige/Quiz-Logik).
+Wikimedia Commons ist aus der Cloud-Sandbox weiterhin gesperrt. Lokal (mit
+normalem Internetzugang), im Projekt-Root:
+
+    python3 tools/foto-import/zusatzfotos-sehenswuerdigkeiten/download_bilder.py
+
+Legt die 27 Dateien direkt an den von `data.js` erwarteten Pfaden ab
+(`images/sehenswuerdigkeiten/<Name>_2.jpg` bis `_4.jpg`) – zusammen mit dem
+Hauptbild aus `tools/foto-import/download_bilder.py` ergibt das die vollen
+4 Galerie-Bilder pro Sehenswürdigkeit. Danach committen/pushen oder Claude
+Bescheid geben für die `bildQuelle`-Einträge in `data.js` und den
+Bildnachweise-Abschnitt.
