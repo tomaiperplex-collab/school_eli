@@ -721,9 +721,7 @@ function zeigeAktuelleLernmodusSeite() {
   if (!state.lernmodusBegriffe.length) return;
 
   const ort = state.lernmodusBegriffe[state.lernmodusIndex];
-  const region = REGIONEN.find(r =>
-    r.teile.some(teil => pointInPolygon([ort.lat, ort.lon], teil))
-  ) || REGIONEN[0]; // Fallback zur ersten Region
+  const region = ermittleRegion(ort.lat, ort.lon);
 
   const karte = holeLernmodusKarte();
   zeichneRegionMitOrt(region, ort);
@@ -750,6 +748,41 @@ function pointInPolygon(point, polygon) {
     if (intersect) inside = !inside;
   }
   return inside;
+}
+
+// kürzester Abstand von Punkt zu einer Strecke (a-b), alles in Grad
+function abstandZuStrecke(px, py, ax, ay, bx, by) {
+  const dx = bx - ax, dy = by - ay;
+  const laengeQuadrat = dx * dx + dy * dy;
+  let t = laengeQuadrat === 0 ? 0 : ((px - ax) * dx + (py - ay) * dy) / laengeQuadrat;
+  t = Math.max(0, Math.min(1, t));
+  const nx = ax + t * dx, ny = ay + t * dy;
+  return Math.hypot(px - nx, py - ny);
+}
+
+// Findet die Region, deren Fläche den Punkt enthält. Für Grenzfälle (z.B.
+// Gipfel wie Finsteraarhorn/Mönch, die exakt auf der Kantonsgrenze zu
+// Wallis liegen, oder Seen wie der Bielersee, die in den amtlichen
+// Verwaltungskreis-Polygonen teils ausgespart sind) wird ersatzweise die
+// Region mit dem geografisch nächstgelegenen Rand gewählt, statt immer auf
+// die erste Region zurückzufallen.
+function ermittleRegion(lat, lon) {
+  const treffer = REGIONEN.find(r => r.teile.some(teil => pointInPolygon([lat, lon], teil)));
+  if (treffer) return treffer;
+  let beste = REGIONEN[0];
+  let besterAbstand = Infinity;
+  for (const region of REGIONEN) {
+    for (const teil of region.teile) {
+      for (let i = 0, j = teil.length - 1; i < teil.length; j = i++) {
+        const abstand = abstandZuStrecke(lat, lon, teil[i][0], teil[i][1], teil[j][0], teil[j][1]);
+        if (abstand < besterAbstand) {
+          besterAbstand = abstand;
+          beste = region;
+        }
+      }
+    }
+  }
+  return beste;
 }
 
 function starteLernmodus() {
