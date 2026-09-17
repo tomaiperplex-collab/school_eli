@@ -46,6 +46,7 @@ const state = {
   sessionGesamt: 0,
   lernmodusBegriffe: [],
   lernmodusIndex: 0,
+  lernmodusHintergrundAn: true,
 };
 
 // ---------------------------------------------------------------------------
@@ -124,6 +125,7 @@ const el = {
   lernmodusCloseBtn: document.getElementById("lernmodus-close"),
   lernmodusPrevBtn: document.getElementById("lernmodus-prev"),
   lernmodusNextBtn: document.getElementById("lernmodus-next"),
+  lernmodusHintergrundToggle: document.getElementById("lernmodus-hintergrund-toggle"),
   panelBildnachweise: document.getElementById("bildnachweise"),
   bildnachweiseListe: document.getElementById("bildnachweise-liste"),
   bildnachweiseLink: document.getElementById("bildnachweise-link"),
@@ -172,20 +174,30 @@ const karten = {
   miniMarker: null,
   lernmodus: null,
   lernmodusRegion: null,
+  lernmodusTiles: null,
 };
 
+// Deckkraft der Regionen-Flächen: dezent über Kartenkacheln, kräftig wenn
+// kein Kartenhintergrund gewählt ist (siehe ohneHintergrundBtn/baselayerchange).
+const REGIONEN_FUELLUNG_MIT_KARTE = 0.22;
+const REGIONEN_FUELLUNG_OHNE_KARTE = 0.55;
+
 // Zeichnet die 5 Verwaltungsregionen als eingefärbte Flächen + Namens-Label
-// auf die übergebene Leaflet-Karte (siehe REGIONEN in data.js).
+// auf die übergebene Leaflet-Karte (siehe REGIONEN in data.js). Die
+// Polygon-Layer werden an der Ebene angehängt (ebene.regionenPolygone),
+// damit die Deckkraft später umgeschaltet werden kann.
 function erzeugeRegionenEbene() {
   const ebene = L.layerGroup();
+  ebene.regionenPolygone = [];
   REGIONEN.forEach((region) => {
-    L.polygon(region.teile, {
+    const polygon = L.polygon(region.teile, {
       color: region.farbe,
       weight: 2,
       fillColor: region.farbe,
-      fillOpacity: 0.22,
+      fillOpacity: REGIONEN_FUELLUNG_MIT_KARTE,
       interactive: false,
     }).addTo(ebene);
+    ebene.regionenPolygone.push(polygon);
 
     L.marker(region.label, {
       icon: L.divIcon({
@@ -197,6 +209,11 @@ function erzeugeRegionenEbene() {
     }).addTo(ebene);
   });
   return ebene;
+}
+
+function setzeRegionenFuellung(ebene, ohneHintergrund) {
+  const fuellung = ohneHintergrund ? REGIONEN_FUELLUNG_OHNE_KARTE : REGIONEN_FUELLUNG_MIT_KARTE;
+  ebene.regionenPolygone.forEach((p) => p.setStyle({ fillOpacity: fuellung }));
 }
 
 // Sperrt eine Karte auf den Kanton Bern: nicht wegscrollbar und nicht weiter
@@ -214,10 +231,17 @@ function holeUebersichtsKarte() {
   const karte = L.map(el.karteLeaflet);
   const osm = erzeugeOsmLayer().addTo(karte);
   const swisstopo = erzeugeSwisstopoLayer();
+  const keinHintergrund = L.layerGroup(); // leer: zeigt nur weisse Fläche
   const regionen = erzeugeRegionenEbene().addTo(karte);
   L.control
-    .layers({ OpenStreetMap: osm, swisstopo: swisstopo }, { "5 Regionen": regionen })
+    .layers(
+      { OpenStreetMap: osm, swisstopo: swisstopo, "Kein Hintergrund": keinHintergrund },
+      { "5 Regionen": regionen }
+    )
     .addTo(karte);
+  karte.on("baselayerchange", (ev) => {
+    setzeRegionenFuellung(regionen, ev.name === "Kein Hintergrund");
+  });
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
 
@@ -260,7 +284,7 @@ function holeLernmodusKarte() {
   if (karten.lernmodus) return karten.lernmodus;
 
   const karte = L.map(el.lernmodusKarte);
-  erzeugeOsmLayer().addTo(karte);
+  karten.lernmodusTiles = erzeugeOsmLayer().addTo(karte);
   karte.fitBounds(KANTON_BOUNDS_LATLNG, { padding: [10, 10] });
   sperreAufKanton(karte);
 
@@ -273,12 +297,15 @@ function holeLernmodusKarte() {
 function zeichneRegionMitOrt(region, ort) {
   karten.lernmodusRegion.clearLayers();
 
+  const fuellung = state.lernmodusHintergrundAn
+    ? REGIONEN_FUELLUNG_MIT_KARTE
+    : REGIONEN_FUELLUNG_OHNE_KARTE;
   region.teile.forEach(teil => {
     L.polygon(teil, {
       color: region.farbe,
       weight: 3,
       fillColor: region.farbe,
-      fillOpacity: 0.3,
+      fillOpacity: fuellung,
       interactive: false,
     }).addTo(karten.lernmodusRegion);
   });
@@ -675,6 +702,24 @@ function schliesseLernmodus() {
   setzeModus("uebersicht");
 }
 
+function toggleLernmodusHintergrund() {
+  state.lernmodusHintergrundAn = !state.lernmodusHintergrundAn;
+  const karte = holeLernmodusKarte();
+
+  if (state.lernmodusHintergrundAn) {
+    karten.lernmodusTiles.addTo(karte);
+  } else {
+    karte.removeLayer(karten.lernmodusTiles);
+  }
+  el.lernmodusHintergrundToggle.textContent = state.lernmodusHintergrundAn
+    ? "🗺️ Hintergrund aus"
+    : "🗺️ Hintergrund an";
+  el.lernmodusHintergrundToggle.classList.toggle("aktiv", !state.lernmodusHintergrundAn);
+
+  // Region neu zeichnen, damit die Füllfarbe an den neuen Zustand angepasst wird
+  if (state.lernmodusBegriffe.length) zeigeAktuelleLernmodusSeite();
+}
+
 // ---------------------------------------------------------------------------
 // Event-Listener
 // ---------------------------------------------------------------------------
@@ -709,6 +754,7 @@ el.lernmodusNextBtn.addEventListener("click", () => {
     zeigeAktuelleLernmodusSeite();
   }
 });
+el.lernmodusHintergrundToggle.addEventListener("click", toggleLernmodusHintergrund);
 
 el.bildnachweiseLink.addEventListener("click", () => setzeModus("bildnachweise"));
 
