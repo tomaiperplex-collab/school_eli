@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kanton Bern – Karte zum Ausdrucken</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Nunito", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    color: #2b2b2b;
+  }
+  .druck-seite {
+    max-width: 1200px;
+    margin: 1.5rem auto;
+    padding: 0 1rem 2rem;
+  }
+  .druck-kopf {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  .druck-kopf h1 {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+  .druck-kopf p {
+    margin: 0.3rem 0 0;
+    color: #666;
+  }
+  .drucken-btn {
+    display: block;
+    margin: 0 auto 1.2rem;
+    border: none;
+    border-radius: 999px;
+    padding: 0.8rem 1.6rem;
+    font-size: 1.05rem;
+    font-weight: bold;
+    background: #ffb703;
+    color: #402900;
+    cursor: pointer;
+    box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+  }
+  /* Karte links, Legende rechts -- nutzt das Querformat optimal aus und
+     hält alles auf einer einzigen Druckseite (siehe @media print unten) */
+  .druck-inhalt {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+  .karte-rahmen {
+    flex: 1 1 55%;
+    aspect-ratio: 1.05 / 1;
+    border: 3px solid #5a8f4a;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  #karte { width: 100%; height: 100%; background: #fff; }
+  .legende-spalte { flex: 1 1 45%; }
+
+  /* Beschriftung der Punkte (siehe style.css .punkt-tooltip) */
+  .punkt-tooltip {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    padding: 0;
+  }
+  .punkt-tooltip::before { display: none; }
+
+  /* Namens-Label der 5 Regionen (siehe style.css .regionen-label) */
+  .regionen-label {
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    font-weight: 800;
+    font-size: 13px;
+    color: #2b2b2b;
+    text-shadow: 0 0 3px #fff, 0 0 3px #fff, 0 0 6px #fff, 0 0 6px #fff;
+    pointer-events: none;
+  }
+
+  .legende {
+    list-style: none;
+    columns: 2;
+    column-gap: 1.4rem;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  .legende li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    break-inside: avoid;
+    margin-bottom: 0.35rem;
+  }
+  .legende .swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+    flex: none;
+  }
+
+  .druck-fuss {
+    text-align: center;
+    color: #999;
+    font-size: 0.8rem;
+    margin-top: 1rem;
+  }
+
+  @media print {
+    .drucken-btn { display: none; }
+    .druck-seite { margin: 0; padding: 0; max-width: none; }
+    .druck-kopf h1 { font-size: 1.4rem; }
+    .druck-kopf p { font-size: 0.85rem; }
+    .karte-rahmen { border-width: 2px; aspect-ratio: unset; flex: none; width: 150mm; height: 165mm; }
+    .legende { columns: 3; font-size: 0.75rem; }
+    .legende .swatch { width: 11px; height: 11px; }
+    .druck-fuss { font-size: 0.65rem; margin-top: 0.6rem; }
+    @page { size: A4 landscape; margin: 8mm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="druck-seite">
+  <div class="druck-kopf">
+    <h1>🏔️ Kanton Bern – Übersichtskarte</h1>
+    <p>Orte, Berge, Seen, Flüsse und Sehenswürdigkeiten mit den 5 Verwaltungsregionen</p>
+  </div>
+
+  <button class="drucken-btn" onclick="window.print()">🖨️ Drucken / als PDF speichern</button>
+
+  <div class="druck-inhalt">
+    <div class="karte-rahmen">
+      <div id="karte"></div>
+    </div>
+    <div class="legende-spalte">
+      <ul class="legende" id="legende"></ul>
+    </div>
+  </div>
+
+  <p class="druck-fuss">Kanton Bern entdecken · Region- und Kategoriefarben wie in der App · Kartengrundlage: eigene, vereinfachte Darstellung (kein Kartendienst nötig)</p>
+</div>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="data.js"></script>
+<script>
+  // Eigenständige Druckseite: nutzt nur die Daten aus data.js, nicht app.js
+  // (das erwartet die volle App-Oberfläche mit Modus-/Filter-Leiste).
+
+  const KATEGORIE_PRAEFIX = { orte: "O", berge: "B", seen: "S", fluesse: "F", sehenswuerdigkeiten: "SW" };
+  const zaehler = {};
+  BEGRIFFE.forEach((b) => {
+    zaehler[b.kategorie] = (zaehler[b.kategorie] || 0) + 1;
+    b._code = KATEGORIE_PRAEFIX[b.kategorie] + zaehler[b.kategorie];
+  });
+
+  function holeMarkerFarbe(b) {
+    if (b.kategorie === "orte" && b.einwohner > GROSSSTADT_SCHWELLE) return GROSSSTADT_FARBE;
+    return KATEGORIEN[b.kategorie].farbe;
+  }
+
+  const kantonBounds = L.latLngBounds(
+    [KARTE_BOUNDS.latMin, KARTE_BOUNDS.lonMin],
+    [KARTE_BOUNDS.latMax, KARTE_BOUNDS.lonMax]
+  );
+
+  const karte = L.map("karte", {
+    zoomControl: false,
+    dragging: false,
+    scrollWheelZoom: false,
+    doubleClickZoom: false,
+    boxZoom: false,
+    keyboard: false,
+    attributionControl: false,
+  });
+
+  // Regionen als eingefärbte Flächen + Namens-Label
+  REGIONEN.forEach((region) => {
+    L.polygon(region.teile, {
+      color: region.farbe,
+      weight: 2,
+      fillColor: region.farbe,
+      fillOpacity: 0.55,
+      interactive: false,
+    }).addTo(karte);
+    L.marker(region.label, {
+      icon: L.divIcon({ className: "regionen-label", html: region.name, iconSize: [0, 0] }),
+      interactive: false,
+    }).addTo(karte);
+  });
+
+  // Seen (mit Insel-Löchern) und Flüsse
+  Object.values(SEEN_SHAPES).forEach((teile) => {
+    teile.forEach((polygon) => {
+      L.polygon(polygon, {
+        color: "#1f5c8b",
+        weight: 1,
+        fillColor: KATEGORIEN.seen.farbe,
+        fillOpacity: 0.65,
+        interactive: false,
+      }).addTo(karte);
+    });
+  });
+  Object.values(FLUSS_LINIEN).forEach((linie) => {
+    L.polyline(linie, { color: KATEGORIEN.fluesse.farbe, weight: 3, interactive: false }).addTo(karte);
+  });
+
+  // Alle Begriffe als Punkte mit Code-Beschriftung
+  BEGRIFFE.filter((b) => typeof b.lat === "number" && typeof b.lon === "number").forEach((b) => {
+    L.circleMarker([b.lat, b.lon], {
+      radius: 12,
+      fillColor: holeMarkerFarbe(b),
+      fillOpacity: 1,
+      color: "#fff",
+      weight: 2,
+      interactive: false,
+    })
+      .bindTooltip(b._code, { permanent: true, direction: "center", className: "punkt-tooltip" })
+      .addTo(karte);
+  });
+
+  karte.fitBounds(kantonBounds, { padding: [10, 10] });
+  window.requestAnimationFrame(() => karte.invalidateSize());
+
+  // Der Kartenrahmen hat für Bildschirm und Druck unterschiedliche Grössen
+  // (siehe @media print) -- Leaflet merkt sich Grösse/Ausschnitt aber nur
+  // zum Zeitpunkt von invalidateSize()/fitBounds(), daher bei jedem
+  // Layoutwechsel neu berechnen. onbeforeprint deckt den echten Druck-
+  // Dialog ab, der matchMedia-Listener zusätzlich Tools wie Playwrights
+  // page.pdf(), die nur die Medien-Emulation umschalten.
+  function neuAusrichtenFuerLayout() {
+    karte.invalidateSize();
+    karte.fitBounds(kantonBounds, { padding: [10, 10] });
+  }
+  window.addEventListener("beforeprint", neuAusrichtenFuerLayout);
+  if (window.matchMedia) {
+    window.matchMedia("print").addEventListener("change", neuAusrichtenFuerLayout);
+  }
+
+  // Legende gruppiert nach Kategorie (gleiche Reihenfolge wie in der App)
+  const legende = document.getElementById("legende");
+  Object.keys(KATEGORIEN).forEach((katKey) => {
+    BEGRIFFE.filter((b) => b.kategorie === katKey).forEach((b) => {
+      const li = document.createElement("li");
+      const swatch = document.createElement("span");
+      swatch.className = "swatch";
+      swatch.style.background = holeMarkerFarbe(b);
+      li.appendChild(swatch);
+      li.append(`${b._code} = ${b.name}`);
+      legende.appendChild(li);
+    });
+  });
+</script>
+</body>
+</html>
