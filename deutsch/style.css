@@ -11,6 +11,16 @@
 }
 
 /* --- Themenauswahl --- */
+#themenauswahl {
+  max-height: 900px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.2s ease;
+}
+#themenauswahl.eingeklappt {
+  max-height: 0;
+  opacity: 0;
+}
 .thema-bar {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

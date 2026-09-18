@@ -44,6 +44,7 @@ const state = {
 };
 
 const el = {
+  themenauswahl: document.getElementById("themenauswahl"),
   themaBar: document.getElementById("thema-bar"),
   fortschrittBtn: document.getElementById("fortschritt-btn"),
   panelIntro: document.getElementById("panel-intro"),
@@ -103,6 +104,10 @@ function zeigePanel(name) {
   el.panelTheorie.classList.toggle("hidden", name !== "theorie");
   el.panelUebung.classList.toggle("hidden", name !== "uebung");
   el.panelFortschritt.classList.toggle("hidden", name !== "fortschritt");
+  // Themenauswahl-Kachelraster nimmt viel Platz weg — sobald ein Thema
+  // (oder der Fortschritt) offen ist, einklappen. Die "← Zurück"-Buttons
+  // in jedem Panel führen zurück zu "intro", wo das Raster wieder erscheint.
+  el.themenauswahl.classList.toggle("eingeklappt", name !== "intro");
   aktualisierteThemaBarAktiv();
 }
 
