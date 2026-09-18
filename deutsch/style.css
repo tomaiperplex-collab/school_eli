@@ -222,7 +222,18 @@
   background: var(--akzent);
   transition: width 0.3s ease;
 }
-.fortschritt-prozent { width: 50px; text-align: right; font-weight: bold; }
+.fortschritt-prozent {
+  width: 64px;
+  text-align: right;
+  font-weight: bold;
+  line-height: 1.3;
+}
+.fortschritt-prozent small {
+  display: block;
+  font-weight: normal;
+  color: #888;
+  font-size: 0.75rem;
+}
 
 .gesamt-punkte {
   text-align: center;
