@@ -1,0 +1,230 @@
+/* deutsch/style.css — Styling für das Fach Deutsch. Gemeinsame Chrome
+   (Grundlayout, Fach-Tabs, Header, Footer, .panel/.hidden) steht in
+   shared/shell.css. Die Quiz-Bausteine (mc-grid, big-btn, feedback, ...)
+   sind bewusst eigenständig gehalten (nicht aus ../style.css importiert),
+   damit das Fach Deutsch unabhängig vom Fach NMG bleibt. */
+
+:root {
+  --richtig: #2a9d5c;
+  --falsch: #e63946;
+  --akzent: #219ebc;
+}
+
+/* --- Themenauswahl --- */
+.thema-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.7rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0.8rem 1rem 0;
+}
+.thema-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.9rem 0.6rem;
+  background: #fff;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+  font-family: var(--font);
+  font-weight: bold;
+  font-size: 0.95rem;
+  text-align: center;
+  cursor: pointer;
+  min-height: 76px;
+}
+.thema-tile:hover:not(:disabled) { transform: translateY(-2px); background: #fff8ec; }
+.thema-tile.aktiv { background: #ffb703; }
+.thema-tile-icon { font-size: 1.6rem; }
+.thema-tile.bald {
+  opacity: 0.55;
+  cursor: default;
+  background: #f1f1f1;
+  box-shadow: none;
+}
+.thema-tile-bald {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.fortschritt-tile-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 0.6rem 1rem 0;
+}
+.fortschritt-tile {
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: var(--font);
+  background: #ffe3b3;
+  color: #5a3d00;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+}
+.fortschritt-tile:hover { transform: translateY(-2px); }
+.fortschritt-tile.aktiv { background: #ffb703; color: #402900; }
+
+/* --- Layout --- */
+#app-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.intro-text {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.link-zurueck {
+  display: inline-block;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 0.95rem;
+  font-weight: bold;
+  font-family: var(--font);
+  cursor: pointer;
+  padding: 0 0 0.8rem;
+}
+.link-zurueck:hover { color: #444; }
+
+/* --- Theorie --- */
+.theorie-text p { line-height: 1.6; }
+.theorie-beispiel {
+  background: #fff8ec;
+  border-left: 4px solid #ffb703;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+}
+.theorie-spanisch {
+  background: #fdeef0;
+  border-left: 4px solid #e63946;
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+}
+#panel-theorie .big-btn { display: block; margin: 1rem auto 0; }
+
+/* --- Übung --- */
+.uebung-kopf {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+}
+.frage-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 0.4rem 0 1rem;
+}
+
+.mc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+}
+@media (max-width: 480px) {
+  .mc-grid { grid-template-columns: 1fr; }
+}
+.mc-option {
+  border: none;
+  border-radius: var(--radius);
+  background: #f1f1f1;
+  padding: 1.1rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: var(--font);
+  cursor: pointer;
+  min-height: 60px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+}
+.mc-option:hover:not(:disabled) { background: #e6e6e6; }
+.mc-option.richtig { background: var(--richtig); color: #fff; }
+.mc-option.falsch { background: var(--falsch); color: #fff; }
+.mc-option:disabled { cursor: default; }
+
+.big-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.6rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: var(--font);
+  background: var(--akzent);
+  color: #fff;
+  cursor: pointer;
+  min-height: 52px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+}
+.big-btn:active { transform: translateY(1px); }
+.big-btn.warnung { background: var(--falsch); }
+
+.feedback {
+  min-height: 1.6em;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 0.8rem 0;
+}
+.feedback.richtig { color: var(--richtig); }
+.feedback.falsch { color: var(--falsch); }
+
+#weiter-btn { display: block; margin: 0 auto; }
+
+/* --- Fortschritt --- */
+#fortschritt-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.fortschritt-zeile {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.fortschritt-zeile .name { width: 190px; font-weight: bold; font-size: 0.95rem; }
+.fortschritt-balken-hintergrund {
+  flex: 1;
+  height: 22px;
+  background: #eee;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.fortschritt-balken {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--akzent);
+  transition: width 0.3s ease;
+}
+.fortschritt-prozent { width: 50px; text-align: right; font-weight: bold; }
+
+.gesamt-punkte {
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+/* --- Mobile --- */
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .panel { padding: 0.9rem; }
+  .fortschritt-zeile { flex-wrap: wrap; }
+  .fortschritt-zeile .name { width: 100%; }
+}
