@@ -59,8 +59,6 @@ const el = {
   punktestand: document.getElementById("punktestand"),
   frageText: document.getElementById("frage-text"),
   multipleChoice: document.getElementById("multiple-choice"),
-  freitextForm: document.getElementById("freitext-form"),
-  freitextInput: document.getElementById("freitext-input"),
   feedback: document.getElementById("feedback"),
   weiterBtn: document.getElementById("weiter-btn"),
   fortschrittListe: document.getElementById("fortschritt-liste"),
@@ -68,10 +66,6 @@ const el = {
   resetBtn: document.getElementById("reset-btn"),
   fortschrittZurueck: document.getElementById("fortschritt-zurueck"),
 };
-
-function normalisiereText(t) {
-  return t.trim().toLowerCase().replace(/\s+/g, " ");
-}
 
 function zufallsElement(liste) {
   return liste[Math.floor(Math.random() * liste.length)];
@@ -139,24 +133,14 @@ function naechsteFrage() {
   el.weiterBtn.classList.add("hidden");
   el.punktestand.textContent = `✅ ${state.sessionRichtig} / ${state.sessionGesamt}`;
 
-  if (state.aufgabe.typ === "mc") {
-    el.multipleChoice.classList.remove("hidden");
-    el.freitextForm.classList.add("hidden");
-    el.multipleChoice.innerHTML = "";
-    state.aufgabe.optionen.forEach((optionText, i) => {
-      const btn = document.createElement("button");
-      btn.className = "mc-option";
-      btn.textContent = optionText;
-      btn.addEventListener("click", () => beantworteMultipleChoice(i, btn));
-      el.multipleChoice.appendChild(btn);
-    });
-  } else {
-    el.multipleChoice.classList.add("hidden");
-    el.freitextForm.classList.remove("hidden");
-    el.freitextInput.value = "";
-    el.freitextInput.disabled = false;
-    el.freitextInput.focus();
-  }
+  el.multipleChoice.innerHTML = "";
+  state.aufgabe.optionen.forEach((optionText, i) => {
+    const btn = document.createElement("button");
+    btn.className = "mc-option";
+    btn.textContent = optionText;
+    btn.addEventListener("click", () => beantworteMultipleChoice(i, btn));
+    el.multipleChoice.appendChild(btn);
+  });
 }
 
 function verbucheAntwort(korrekt) {
@@ -189,15 +173,6 @@ function beantworteMultipleChoice(gewaehlt, button) {
   });
   verbucheAntwort(korrekt);
   zeigeFeedback(korrekt, state.aufgabe.optionen[state.aufgabe.richtig]);
-}
-
-function beantworteFreitext(ev) {
-  ev.preventDefault();
-  const eingabe = normalisiereText(el.freitextInput.value);
-  const korrekt = state.aufgabe.antworten.some((a) => normalisiereText(a) === eingabe);
-  el.freitextInput.disabled = true;
-  verbucheAntwort(korrekt);
-  zeigeFeedback(korrekt, state.aufgabe.antworten[0]);
 }
 
 function renderFortschritt() {
@@ -241,6 +216,5 @@ el.theorieStartBtn.addEventListener("click", starteUebung);
 el.theorieZurueck.addEventListener("click", () => { state.thema = null; zeigePanel("intro"); });
 el.uebungZurueck.addEventListener("click", () => { renderTheorie(); zeigePanel("theorie"); });
 el.fortschrittZurueck.addEventListener("click", () => zeigePanel("intro"));
-el.freitextForm.addEventListener("submit", beantworteFreitext);
 el.weiterBtn.addEventListener("click", naechsteFrage);
 el.resetBtn.addEventListener("click", fortschrittZuruecksetzen);

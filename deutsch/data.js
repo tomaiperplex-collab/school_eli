@@ -4,11 +4,9 @@
 // Fortschritt verloren) sowie einen Pool `aufgaben`, aus dem die Übung
 // zufällig zieht (siehe app.js: naechsteFrage()).
 //
-// Aufgaben-Typen:
-//   { typ: "mc",   frage, optionen: [...], richtig: <Index in optionen> }
-//   { typ: "text", frage, antworten: [...] }  // beliebig viele akzeptierte
-//                                              // Schreibweisen, Vergleich
-//                                              // über normalisiereText()
+// Aufgaben-Typ (bewusst nur Multiple-Choice — mobilfreundlich, kein
+// Eintippen nötig):
+//   { typ: "mc", frage, optionen: [...], richtig: <Index in optionen> }
 
 const DEUTSCH_THEMEN = [
   {
@@ -49,12 +47,12 @@ const DEUTSCH_THEMEN = [
         optionen: ["Ja", "Nein"],
         richtig: istNomen ? 0 : 1,
       })),
-      // 2) Zusammengesetzte Nomen bilden
-      { typ: "text", frage: "Brief + Marke = ? (mit Artikel)", antworten: ["die Briefmarke", "briefmarke"] },
-      { typ: "text", frage: "schreiben + Heft = ? (mit Artikel)", antworten: ["das Schreibheft", "schreibheft"] },
-      { typ: "text", frage: "Birne + Baum = ? (mit Artikel)", antworten: ["der Birnbaum", "der Birnenbaum", "birnbaum", "birnenbaum"] },
-      { typ: "text", frage: "Dach + Fenster = ? (mit Artikel)", antworten: ["das Dachfenster", "dachfenster"] },
-      { typ: "text", frage: "lesen + Buch = ? (mit Artikel)", antworten: ["das Lesebuch", "lesebuch"] },
+      // 2) Zusammengesetzte Nomen bilden — passendes zweites Wort wählen
+      { typ: "mc", frage: "Brief + ? = die Briefmarke", optionen: ["Marke", "Baum", "Fenster"], richtig: 0 },
+      { typ: "mc", frage: "schreiben + ? = das Schreibheft", optionen: ["Heft", "Buch", "Marke"], richtig: 0 },
+      { typ: "mc", frage: "Birne + ? = der Birnbaum", optionen: ["Baum", "Heft", "Fenster"], richtig: 0 },
+      { typ: "mc", frage: "Dach + ? = das Dachfenster", optionen: ["Fenster", "Buch", "Baum"], richtig: 0 },
+      { typ: "mc", frage: "lesen + ? = das Lesebuch", optionen: ["Buch", "Marke", "Heft"], richtig: 0 },
       // 3) Nomen für Gefühle und Gedanken erkennen
       ...[
         ["Glück", true], ["Wanderschuhe", false], ["Angst", true], ["Bahn", false],
@@ -67,13 +65,13 @@ const DEUTSCH_THEMEN = [
         optionen: ["Ja", "Nein"],
         richtig: istGefuehl ? 0 : 1,
       })),
-      // 4) Nomen auf -heit, -keit, -ung bilden
-      { typ: "text", frage: "einladen + ung = ? (mit Artikel)", antworten: ["die Einladung", "einladung"] },
-      { typ: "text", frage: "neu + heit = ? (mit Artikel)", antworten: ["die Neuheit", "neuheit"] },
-      { typ: "text", frage: "erholen + ung = ? (mit Artikel)", antworten: ["die Erholung", "erholung"] },
-      { typ: "text", frage: "frech + heit = ? (mit Artikel)", antworten: ["die Frechheit", "frechheit"] },
-      { typ: "text", frage: "traurig + keit = ? (mit Artikel)", antworten: ["die Traurigkeit", "traurigkeit"] },
-      { typ: "text", frage: "üben + ung = ? (mit Artikel)", antworten: ["die Übung", "übung"] },
+      // 4) Nomen auf -heit, -keit, -ung bilden — richtige Endung wählen
+      { typ: "mc", frage: "einladen — wie heisst das Nomen?", optionen: ["die Einladung", "die Einladheit", "die Einladkeit"], richtig: 0 },
+      { typ: "mc", frage: "neu — wie heisst das Nomen?", optionen: ["die Neuung", "die Neuheit", "die Neukeit"], richtig: 1 },
+      { typ: "mc", frage: "erholen — wie heisst das Nomen?", optionen: ["die Erholheit", "die Erholkeit", "die Erholung"], richtig: 2 },
+      { typ: "mc", frage: "frech — wie heisst das Nomen?", optionen: ["die Frechheit", "die Frechung", "die Frechkeit"], richtig: 0 },
+      { typ: "mc", frage: "traurig — wie heisst das Nomen?", optionen: ["die Traurigheit", "die Traurigung", "die Traurigkeit"], richtig: 2 },
+      { typ: "mc", frage: "üben — wie heisst das Nomen?", optionen: ["die Übheit", "die Übkeit", "die Übung"], richtig: 2 },
     ],
   },
 
@@ -100,13 +98,13 @@ const DEUTSCH_THEMEN = [
       <strong>das Schwimmen</strong> — und deshalb gross geschrieben.</p>
     `,
     aufgaben: [
-      // 1) Verb als Nomen ergänzen
-      { typ: "text", frage: "Seife zum ___ (waschen)", antworten: ["waschen", "das waschen"] },
-      { typ: "text", frage: "müde vom ___ (wandern)", antworten: ["wandern", "das wandern"] },
-      { typ: "text", frage: "ein Buch zum ___ (lesen)", antworten: ["lesen", "das lesen"] },
-      { typ: "text", frage: "Witze zum ___ (lachen)", antworten: ["lachen", "das lachen"] },
-      { typ: "text", frage: "Angst vor dem ___ (fliegen)", antworten: ["fliegen", "das fliegen"] },
-      { typ: "text", frage: "am Ufer beim ___ (fischen)", antworten: ["fischen", "das fischen"] },
+      // 1) Verb als Nomen ergänzen — richtiges Verb aus der Wortbank wählen
+      { typ: "mc", frage: "Seife zum ___?", optionen: ["Waschen", "Fischen", "Lachen"], richtig: 0 },
+      { typ: "mc", frage: "müde vom ___?", optionen: ["Lesen", "Fliegen", "Wandern"], richtig: 2 },
+      { typ: "mc", frage: "ein Buch zum ___?", optionen: ["Lesen", "Waschen", "Wandern"], richtig: 0 },
+      { typ: "mc", frage: "Witze zum ___?", optionen: ["Fischen", "Lachen", "Fliegen"], richtig: 1 },
+      { typ: "mc", frage: "Angst vor dem ___?", optionen: ["Waschen", "Lesen", "Fliegen"], richtig: 2 },
+      { typ: "mc", frage: "am Ufer beim ___?", optionen: ["Fischen", "Lachen", "Wandern"], richtig: 0 },
       // 2) Passende Verbform einsetzen
       { typ: "mc", frage: "Anja ___ an der Kletterwand.", optionen: ["klettert", "schwimmt", "fliegt"], richtig: 0 },
       { typ: "mc", frage: "Ivo ___ am schnellsten durch den See.", optionen: ["läuft", "schwimmt", "klettert"], richtig: 1 },
@@ -114,24 +112,24 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Leo will keine Suppe ___.", optionen: ["essen", "fliegen", "schwimmen"], richtig: 0 },
       { typ: "mc", frage: "Maria ___ morgen nach Rom.", optionen: ["klettert", "läuft", "fliegt"], richtig: 2 },
       // 3) Verben als Nomen ergänzen (Lückentext)
-      { typ: "text", frage: "Beim ___ zähle ich manchmal mit den Fingern.", antworten: ["rechnen"] },
-      { typ: "text", frage: "Er hat sich beim ___ das Bein gebrochen.", antworten: ["klettern"] },
-      { typ: "text", frage: "Zum ___ setze ich mich an den Tisch.", antworten: ["essen"] },
-      { typ: "text", frage: "Wenn ich Bücher sehe, bekomme ich Lust zum ___.", antworten: ["lesen"] },
-      { typ: "text", frage: "Im Schwimmbad will er nichts vom ___ hören.", antworten: ["tuscheln"] },
-      { typ: "text", frage: "Sobald er Flugzeuge sieht, träumt er vom ___.", antworten: ["fliegen"] },
-      { typ: "text", frage: "Er ist müde vom ___.", antworten: ["wandern"] },
-      { typ: "text", frage: "Beim ___ werde ich regelmässig seekrank.", antworten: ["segeln"] },
-      { typ: "text", frage: "Beim ___ geht es ihr nicht hoch genug.", antworten: ["schaukeln"] },
+      { typ: "mc", frage: "Beim ___ zähle ich manchmal mit den Fingern.", optionen: ["Rechnen", "Klettern", "Segeln"], richtig: 0 },
+      { typ: "mc", frage: "Er hat sich beim ___ das Bein gebrochen.", optionen: ["Schaukeln", "Klettern", "Essen"], richtig: 1 },
+      { typ: "mc", frage: "Zum ___ setze ich mich an den Tisch.", optionen: ["Lesen", "Essen", "Tuscheln"], richtig: 1 },
+      { typ: "mc", frage: "Wenn ich Bücher sehe, bekomme ich Lust zum ___.", optionen: ["Rechnen", "Fliegen", "Lesen"], richtig: 2 },
+      { typ: "mc", frage: "Im Schwimmbad will er nichts vom ___ hören.", optionen: ["Wandern", "Tuscheln", "Klettern"], richtig: 1 },
+      { typ: "mc", frage: "Sobald er Flugzeuge sieht, träumt er vom ___.", optionen: ["Segeln", "Essen", "Fliegen"], richtig: 2 },
+      { typ: "mc", frage: "Er ist müde vom ___.", optionen: ["Wandern", "Schaukeln", "Rechnen"], richtig: 0 },
+      { typ: "mc", frage: "Beim ___ werde ich regelmässig seekrank.", optionen: ["Tuscheln", "Lesen", "Segeln"], richtig: 2 },
+      { typ: "mc", frage: "Beim ___ geht es ihr nicht hoch genug.", optionen: ["Klettern", "Fliegen", "Schaukeln"], richtig: 2 },
       // 4) Verben als Nomen in Sätzen
-      { typ: "text", frage: "Ich lache über das laute ___ der Motorräder. (knattern)", antworten: ["knattern"] },
-      { typ: "text", frage: "So schnelles ___ ist nicht gut für sein krankes Herz. (laufen)", antworten: ["laufen"] },
-      { typ: "text", frage: "Aus dem Hühnerstall hört man ein heiseres ___. (krähen)", antworten: ["krähen"] },
-      { typ: "text", frage: "Weites ___ ist Adams Spezialität. (springen)", antworten: ["springen"] },
-      { typ: "text", frage: "Humor wäre sicher besser als das ständige ___. (schimpfen)", antworten: ["schimpfen"] },
-      { typ: "text", frage: "Aylin übt das ___ mit der Linkshänderschere. (schneiden)", antworten: ["schneiden"] },
-      { typ: "text", frage: "Zum ___ legen wir uns ins Gras. (ausruhen)", antworten: ["ausruhen"] },
-      { typ: "text", frage: "Wir fahren ans schwarze Meer zum ___. (tauchen)", antworten: ["tauchen"] },
+      { typ: "mc", frage: "Ich lache über das laute ___ der Motorräder.", optionen: ["Knattern", "Krähen", "Schimpfen"], richtig: 0 },
+      { typ: "mc", frage: "So schnelles ___ ist nicht gut für sein krankes Herz.", optionen: ["Springen", "Laufen", "Tauchen"], richtig: 1 },
+      { typ: "mc", frage: "Aus dem Hühnerstall hört man ein heiseres ___.", optionen: ["Knattern", "Krähen", "Schneiden"], richtig: 1 },
+      { typ: "mc", frage: "Weites ___ ist Adams Spezialität.", optionen: ["Laufen", "Springen", "Ausruhen"], richtig: 1 },
+      { typ: "mc", frage: "Humor wäre sicher besser als das ständige ___.", optionen: ["Ausruhen", "Schimpfen", "Tauchen"], richtig: 1 },
+      { typ: "mc", frage: "Aylin übt das ___ mit der Linkshänderschere.", optionen: ["Knattern", "Springen", "Schneiden"], richtig: 2 },
+      { typ: "mc", frage: "Zum ___ legen wir uns ins Gras.", optionen: ["Ausruhen", "Laufen", "Krähen"], richtig: 0 },
+      { typ: "mc", frage: "Wir fahren ans schwarze Meer zum ___.", optionen: ["Schimpfen", "Schneiden", "Tauchen"], richtig: 2 },
     ],
   },
 
@@ -169,18 +167,18 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Welche Schreibweise stimmt?", optionen: ["Hafer", "Hapfer", "Haffer"], richtig: 0 },
       { typ: "mc", frage: "Welche Schreibweise stimmt?", optionen: ["Flanzenfresser", "Pflanzenfresser", "Pflanzefresser"], richtig: 1 },
       { typ: "mc", frage: "Welche Schreibweise stimmt?", optionen: ["Pfreizeit", "Freitzeit", "Freizeit"], richtig: 2 },
-      // 2) Reimwörter
-      { typ: "text", frage: "Kopf reimt sich auf ___ (beginnt mit T)", antworten: ["topf"] },
-      { typ: "text", frage: "dampfen reimt sich auf ___ (beginnt mit st)", antworten: ["stampfen"] },
-      { typ: "text", frage: "klopfen reimt sich auf ___ (beginnt mit Tr)", antworten: ["tropfen"] },
-      { typ: "text", frage: "Sumpf reimt sich auf ___ (beginnt mit st)", antworten: ["stumpf"] },
-      // 3) Worttrennung mit pf (mit Trennstrich schreiben, z.B. "klop-fen")
-      { typ: "text", frage: "Trenne: klopfen", antworten: ["klop-fen"] },
-      { typ: "text", frage: "Trenne: Wipfel", antworten: ["wip-fel"] },
-      { typ: "text", frage: "Trenne: Kupfer", antworten: ["kup-fer"] },
-      { typ: "text", frage: "Trenne: tapfer", antworten: ["tap-fer"] },
-      { typ: "text", frage: "Trenne: stampfen", antworten: ["stamp-fen"] },
-      { typ: "text", frage: "Trenne: rümpfen", antworten: ["rümp-fen"] },
+      // 2) Reimwörter erkennen
+      { typ: "mc", frage: "Kopf reimt sich auf … (beginnt mit T)", optionen: ["Topf", "Tisch", "Tasse"], richtig: 0 },
+      { typ: "mc", frage: "dampfen reimt sich auf … (beginnt mit st)", optionen: ["stehen", "stampfen", "stark"], richtig: 1 },
+      { typ: "mc", frage: "klopfen reimt sich auf … (beginnt mit Tr)", optionen: ["Treppe", "Traum", "Tropfen"], richtig: 2 },
+      { typ: "mc", frage: "Sumpf reimt sich auf … (beginnt mit st)", optionen: ["Stumpf", "Stern", "Start"], richtig: 0 },
+      // 3) Worttrennung mit pf — richtige Trennstelle wählen
+      { typ: "mc", frage: "Wie trennt man \"klopfen\" richtig?", optionen: ["klop-fen", "klo-pfen", "klopf-en"], richtig: 0 },
+      { typ: "mc", frage: "Wie trennt man \"Wipfel\" richtig?", optionen: ["Wi-pfel", "Wip-fel", "Wipf-el"], richtig: 1 },
+      { typ: "mc", frage: "Wie trennt man \"Kupfer\" richtig?", optionen: ["Ku-pfer", "Kupf-er", "Kup-fer"], richtig: 2 },
+      { typ: "mc", frage: "Wie trennt man \"tapfer\" richtig?", optionen: ["tapf-er", "tap-fer", "ta-pfer"], richtig: 1 },
+      { typ: "mc", frage: "Wie trennt man \"stampfen\" richtig?", optionen: ["stam-pfen", "stampf-en", "stamp-fen"], richtig: 2 },
+      { typ: "mc", frage: "Wie trennt man \"rümpfen\" richtig?", optionen: ["rümp-fen", "rüm-pfen", "rümpf-en"], richtig: 0 },
       // 4) Alphabetische Reihenfolge
       { typ: "mc", frage: "Welches Wort kommt im Alphabet zuerst?", optionen: ["Pfote", "Pflaster"], richtig: 1 },
       { typ: "mc", frage: "Welches Wort kommt im Alphabet zuerst?", optionen: ["Pfeil", "Pfau"], richtig: 1 },

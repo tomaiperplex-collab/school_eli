@@ -159,25 +159,6 @@
 .mc-option.falsch { background: var(--falsch); color: #fff; }
 .mc-option:disabled { cursor: default; }
 
-#freitext-form {
-  display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  margin-top: 0.6rem;
-  justify-content: center;
-}
-#freitext-input {
-  flex: 1;
-  min-width: 200px;
-  max-width: 340px;
-  font-size: 1.15rem;
-  padding: 0.8rem 1rem;
-  border-radius: 999px;
-  border: 3px solid #ccc;
-  font-family: var(--font);
-}
-#freitext-input:focus { outline: none; border-color: #ffb703; }
-
 .big-btn {
   border: none;
   border-radius: 999px;
