@@ -97,6 +97,16 @@
   max-width: 640px;
   margin: 0.5rem auto 0;
 }
+.karte-drucken-hinweis {
+  text-align: center;
+  margin: 1rem 0 0;
+}
+.karte-drucken-hinweis a {
+  color: #666;
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+.karte-drucken-hinweis a:hover { color: #333; }
 
 /* Beschriftung der Punkte auf der Übersichtskarte (Leaflet permanent tooltip) */
 .punkt-tooltip {
