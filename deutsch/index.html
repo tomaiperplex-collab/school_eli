@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="../shared/shell.css" />
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
@@ -19,16 +20,64 @@
 
 <header class="app-header">
   <h1>📖 Deutsch lernen</h1>
+  <p class="subtitle">Rechtschreibung üben — Thema wählen und loslegen</p>
 </header>
 
-<section class="panel fach-coming-soon">
-  <h2>🚧 Demnächst verfügbar</h2>
-  <p class="fach-coming-soon-text">Hier entsteht bald ein neuer Lernbereich.</p>
-</section>
+<nav class="thema-bar" id="thema-bar" aria-label="Themenauswahl"></nav>
+<div class="fortschritt-tile-wrapper">
+  <button id="fortschritt-btn" class="fortschritt-tile">📊 Fortschritt</button>
+</div>
+
+<main id="app-main">
+
+  <section id="panel-intro" class="panel">
+    <p class="intro-text">👆 Wähle oben ein Thema aus. Zuerst gibt's eine
+    kurze Erklärung zum Nachlesen, danach kannst du üben.</p>
+  </section>
+
+  <section id="panel-theorie" class="panel hidden">
+    <button class="link-zurueck" id="theorie-zurueck">← Andere Themen</button>
+    <h2 id="theorie-titel"></h2>
+    <div id="theorie-text" class="theorie-text"></div>
+    <button class="big-btn" id="theorie-start-btn">Übung starten ▶</button>
+  </section>
+
+  <section id="panel-uebung" class="panel hidden">
+    <button class="link-zurueck" id="uebung-zurueck">← Zurück zur Theorie</button>
+    <div class="uebung-kopf">
+      <span id="uebung-thema-name"></span>
+      <span id="punktestand"></span>
+    </div>
+
+    <p id="frage-text" class="frage-text"></p>
+
+    <div id="multiple-choice" class="mc-grid hidden"></div>
+
+    <form id="freitext-form" class="hidden">
+      <input type="text" id="freitext-input" placeholder="Antwort eintippen…" autocomplete="off" />
+      <button type="submit" class="big-btn">Prüfen</button>
+    </form>
+
+    <p id="feedback" class="feedback" aria-live="polite"></p>
+
+    <button id="weiter-btn" class="big-btn hidden">Weiter →</button>
+  </section>
+
+  <section id="panel-fortschritt" class="panel hidden">
+    <button class="link-zurueck" id="fortschritt-zurueck">← Andere Themen</button>
+    <h2>📊 Dein Fortschritt</h2>
+    <div id="fortschritt-liste"></div>
+    <p class="gesamt-punkte">Gesamtpunkte: <span id="gesamt-punkte">0</span></p>
+    <button id="reset-btn" class="big-btn warnung">Fortschritt zurücksetzen</button>
+  </section>
+
+</main>
 
 <footer class="app-footer">
   <p>Erstellt zur Prüfungsvorbereitung · läuft komplett lokal im Browser</p>
 </footer>
 
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
