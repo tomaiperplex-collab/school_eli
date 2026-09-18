@@ -1,7 +1,8 @@
 // deutsch/app.js — Übungs-Engine für das Fach Deutsch: Themenauswahl,
-// Theorie-Anzeige, Quiz (Multiple-Choice + Freitext) und Fortschritt in
-// localStorage. Struktur bewusst analog zu ../app.js (NMG), aber ohne
-// Karten/Leaflet — reiner Text-Quiz-Flow.
+// Theorie-Anzeige, Multiple-Choice-Quiz und Fortschritt in localStorage
+// (Fortschritt wird direkt auf der Übersichtsseite "intro" angezeigt).
+// Struktur bewusst analog zu ../app.js (NMG), aber ohne Karten/Leaflet —
+// reiner Text-Quiz-Flow.
 
 const STORAGE_KEY = "deutschLernapp.fortschritt.v1";
 
@@ -46,11 +47,9 @@ const state = {
 const el = {
   themenauswahl: document.getElementById("themenauswahl"),
   themaBar: document.getElementById("thema-bar"),
-  fortschrittBtn: document.getElementById("fortschritt-btn"),
   panelIntro: document.getElementById("panel-intro"),
   panelTheorie: document.getElementById("panel-theorie"),
   panelUebung: document.getElementById("panel-uebung"),
-  panelFortschritt: document.getElementById("panel-fortschritt"),
   theorieTitel: document.getElementById("theorie-titel"),
   theorieText: document.getElementById("theorie-text"),
   theorieStartBtn: document.getElementById("theorie-start-btn"),
@@ -65,7 +64,6 @@ const el = {
   fortschrittListe: document.getElementById("fortschritt-liste"),
   gesamtPunkte: document.getElementById("gesamt-punkte"),
   resetBtn: document.getElementById("reset-btn"),
-  fortschrittZurueck: document.getElementById("fortschritt-zurueck"),
 };
 
 function zufallsElement(liste) {
@@ -96,18 +94,19 @@ function aktualisierteThemaBarAktiv() {
   Array.from(el.themaBar.children).forEach((btn) => {
     btn.classList.toggle("aktiv", !!state.thema && btn.dataset.id === state.thema.id);
   });
-  el.fortschrittBtn.classList.toggle("aktiv", el.panelFortschritt.classList.contains("hidden") === false);
 }
 
 function zeigePanel(name) {
   el.panelIntro.classList.toggle("hidden", name !== "intro");
   el.panelTheorie.classList.toggle("hidden", name !== "theorie");
   el.panelUebung.classList.toggle("hidden", name !== "uebung");
-  el.panelFortschritt.classList.toggle("hidden", name !== "fortschritt");
   // Themenauswahl-Kachelraster nimmt viel Platz weg — sobald ein Thema
-  // (oder der Fortschritt) offen ist, einklappen. Die "← Zurück"-Buttons
-  // in jedem Panel führen zurück zu "intro", wo das Raster wieder erscheint.
+  // offen ist, einklappen. Die "← Zurück"-Buttons in jedem Panel führen
+  // zurück zu "intro", wo das Raster wieder erscheint.
   el.themenauswahl.classList.toggle("eingeklappt", name !== "intro");
+  // Die Übersichtsseite zeigt den Fortschritt direkt — bei jeder Rückkehr
+  // dorthin neu rendern, damit er aktuell bleibt.
+  if (name === "intro") renderFortschritt();
   aktualisierteThemaBarAktiv();
 }
 
@@ -201,11 +200,6 @@ function renderFortschritt() {
   el.gesamtPunkte.textContent = gesamtpunkte;
 }
 
-function zeigeFortschritt() {
-  renderFortschritt();
-  zeigePanel("fortschritt");
-}
-
 function fortschrittZuruecksetzen() {
   if (!confirm("Wirklich den ganzen Fortschritt löschen?")) return;
   state.fortschritt = leererFortschritt();
@@ -216,10 +210,8 @@ function fortschrittZuruecksetzen() {
 renderThemenBar();
 zeigePanel("intro");
 
-el.fortschrittBtn.addEventListener("click", zeigeFortschritt);
 el.theorieStartBtn.addEventListener("click", starteUebung);
 el.theorieZurueck.addEventListener("click", () => { state.thema = null; zeigePanel("intro"); });
 el.uebungZurueck.addEventListener("click", () => { renderTheorie(); zeigePanel("theorie"); });
-el.fortschrittZurueck.addEventListener("click", () => zeigePanel("intro"));
 el.weiterBtn.addEventListener("click", naechsteFrage);
 el.resetBtn.addEventListener("click", fortschrittZuruecksetzen);
