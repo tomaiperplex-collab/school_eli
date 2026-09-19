@@ -193,7 +193,7 @@ function renderFortschritt() {
       <div class="fortschritt-balken-hintergrund">
         <div class="fortschritt-balken" style="width:${prozent}%"></div>
       </div>
-      <span class="fortschritt-prozent">${prozent}%<br><small>(${stat.richtig}/${stat.gesamt})</small></span>
+      <span class="fortschritt-prozent">${prozent}%<br><small>(${stat.gesamt}/${thema.aufgaben.length})</small></span>
     `;
     el.fortschrittListe.appendChild(zeile);
   });
