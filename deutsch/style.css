@@ -222,6 +222,132 @@
   margin: 1rem 0;
 }
 
+/* --- Schere-Stein-Papier-Quiz --- */
+.spiel-btn {
+  display: block;
+  margin: 0.8rem auto 1.2rem;
+  background: linear-gradient(135deg, #8e44ad, #e63946);
+}
+
+.spieler-namen-zeile {
+  margin: 1rem 0;
+}
+.spieler-namen-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+}
+.spieler-namen-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.namen-chip {
+  border: 3px solid #ddd;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font);
+  font-weight: bold;
+  cursor: pointer;
+}
+.namen-chip.aktiv { border-color: var(--akzent); background: #e6f6fb; }
+#spieler-namen-wahl .big-btn { display: block; margin: 1.2rem auto 0; }
+
+.scoreboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  background: #fff8ec;
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+}
+.scoreboard-eintrag { font-size: 0.9rem; }
+
+.rps-runde {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #888;
+  margin: 0 0 0.6rem;
+}
+.rps-wer-dran {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0.4rem 0;
+}
+.rps-wahl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.rps-option {
+  border: none;
+  border-radius: var(--radius);
+  background: #f1f1f1;
+  padding: 1.2rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font);
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+}
+.rps-option:hover { background: #e6e6e6; transform: translateY(-2px); }
+.rps-option-icon { font-size: 2.2rem; }
+
+.rps-reveal-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.rps-reveal-karte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  background: #f9f9f9;
+  border-radius: var(--radius);
+  padding: 1rem;
+  min-width: 90px;
+}
+.rps-reveal-icon { font-size: 2.5rem; }
+.rps-reveal-name { font-weight: bold; font-size: 0.9rem; }
+.rps-reveal-karte.verdeckt { background: #e0e0e0; }
+.rps-reveal-karte.aufgedeckt {
+  background: #fff8ec;
+  animation: rps-pop 0.35s ease;
+}
+@keyframes rps-pop {
+  0% { transform: scale(0.6) rotate(-8deg); opacity: 0.3; }
+  60% { transform: scale(1.15) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.rps-ergebnis-text {
+  text-align: center;
+  font-size: 1.3rem;
+  margin: 1rem 0;
+}
+
+.spiel-frage-thema {
+  text-align: center;
+  color: #888;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin: 0 0 0.2rem;
+}
+
+#spiel-runde-inhalt .big-btn { display: block; margin: 1rem auto 0; }
+
 /* --- Mobile --- */
 @media (max-width: 600px) {
   body { font-size: 16px; }
