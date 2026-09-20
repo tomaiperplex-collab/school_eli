@@ -11,7 +11,7 @@
 <!-- ?v=N an style.css/data.js/app.js hochzählen, wenn eine dieser Dateien
      geändert wird — GitHub Pages liefert sie sonst gecacht aus und
      Änderungen erscheinen auf Handys/Browsern verzögert oder gar nicht. -->
-<link rel="stylesheet" href="style.css?v=4" />
+<link rel="stylesheet" href="style.css?v=5" />
 </head>
 <body>
 
@@ -35,6 +35,7 @@
   <section id="panel-intro" class="panel">
     <p class="intro-text">👆 Wähle oben ein Thema aus. Zuerst gibt's eine
     kurze Erklärung zum Nachlesen, danach kannst du üben.</p>
+    <button id="spiel-start-btn" class="big-btn spiel-btn">⚔️ Schere-Stein-Papier-Quiz spielen (2–3 Spieler)</button>
     <h2>📊 Dein Fortschritt</h2>
     <div id="fortschritt-liste"></div>
     <p class="gesamt-punkte">Gesamtpunkte: <span id="gesamt-punkte">0</span></p>
@@ -64,6 +65,26 @@
     <button id="weiter-btn" class="big-btn hidden">Weiter →</button>
   </section>
 
+  <section id="panel-spiel" class="panel hidden">
+    <button class="link-zurueck" id="spiel-zurueck">← Spiel beenden</button>
+    <h2>⚔️ Schere-Stein-Papier-Quiz</h2>
+
+    <div id="spiel-setup">
+      <p class="intro-text">Wie viele Spieler seid ihr?</p>
+      <div class="mc-grid">
+        <button class="mc-option" id="spiel-anzahl-2">👥 2 Spieler</button>
+        <button class="mc-option" id="spiel-anzahl-3">👥 3 Spieler</button>
+      </div>
+      <div id="spieler-namen-wahl"></div>
+    </div>
+
+    <div id="spiel-scoreboard" class="scoreboard hidden"></div>
+
+    <div id="spiel-runde" class="hidden">
+      <p id="spiel-runde-text" class="rps-runde"></p>
+      <div id="spiel-runde-inhalt"></div>
+    </div>
+  </section>
 
 </main>
 
@@ -72,6 +93,6 @@
 </footer>
 
 <script src="data.js?v=3"></script>
-<script src="app.js?v=6"></script>
+<script src="app.js?v=7"></script>
 </body>
 </html>
