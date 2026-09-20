@@ -105,6 +105,24 @@ function zufallsElement(liste) {
   return liste[Math.floor(Math.random() * liste.length)];
 }
 
+// Antwortreihenfolge pro Aufgabe zufällig mischen. Ohne das stünde die
+// Lösung viel zu oft an erster Stelle (in den Rohdaten bei ~60% der
+// Aufgaben) und liesse sich erraten, ohne nachzudenken.
+// Ausnahme: reine Zahlenoptionen (z.B. Silbenanzahl) bleiben sortiert.
+function mischeOptionen(aufgabe) {
+  if (aufgabe.optionen.every((o) => /^\d+$/.test(o))) return aufgabe;
+  const paare = aufgabe.optionen.map((text, i) => ({ text, istRichtig: i === aufgabe.richtig }));
+  for (let i = paare.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [paare[i], paare[j]] = [paare[j], paare[i]];
+  }
+  return {
+    ...aufgabe,
+    optionen: paare.map((p) => p.text),
+    richtig: paare.findIndex((p) => p.istRichtig),
+  };
+}
+
 function renderThemenBar() {
   el.themaBar.innerHTML = "";
   DEUTSCH_THEMEN.forEach((thema) => {
@@ -166,7 +184,7 @@ function starteUebung() {
 }
 
 function naechsteFrage() {
-  state.aufgabe = zufallsElement(state.thema.aufgaben);
+  state.aufgabe = mischeOptionen(zufallsElement(state.thema.aufgaben));
   el.frageText.textContent = state.aufgabe.frage;
   el.feedback.textContent = "";
   el.feedback.className = "feedback";
@@ -451,7 +469,7 @@ function zeigeRundeErgebnis() {
 
 function naechsteSpielFrage() {
   const spielerIndex = spiel.verliererQueue.shift();
-  spiel.aktuelleFrage = { spielerIndex, aufgabe: zufallsElement(ALLE_AUFGABEN) };
+  spiel.aktuelleFrage = { spielerIndex, aufgabe: mischeOptionen(zufallsElement(ALLE_AUFGABEN)) };
   renderSpielFrage();
 }
 
