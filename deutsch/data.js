@@ -840,6 +840,341 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "\"Übermorgen ___ kommt Besuch.\"", optionen: ["Nacht", "nacht"], richtig: 0 },
     ],
   },
+
+  // --- Lernziele „Baumuster und Satzglieder“ (Sprachwelt 2, Sprache erforschen 4,
+  // Kapitel 1 und 8) ---
+
+  {
+    id: "baumuster",
+    icon: "🌳",
+    name: "Baumuster 1–4",
+    theorie: `
+      <p>Ein zweisilbiges Wort hat eine <strong>Hauptsilbe</strong> (betont)
+      und eine <strong>Nebensilbe</strong> (meist mit <strong>e</strong>).
+      Sprich das Wort langsam in Silben: <em>Ha-se, Som-mer</em>. Am
+      <strong>Baumuster</strong> siehst du, ob ein Buchstabe verdoppelt wird
+      oder ein h dazukommt.</p>
+      <p><strong>Offene Hauptsilbe:</strong> Nach dem Vokal folgt gleich die
+      nächste Silbe — der Vokal ist <strong>lang</strong>.<br>
+      <strong>Geschlossene Hauptsilbe:</strong> Nach dem Vokal steht noch ein
+      Konsonant — der Vokal ist <strong>kurz</strong>.</p>
+      <p><strong>Baumuster 1</strong> (offen, lang): <em>Ha-se, Ro-se,
+      sie-ben, Flie-ge</em>. Ein langes i schreibt man meist
+      <strong>ie</strong>.</p>
+      <p><strong>Baumuster 2</strong> (geschlossen, kurz): zwei
+      <strong>verschiedene</strong> Konsonanten zwischen den Vokalen:
+      <em>fin-den, Bir-ne, win-ken, Bil-der</em>.</p>
+      <p><strong>Baumuster 3</strong> (geschlossen, kurz, Doppelkonsonant):
+      Du hörst nur <strong>einen</strong> Konsonanten, also wird er
+      <strong>verdoppelt</strong>: <em>Som-mer, Pup-pe, hel-le, Af-fe</em>.
+      Statt kk schreibt man <strong>ck</strong>, statt zz
+      <strong>tz</strong>: <em>Zu-cker, Kat-ze</em>.</p>
+      <p><strong>Baumuster 4</strong> (offen, lang, silbentrennendes h): Das
+      <strong>h</strong> trennt zwei Vokale und steht am Anfang der zweiten
+      Silbe: <em>ge-hen, zie-hen, Ze-hen, nä-hen</em>.</p>
+      <p class="theorie-beispiel">💡 Merke: ck und tz stehen nur nach kurzem
+      Vokal ohne weiteren Konsonanten davor — aber <em>dun-kel, Ker-ze</em>
+      mit k und z.</p>
+    `,
+    aufgaben: [
+      // 1) Welches Baumuster?
+      ...[
+        ["Hase", 0], ["Rose", 0], ["Wiese", 0], ["Fliege", 0], ["Nase", 0], ["Biene", 0],
+        ["finden", 1], ["Birne", 1], ["winken", 1], ["Bilder", 1], ["Kerze", 1], ["Winter", 1],
+        ["Sommer", 2], ["Puppe", 2], ["Affe", 2], ["Mutter", 2], ["Tasse", 2], ["Zucker", 2], ["Katze", 2],
+        ["gehen", 3], ["ziehen", 3], ["Zehen", 3], ["nähen", 3], ["drehen", 3], ["fliehen", 3],
+      ].map(([wort, bm]) => ({
+        typ: "mc",
+        frage: `Zu welchem Baumuster gehört „${wort}“?`,
+        optionen: ["Baumuster 1", "Baumuster 2", "Baumuster 3", "Baumuster 4"],
+        richtig: bm,
+      })),
+      // 2) Vokal lang oder kurz?
+      ...[
+        ["Hase", true], ["Sommer", false], ["finden", false], ["Rose", true],
+        ["Puppe", false], ["Biene", true], ["Bilder", false], ["gehen", true],
+      ].map(([wort, lang]) => ({
+        typ: "mc",
+        frage: `Ist der Vokal in der Hauptsilbe von „${wort}“ lang oder kurz?`,
+        optionen: ["lang", "kurz"],
+        richtig: lang ? 0 : 1,
+      })),
+      // 3) Hauptsilbe offen oder geschlossen?
+      { typ: "mc", frage: "Die Hauptsilbe von „Ha-se“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Win-ter“ ist …", optionen: ["offen", "geschlossen"], richtig: 1 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Pup-pe“ ist …", optionen: ["offen", "geschlossen"], richtig: 1 },
+      { typ: "mc", frage: "Die Hauptsilbe von „ge-hen“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      // 4) Doppelkonsonant (Baumuster 3)
+      { typ: "mc", frage: "So__er (Jahreszeit) — wie schreibt man das?", optionen: ["mm", "m"], richtig: 0 },
+      { typ: "mc", frage: "Pu__e (Spielzeug) — wie schreibt man das?", optionen: ["pp", "p"], richtig: 0 },
+      { typ: "mc", frage: "A__e (Tier) — wie schreibt man das?", optionen: ["ff", "f"], richtig: 0 },
+      { typ: "mc", frage: "Ta__e (zum Trinken) — wie schreibt man das?", optionen: ["ss", "s"], richtig: 0 },
+      { typ: "mc", frage: "Mu__er (Elternteil) — wie schreibt man das?", optionen: ["tt", "t"], richtig: 0 },
+      { typ: "mc", frage: "Ha__e (Tier mit langen Ohren) — wie schreibt man das?", optionen: ["s", "ss"], richtig: 0 },
+      { typ: "mc", frage: "Ro__e (Blume) — wie schreibt man das?", optionen: ["s", "ss"], richtig: 0 },
+      // 5) ck / tz oder k / z
+      { typ: "mc", frage: "Zu__er (zum Backen) — wie schreibt man das?", optionen: ["ck", "k"], richtig: 0 },
+      { typ: "mc", frage: "Ka__e (Haustier) — wie schreibt man das?", optionen: ["tz", "z"], richtig: 0 },
+      { typ: "mc", frage: "Dun__el (nicht hell) — wie schreibt man das?", optionen: ["k", "ck"], richtig: 0 },
+      { typ: "mc", frage: "Ker__e (brennt am Geburtstagskuchen) — wie schreibt man das?", optionen: ["z", "tz"], richtig: 0 },
+      { typ: "mc", frage: "Ha__en (an der Wand) — wie schreibt man das?", optionen: ["k", "ck"], richtig: 0 },
+      { typ: "mc", frage: "Si__en (auf dem Stuhl) — wie schreibt man das?", optionen: ["tz", "z"], richtig: 0 },
+      // 6) Baumuster 4: silbentrennendes h
+      { typ: "mc", frage: "ge__en — fehlt ein Buchstabe?", optionen: ["h", "ss", "ck"], richtig: 0 },
+      { typ: "mc", frage: "zie__en — fehlt ein Buchstabe?", optionen: ["h", "ss", "tz"], richtig: 0 },
+      { typ: "mc", frage: "nä__en (mit Nadel und Faden) — fehlt ein Buchstabe?", optionen: ["h", "ss", "ck"], richtig: 0 },
+      // 7) Das passende Wort zum Baumuster
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 2?", optionen: ["Winter", "Sommer", "gehen"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 3?", optionen: ["Hase", "Puppe", "Birne"], richtig: 1 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 4?", optionen: ["Rose", "Mutter", "sehen"], richtig: 2 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 1?", optionen: ["Nase", "Kerze", "Tasse"], richtig: 0 },
+    ],
+  },
+
+  {
+    id: "silbenprobe-h",
+    icon: "✂️",
+    name: "Silbenprobe & h",
+    theorie: `
+      <p>Sprich ein Wort <strong>langsam in Silben</strong>, so wie man es
+      schreibt: <em>Brief-trä-ger, Schmet-ter-ling</em>. Jede Silbe hat einen
+      Vokal.</p>
+      <p><strong>Silbenprobe</strong> — wenn ein Wort nur <strong>eine
+      Silbe</strong> hat:</p>
+      <ol>
+        <li><strong>Verlängern:</strong> Verb zur Grundform (kippt →
+        kippen), Nomen zur Mehrzahl (Hund → Hunde), Adjektiv mit Nomen
+        (krumm → der krumme Nagel).</li>
+        <li><strong>Ins Baumuster schreiben</strong> — mit dem Vokal
+        beginnen.</li>
+        <li><strong>Entscheiden</strong> und das richtige Wort markieren.</li>
+      </ol>
+      <p class="theorie-beispiel">🔎 Beispiele: <em>kippt → kip-pen
+      (Baumuster 3) → kippt</em>, <em>hält → hal-ten (Baumuster 2) →
+      hält</em>, <em>Stück → Stü-cke → Stück</em></p>
+      <p><strong>Dehnungs-h:</strong> steht am Ende der <strong>ersten</strong>
+      Silbe und verlängert den Vokal, nur vor <strong>l, m, n, r</strong>:
+      <em>Feh-ler, zah-me, woh-nen, Oh-ren</em>. Nicht immer — diese Wörter
+      musst du dir merken (Schule, Name).</p>
+      <p><strong>Silbentrennendes h:</strong> steht am Anfang der
+      <strong>zweiten</strong> Silbe und trennt zwei Vokale: <em>ge-hen,
+      zie-hen, Kü-he</em>. Nach <strong>au, äu, eu</strong> steht es nie.
+      Verlängere das Wort, dann hörst du es: <em>Kuh → Kü-he</em>,
+      <em>geht → ge-hen</em>.</p>
+    `,
+    aufgaben: [
+      // 1) Silbenprobe: richtige Schreibung nach dem Verlängern
+      { typ: "mc", frage: "kipt oder kippt? Verlängert: kip-pen.", optionen: ["kippt", "kipt"], richtig: 0 },
+      { typ: "mc", frage: "hält oder hällt? Verlängert: hal-ten.", optionen: ["hält", "hällt"], richtig: 0 },
+      { typ: "mc", frage: "krum oder krumm? Verlängert: krum-me.", optionen: ["krumm", "krum"], richtig: 0 },
+      { typ: "mc", frage: "Stük oder Stück? Verlängert: Stü-cke.", optionen: ["Stück", "Stük"], richtig: 0 },
+      { typ: "mc", frage: "Hunt oder Hund? Verlängert: Hun-de.", optionen: ["Hund", "Hunt"], richtig: 0 },
+      { typ: "mc", frage: "Kam oder Kamm? Verlängert: Käm-me.", optionen: ["Kamm", "Kam"], richtig: 0 },
+      { typ: "mc", frage: "Mann oder Man? Verlängert: Män-ner.", optionen: ["Mann", "Man"], richtig: 0 },
+      { typ: "mc", frage: "Schif oder Schiff? Verlängert: Schif-fe.", optionen: ["Schiff", "Schif"], richtig: 0 },
+      { typ: "mc", frage: "Bet oder Bett? Verlängert: Bet-ten.", optionen: ["Bett", "Bet"], richtig: 0 },
+      { typ: "mc", frage: "Korp oder Korb? Verlängert: Kör-be.", optionen: ["Korb", "Korp"], richtig: 0 },
+      { typ: "mc", frage: "Rat oder Rad (zum Fahren)? Verlängert: Rä-der.", optionen: ["Rad", "Rat"], richtig: 0 },
+      { typ: "mc", frage: "Zuk oder Zug? Verlängert: Zü-ge.", optionen: ["Zug", "Zuk"], richtig: 0 },
+      // 2) Wie verlängert man?
+      { typ: "mc", frage: "Wie verlängerst du das Verb „kippt“?", optionen: ["kippen", "kipp", "Kippe"], richtig: 0 },
+      { typ: "mc", frage: "Wie verlängerst du das Nomen „Hund“?", optionen: ["Hunde", "hundig", "Hundig"], richtig: 0 },
+      { typ: "mc", frage: "Wie verlängerst du das Adjektiv „krumm“?", optionen: ["der krumme Nagel", "krummer", "krumm sein"], richtig: 0 },
+      { typ: "mc", frage: "Wie verlängerst du das Nomen „Stück“?", optionen: ["Stücke", "Stückig", "Stücken Stück"], richtig: 0 },
+      { typ: "mc", frage: "Wie verlängerst du das Verb „geht“?", optionen: ["gehen", "gehe", "Gang"], richtig: 0 },
+      // 3) Silbentrennendes h oder Dehnungs-h?
+      ...[
+        ["gehen", true], ["sehen", true], ["ziehen", true], ["Zehen", true],
+        ["nähen", true], ["drehen", true], ["blühen", true], ["fliehen", true],
+        ["Ruhe", true], ["Kühe", true],
+        ["Fehler", false], ["Ohren", false], ["wohnen", false], ["Zahl", false],
+        ["Bahn", false], ["Uhr", false], ["zahm", false], ["Sahne", false],
+      ].map(([wort, trennend]) => ({
+        typ: "mc",
+        frage: `Welches h steckt in „${wort}“?`,
+        optionen: ["silbentrennendes h", "Dehnungs-h"],
+        richtig: trennend ? 0 : 1,
+      })),
+      // 4) Mit Verlängern das silbentrennende h finden
+      { typ: "mc", frage: "Kuh — verlängert zu „Kü-he“. Welches h hat das Wort?", optionen: ["silbentrennendes h", "Dehnungs-h"], richtig: 0 },
+      { typ: "mc", frage: "geht — verlängert zu „ge-hen“. Welches h hat das Wort?", optionen: ["silbentrennendes h", "Dehnungs-h"], richtig: 0 },
+      { typ: "mc", frage: "Schuh — verlängert zu „Schu-he“. Welches h hat das Wort?", optionen: ["silbentrennendes h", "Dehnungs-h"], richtig: 0 },
+      { typ: "mc", frage: "sieht — verlängert zu „se-hen“. Welches h hat das Wort?", optionen: ["silbentrennendes h", "Dehnungs-h"], richtig: 0 },
+      { typ: "mc", frage: "Zahl — verlängert zu „Zah-len“. Welches h hat das Wort?", optionen: ["silbentrennendes h", "Dehnungs-h"], richtig: 1 },
+      { typ: "mc", frage: "Uhr — verlängert zu „Uh-ren“. Welches h hat das Wort?", optionen: ["silbentrennendes h", "Dehnungs-h"], richtig: 1 },
+      // 5) Regeln
+      { typ: "mc", frage: "Wo steht das silbentrennende h?", optionen: ["am Anfang der zweiten Silbe", "am Ende der ersten Silbe", "am Ende des Wortes"], richtig: 0 },
+      { typ: "mc", frage: "Wo steht das Dehnungs-h?", optionen: ["am Ende der ersten Silbe", "am Anfang der zweiten Silbe", "immer am Wortanfang"], richtig: 0 },
+      { typ: "mc", frage: "Vor welchen Buchstaben steht das Dehnungs-h?", optionen: ["l, m, n, r", "b, d, g", "s, t, k"], richtig: 0 },
+      { typ: "mc", frage: "Nach welchen Lauten steht nie ein silbentrennendes h?", optionen: ["au, äu, eu", "a, e, o", "ie, ei, ü"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["bauen", "bauhen", "buahen"], richtig: 0 },
+      // 6) Richtig geschriebenes Wort wählen
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["Fehler", "Feler", "Fehhler"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["Ohren", "Oren", "Ohhren"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["sehen", "seen", "sehhen"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["ziehen", "zieen", "zihen"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben? (Ausnahme: kein h)", optionen: ["Schule", "Schuhle", "Schuule"], richtig: 0 },
+    ],
+  },
+
+  {
+    id: "satzglieder-verbenfaecher",
+    icon: "👑",
+    name: "Satzglieder & Verbenfächer",
+    theorie: `
+      <p>Ein <strong>Satzglied</strong> ist ein Wort oder eine
+      <strong>Wortgruppe</strong>, die beim Umstellen (Verschiebeprobe)
+      <strong>immer zusammenbleibt</strong>. Ein Satzglied kann also aus
+      mehreren Wörtern bestehen: <em>meine Oma | spricht | am Morgen | mit
+      dem Briefträger</em>.</p>
+      <p>Das <strong>Verb ist der König</strong> des Satzes. Es steht in der
+      Mitte des <strong>Verbenfächers</strong>. Von dort aus fragst du nach
+      den anderen Satzgliedern — immer <strong>zusammen mit dem Verb</strong>:
+      „<em>Wer spricht?</em>“, nicht nur „Wer?“.</p>
+      <ul>
+        <li><strong>Wer? / Was?</strong> → Subjekt</li>
+        <li><strong>Wen? / Was?</strong> → Akkusativobjekt</li>
+        <li><strong>Wem?</strong> → Dativobjekt</li>
+        <li><strong>Wann? Wo? Wie? Womit? Warum?</strong> → Umstände (Zeit,
+        Ort, Art, Mittel, Grund)</li>
+      </ul>
+      <p>Nicht jeder Satz hat jedes Satzglied — Felder im Fächer dürfen leer
+      bleiben. Zweiteilige Verben gehören beide in die Mitte:
+      „Oma <strong>ruft</strong> ihn <strong>an</strong>“ → <em>ruft
+      an</em>.</p>
+      <p class="theorie-beispiel">💡 Satz bilden mit dem Fächer: Verb
+      <em>backen</em>, Wer? <em>die Mutter</em>, Was? <em>einen Kuchen</em>,
+      Wann? <em>am Sonntag</em> → <em>Die Mutter backt am Sonntag einen
+      Kuchen.</em></p>
+    `,
+    aufgaben: (() => {
+      const FRAGEN = ["Wer? / Was?", "Wen? / Was?", "Wem?", "Wann?", "Wo?", "Wie?", "Womit?"];
+      const SAETZE = [
+        { satz: "Der Hund frisst im Garten einen Knochen.", verb: "frisst",
+          glieder: [["Der Hund", 0], ["im Garten", 4], ["einen Knochen", 1]] },
+        { satz: "Am Sonntag backt die Mutter einen Kuchen.", verb: "backt",
+          glieder: [["Am Sonntag", 3], ["die Mutter", 0], ["einen Kuchen", 1]] },
+        { satz: "Lena schenkt ihrem Bruder ein Buch.", verb: "schenkt",
+          glieder: [["Lena", 0], ["ihrem Bruder", 2], ["ein Buch", 1]] },
+        { satz: "Die Kinder spielen heute auf dem Pausenplatz.", verb: "spielen",
+          glieder: [["Die Kinder", 0], ["heute", 3], ["auf dem Pausenplatz", 4]] },
+        { satz: "Der Briefträger fährt jeden Morgen mit dem Velo.", verb: "fährt",
+          glieder: [["Der Briefträger", 0], ["jeden Morgen", 3], ["mit dem Velo", 6]] },
+        { satz: "Leise öffnet Anna die Tür.", verb: "öffnet",
+          glieder: [["Leise", 5], ["Anna", 0], ["die Tür", 1]] },
+      ];
+      const aufgaben = [];
+      SAETZE.forEach(({ satz, verb, glieder }) => {
+        // 1) Welche Frage führt zum Satzglied?
+        glieder.forEach(([text, f]) => {
+          const falsch = [FRAGEN[(f + 2) % FRAGEN.length], FRAGEN[(f + 4) % FRAGEN.length]];
+          aufgaben.push({
+            typ: "mc",
+            frage: `„${satz}“ — Welche Frage mit dem Verb führt zu „${text}“?`,
+            optionen: [FRAGEN[f], ...falsch],
+            richtig: 0,
+          });
+        });
+        // 2) Wie viele Satzglieder? (Verb zählt mit)
+        const n = glieder.length + 1;
+        aufgaben.push({
+          typ: "mc",
+          frage: `Wie viele Satzglieder hat der Satz „${satz}“?`,
+          optionen: [String(n), String(n + 1), String(n + 2), String(n - 1)],
+          richtig: 0,
+        });
+        // 3) Das Verb finden
+        const woerter = satz.replace(".", "").split(" ").filter((w) => w !== verb);
+        aufgaben.push({
+          typ: "mc",
+          frage: `Welches Wort ist das Verb (der König) in „${satz}“?`,
+          optionen: [verb, woerter[0], woerter[woerter.length - 1]],
+          richtig: 0,
+        });
+      });
+      return aufgaben.concat([
+        // 4) Was ist ein Satzglied? (mit eigenen Worten)
+        { typ: "mc", frage: "Was ist ein Satzglied?", optionen: ["Ein Wort oder eine Wortgruppe, die beim Umstellen zusammenbleibt", "Immer genau ein einzelnes Wort", "Nur das Verb im Satz"], richtig: 0 },
+        { typ: "mc", frage: "Woran erkennst du ein Satzglied?", optionen: ["Es bleibt bei der Verschiebeprobe zusammen", "Es beginnt mit einem Grossbuchstaben", "Es hat immer zwei Wörter"], richtig: 0 },
+        { typ: "mc", frage: "„Meine Oma“ im Satz „Meine Oma spricht am Morgen.“ — wie viele Satzglieder sind das?", optionen: ["eins", "zwei", "drei"], richtig: 0 },
+        // 5) Verbenfächer
+        { typ: "mc", frage: "Wer ist der König im Verbenfächer?", optionen: ["das Verb", "das Nomen", "das Adjektiv"], richtig: 0 },
+        { typ: "mc", frage: "Wo steht das Verb im Verbenfächer?", optionen: ["in der Mitte", "ganz aussen links", "am Schluss"], richtig: 0 },
+        { typ: "mc", frage: "Wie fragst du richtig nach dem Subjekt in „Oma spricht“?", optionen: ["Wer spricht?", "Wer?", "Spricht Oma?"], richtig: 0 },
+        { typ: "mc", frage: "„Oma ruft ihn an.“ — Welche Wörter gehören zum Verb?", optionen: ["ruft … an", "Oma … ruft", "ihn … an"], richtig: 0 },
+        // 6) Sätze mit dem Verbenfächer bilden
+        { typ: "mc", frage: "Verb: backen · Wer? die Mutter · Was? einen Kuchen · Wann? am Sonntag. Welcher Satz passt?", optionen: ["Die Mutter backt am Sonntag einen Kuchen.", "Die Mutter am Sonntag einen Kuchen backt.", "Backt die Mutter, am Sonntag einen Kuchen."], richtig: 0 },
+        { typ: "mc", frage: "Verb: lesen · Wer? Tim · Was? ein Buch · Wo? im Bett. Welcher Satz passt?", optionen: ["Tim liest im Bett ein Buch.", "Tim im Bett ein Buch liest.", "Liest Tim im Bett, ein Buch."], richtig: 0 },
+        { typ: "mc", frage: "Verb: schenken · Wer? Lena · Wem? ihrer Freundin · Was? eine Karte. Welcher Satz passt?", optionen: ["Lena schenkt ihrer Freundin eine Karte.", "Lena ihrer Freundin eine Karte schenkt.", "Schenkt Lena ihrer Freundin, eine Karte."], richtig: 0 },
+        { typ: "mc", frage: "Verb: fahren · Wer? der Bus · Wann? jeden Morgen · Wohin? zur Schule. Welcher Satz passt?", optionen: ["Der Bus fährt jeden Morgen zur Schule.", "Der Bus jeden Morgen zur Schule fährt.", "Fährt der Bus, jeden Morgen zur Schule."], richtig: 0 },
+        { typ: "mc", frage: "Verb: singen · Wer? die Kinder · Wie? laut · Wo? im Garten. Welcher Satz passt?", optionen: ["Die Kinder singen laut im Garten.", "Die Kinder laut im Garten singen.", "Singen die Kinder, laut im Garten."], richtig: 0 },
+      ]);
+    })(),
+  },
+
+  {
+    id: "satzproben",
+    icon: "🔬",
+    name: "Die 4 Satzproben",
+    theorie: `
+      <p>Mit den <strong>Satzproben</strong> veränderst du einen Satz und
+      prüfst, ob er noch stimmt.</p>
+      <p><strong>Verschiebeprobe</strong> (Umstellprobe): Satzglieder
+      umstellen. Wörter, die zusammen wandern, sind <strong>ein
+      Satzglied</strong>. Das Verb bleibt an <strong>2. Stelle</strong>.<br>
+      <em>Meine Oma spricht am Morgen … → Am Morgen spricht meine
+      Oma …</em></p>
+      <p><strong>Ersatzprobe:</strong> Wörter ersetzen. So vermeidest du
+      Wiederholungen.<br>
+      <em>Meine Oma → Sie · dem Briefträger → ihm</em></p>
+      <p><strong>Weglassprobe:</strong> Wörter streichen. So findest du heraus,
+      was nötig ist, und kannst Texte kürzen. Nicht jedes Satzglied lässt
+      sich weglassen.<br>
+      <em>Meine Oma spricht <s>am Morgen</s> mit dem Briefträger.</em></p>
+      <p><strong>Erweiterungsprobe:</strong> Wörter ergänzen. So wird der Text
+      genauer. Die Nominalgruppe wird um das <strong>Kernwort</strong>
+      (Nomen) herum erweitert.<br>
+      <em>der Hund → der kleine Hund → der kleine Hund mit dem roten
+      Halsband</em></p>
+    `,
+    aufgaben: [
+      // 1) Welche Probe ist gemeint?
+      { typ: "mc", frage: "Du stellst Satzglieder um. Welche Probe ist das?", optionen: ["Verschiebeprobe", "Ersatzprobe", "Weglassprobe", "Erweiterungsprobe"], richtig: 0 },
+      { typ: "mc", frage: "Du ersetzt Wörter, z. B. „Meine Oma“ durch „Sie“. Welche Probe ist das?", optionen: ["Ersatzprobe", "Verschiebeprobe", "Weglassprobe", "Erweiterungsprobe"], richtig: 0 },
+      { typ: "mc", frage: "Du streichst Wörter, um zu sehen, was nötig ist. Welche Probe ist das?", optionen: ["Weglassprobe", "Ersatzprobe", "Verschiebeprobe", "Erweiterungsprobe"], richtig: 0 },
+      { typ: "mc", frage: "Du ergänzt Wörter, damit der Satz genauer wird. Welche Probe ist das?", optionen: ["Erweiterungsprobe", "Weglassprobe", "Ersatzprobe", "Verschiebeprobe"], richtig: 0 },
+      // 2) Wozu dient welche Probe?
+      { typ: "mc", frage: "Womit findest du heraus, welche Wörter zusammen ein Satzglied bilden?", optionen: ["mit der Verschiebeprobe", "mit der Erweiterungsprobe", "mit der Ersatzprobe"], richtig: 0 },
+      { typ: "mc", frage: "Womit vermeidest du Wiederholungen im Text?", optionen: ["mit der Ersatzprobe", "mit der Weglassprobe", "mit der Verschiebeprobe"], richtig: 0 },
+      { typ: "mc", frage: "Womit kannst du einen Text kürzen?", optionen: ["mit der Weglassprobe", "mit der Erweiterungsprobe", "mit der Ersatzprobe"], richtig: 0 },
+      { typ: "mc", frage: "Womit machst du einen Satz genauer und anschaulicher?", optionen: ["mit der Erweiterungsprobe", "mit der Weglassprobe", "mit der Verschiebeprobe"], richtig: 0 },
+      // 3) Verschiebeprobe
+      { typ: "mc", frage: "Schiebe „am Morgen“ nach vorn: „Meine Oma spricht am Morgen mit dem Briefträger.“", optionen: ["Am Morgen spricht meine Oma mit dem Briefträger.", "Am Morgen meine Oma spricht mit dem Briefträger.", "Spricht am Morgen meine Oma mit dem Briefträger."], richtig: 0 },
+      { typ: "mc", frage: "Schiebe „heute“ nach vorn: „Die Kinder spielen heute draussen.“", optionen: ["Heute spielen die Kinder draussen.", "Heute die Kinder spielen draussen.", "Die Kinder heute spielen draussen."], richtig: 0 },
+      { typ: "mc", frage: "Schiebe „im Garten“ nach vorn: „Der Hund frisst im Garten einen Knochen.“", optionen: ["Im Garten frisst der Hund einen Knochen.", "Im Garten der Hund frisst einen Knochen.", "Frisst im Garten der Hund einen Knochen."], richtig: 0 },
+      { typ: "mc", frage: "An welcher Stelle bleibt das Verb bei der Verschiebeprobe?", optionen: ["an 2. Stelle", "an 1. Stelle", "am Schluss"], richtig: 0 },
+      { typ: "mc", frage: "„Der kleine Hund bellt laut.“ Wie viele Satzglieder zeigt die Verschiebeprobe?", optionen: ["3", "5", "4"], richtig: 0 },
+      { typ: "mc", frage: "Welche Wörter wandern bei der Verschiebeprobe zusammen? „Meine Oma spricht am Morgen.“", optionen: ["Meine Oma", "Oma spricht", "spricht am"], richtig: 0 },
+      // 4) Ersatzprobe
+      { typ: "mc", frage: "Ersetze „Meine Oma“: „Meine Oma spricht mit dem Briefträger.“", optionen: ["Sie spricht mit dem Briefträger.", "Ihm spricht mit dem Briefträger.", "Ihn spricht mit dem Briefträger."], richtig: 0 },
+      { typ: "mc", frage: "Ersetze „dem Briefträger“: „Meine Oma spricht mit dem Briefträger.“", optionen: ["Meine Oma spricht mit ihm.", "Meine Oma spricht mit er.", "Meine Oma spricht mit sie."], richtig: 0 },
+      { typ: "mc", frage: "Ersetze „den Hund“: „Lena streichelt den Hund.“", optionen: ["Lena streichelt ihn.", "Lena streichelt er.", "Lena streichelt ihm."], richtig: 0 },
+      { typ: "mc", frage: "Ersetze „Die Kinder“: „Die Kinder spielen im Garten.“", optionen: ["Sie spielen im Garten.", "Ihnen spielen im Garten.", "Er spielt im Garten."], richtig: 0 },
+      { typ: "mc", frage: "Ersetze „ein Buch“: „Tim liest ein Buch.“", optionen: ["Tim liest es.", "Tim liest er.", "Tim liest ihm."], richtig: 0 },
+      // 5) Weglassprobe
+      { typ: "mc", frage: "Welches Satzglied kannst du weglassen? „Meine Oma spricht am Morgen mit dem Briefträger.“", optionen: ["am Morgen", "Meine Oma", "spricht"], richtig: 0 },
+      { typ: "mc", frage: "Welches Satzglied kannst du NICHT weglassen? „Der Hund bellt laut.“", optionen: ["Der Hund", "laut"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort kannst du weglassen? „Die Kinder spielen heute draussen.“", optionen: ["heute", "Die Kinder", "spielen"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz bleibt nach der Weglassprobe vollständig? „Lena schenkt gestern ihrem Bruder ein Buch.“", optionen: ["Lena schenkt ihrem Bruder ein Buch.", "Lena schenkt gestern ein Buch.", "Schenkt gestern ihrem Bruder."], richtig: 0 },
+      { typ: "mc", frage: "Lässt sich jedes Satzglied weglassen?", optionen: ["Nein, nicht alle", "Ja, immer", "Nur das Verb"], richtig: 0 },
+      // 6) Erweiterungsprobe
+      { typ: "mc", frage: "Wie kannst du „der Hund“ erweitern?", optionen: ["der kleine Hund", "der Hund kleine", "kleine der Hund"], richtig: 0 },
+      { typ: "mc", frage: "Wie kannst du „der kleine Hund“ weiter erweitern?", optionen: ["der kleine Hund mit dem roten Halsband", "mit dem roten Halsband der kleine", "der kleine mit Hund Halsband"], richtig: 0 },
+      { typ: "mc", frage: "Erweitere „Die Katze schläft.“ — welche Fragen helfen dir?", optionen: ["Wann? Wo? Womit?", "Wer? Wen?", "Was? Wem?"], richtig: 0 },
+      { typ: "mc", frage: "Um welches Wort wird eine Nominalgruppe bei der Erweiterungsprobe erweitert?", optionen: ["um das Kernwort (Nomen)", "um das Verb", "um das Satzzeichen"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz ist eine Erweiterung von „Tim liest.“?", optionen: ["Tim liest abends im Bett ein Buch.", "Tim liest nicht.", "Liest Tim?"], richtig: 0 },
+    ],
+  },
 ];
 
 // Themen aus dem Heft, die als Nächstes umgesetzt werden — hier nur als
