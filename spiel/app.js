@@ -353,16 +353,16 @@ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let erkenner = null;
 const MIKRO_FEHLER = {
   "not-allowed": "🎤 Mikrofon nicht erlaubt — in Chrome auf das Schloss neben der Adresse tippen → Mikrofon → Zulassen, dann Seite neu laden. (Nur über https:// oder localhost möglich.)",
-  "service-not-allowed": "🎤 Spracherkennung ist auf diesem Gerät gesperrt (Browser/Google-Dienst). In Chrome Android prüfen: Einstellungen → Apps → Google → Sprache/Spracheingabe aktiv?",
+  "service-not-allowed": "🎤 Spracherkennung ist in diesem Browser nicht verfügbar (nur im Google-Chrome-App, nicht in Brave/Chromium-Ablegern). Tipp: Im Eingabefeld das Mikrofon der Tastatur (Gboard) antippen und Sprache Französisch wählen — das geht in jedem Browser.",
   "audio-capture": "🎤 Kein Mikrofon gefunden oder es wird von einer anderen App benutzt.",
   "no-speech": "🎤 Ich habe nichts gehört — nochmal drücken und direkt losreden.",
   "network": "🎤 Spracherkennung braucht Internet (Google-Dienst) — Verbindung prüfen und nochmal versuchen.",
-  "language-not-supported": "🎤 Französische Spracherkennung wird auf diesem Gerät nicht unterstützt — bitte tippen.",
+  "language-not-supported": "🎤 Französische Spracherkennung wird auf diesem Gerät nicht unterstützt. Tipp: Im Eingabefeld das Mikrofon der Tastatur (Gboard) antippen und Sprache Französisch wählen — das geht in jedem Browser.",
   "aborted": "",
 };
 
 function mikro() {
-  if (!SR) { el.status.textContent = "Spracheingabe geht in diesem Browser nicht — bitte Chrome (Android/PC) nutzen oder tippen."; return; }
+  if (!SR) { el.status.textContent = "Spracheingabe geht in diesem Browser nicht — bitte die Google-Chrome-App nutzen. Tipp: Im Eingabefeld das Mikrofon der Tastatur (Gboard) antippen und Sprache Französisch wählen — das geht in jedem Browser."; return; }
   if (erkenner) { erkenner.stop(); return; }
   if (window.speechSynthesis) speechSynthesis.cancel();
   erkenner = new SR();
