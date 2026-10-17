@@ -8,6 +8,13 @@
 // Eintippen nötig):
 //   { typ: "mc", frage, optionen: [...], richtig: <Index in optionen> }
 
+// Gruppen für die Themenauswahl: Themen mit `gruppe: "pruefung"` erscheinen
+// nur in der Sektion „Prüfung 26.10.“, alle anderen unter „Weitere Themen“.
+const DEUTSCH_GRUPPEN = [
+  { id: "pruefung", titel: "📝 Prüfung 26.10." },
+  { id: "", titel: "📚 Weitere Themen" },
+];
+
 const DEUTSCH_THEMEN = [
   {
     id: "satzanfaenge-nomen",
@@ -846,6 +853,7 @@ const DEUTSCH_THEMEN = [
 
   {
     id: "baumuster",
+    gruppe: "pruefung",
     icon: "🌳",
     name: "Baumuster 1–4",
     theorie: `
@@ -933,6 +941,7 @@ const DEUTSCH_THEMEN = [
 
   {
     id: "silbenprobe-h",
+    gruppe: "pruefung",
     icon: "✂️",
     name: "Silbenprobe & h",
     theorie: `
@@ -1019,6 +1028,7 @@ const DEUTSCH_THEMEN = [
 
   {
     id: "satzglieder-verbenfaecher",
+    gruppe: "pruefung",
     icon: "👑",
     name: "Satzglieder & Verbenfächer",
     theorie: `
@@ -1114,6 +1124,7 @@ const DEUTSCH_THEMEN = [
 
   {
     id: "satzproben",
+    gruppe: "pruefung",
     icon: "🔬",
     name: "Die 4 Satzproben",
     theorie: `

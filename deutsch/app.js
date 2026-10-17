@@ -125,21 +125,30 @@ function mischeOptionen(aufgabe) {
 
 function renderThemenBar() {
   el.themaBar.innerHTML = "";
-  DEUTSCH_THEMEN.forEach((thema) => {
-    const btn = document.createElement("button");
-    btn.className = "thema-tile";
-    btn.dataset.id = thema.id;
-    btn.innerHTML = `<span class="thema-tile-icon">${thema.icon}</span><span>${thema.name}</span>`;
-    btn.addEventListener("click", () => waehleThema(thema.id));
-    el.themaBar.appendChild(btn);
-  });
-  DEUTSCH_KOMMENDE_THEMEN.forEach((thema) => {
-    const btn = document.createElement("button");
-    btn.className = "thema-tile bald";
-    btn.disabled = true;
-    btn.title = "Demnächst verfügbar";
-    btn.innerHTML = `<span class="thema-tile-icon">${thema.icon}</span><span>${thema.name}</span><span class="thema-tile-bald">bald</span>`;
-    el.themaBar.appendChild(btn);
+  DEUTSCH_GRUPPEN.forEach((gruppe) => {
+    const themen = DEUTSCH_THEMEN.filter((t) => (t.gruppe || "") === gruppe.id);
+    const kommende = gruppe.id === "" ? DEUTSCH_KOMMENDE_THEMEN : [];
+    if (!themen.length && !kommende.length) return;
+    const titel = document.createElement("h2");
+    titel.className = "thema-gruppe-titel";
+    titel.textContent = gruppe.titel;
+    el.themaBar.appendChild(titel);
+    themen.forEach((thema) => {
+      const btn = document.createElement("button");
+      btn.className = "thema-tile";
+      btn.dataset.id = thema.id;
+      btn.innerHTML = `<span class="thema-tile-icon">${thema.icon}</span><span>${thema.name}</span>`;
+      btn.addEventListener("click", () => waehleThema(thema.id));
+      el.themaBar.appendChild(btn);
+    });
+    kommende.forEach((thema) => {
+      const btn = document.createElement("button");
+      btn.className = "thema-tile bald";
+      btn.disabled = true;
+      btn.title = "Demnächst verfügbar";
+      btn.innerHTML = `<span class="thema-tile-icon">${thema.icon}</span><span>${thema.name}</span><span class="thema-tile-bald">bald</span>`;
+      el.themaBar.appendChild(btn);
+    });
   });
 }
 
@@ -236,7 +245,8 @@ function beantworteMultipleChoice(gewaehlt, button) {
 function renderFortschritt() {
   el.fortschrittListe.innerHTML = "";
   let gesamtpunkte = 0;
-  DEUTSCH_THEMEN.forEach((thema) => {
+  const geordnet = DEUTSCH_GRUPPEN.flatMap((g) => DEUTSCH_THEMEN.filter((t) => (t.gruppe || "") === g.id));
+  geordnet.forEach((thema) => {
     const stat = state.fortschritt[thema.id] || { richtig: 0, gesamt: 0 };
     const prozent = stat.gesamt ? Math.round((stat.richtig / stat.gesamt) * 100) : 0;
     gesamtpunkte += stat.richtig * 10;
