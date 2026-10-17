@@ -29,7 +29,7 @@ const el = {
 };
 
 const state = {
-  verdaechtige: [], dieb: null, fragen: 0, falsch: 0, ausgeschlossen: new Set(),
+  verdaechtige: [], dieb: null, objekte: [], objekt: null, phase: "dieb", rundenPunkte: 0, fragen: 0, falsch: 0, ausgeschlossen: new Set(),
   anklageModus: false, vorbei: false, verlauf: [], wartet: false,
   gesamt: Number(lsGet(LS.punkte, "0")) || 0, best: Number(lsGet(LS.best, "0")) || 0,
 };
@@ -97,13 +97,25 @@ function systemMeldung(text, art = "") {
 }
 
 // ---------- Spiel ----------
+// Zwei Phasen wie im Lehrmittel: erst den Dieb finden, dann den gestohlenen
+// Gegenstand. Pro gefundener Phase gibt es Punkte.
 function renderVerdaechtige() {
   el.grid.innerHTML = "";
-  state.verdaechtige.forEach((s, i) => {
+  el.grid.classList.toggle("objekte", state.phase === "objekt");
+  const liste = state.phase === "dieb" ? state.verdaechtige : state.objekte;
+  liste.forEach((x, i) => {
     const b = document.createElement("button");
     b.className = "karte" + (state.ausgeschlossen.has(i) ? " weg" : "");
-    b.innerHTML = `${gesichtSvg(s)}<span class="karte-name"></span>`;
-    b.querySelector(".karte-name").textContent = s.name;
+    if (state.phase === "dieb") {
+      b.innerHTML = `${gesichtSvg(x)}<span class="karte-name"></span>`;
+      b.querySelector(".karte-name").textContent = x.name;
+    } else {
+      b.innerHTML = `<span class="objekt-bild"></span><span class="karte-name"></span>`;
+      b.querySelector(".objekt-bild").textContent = x.emoji;
+      b.querySelector(".objekt-bild").style.background = OBJEKT_FARBEN[x.farbe];
+      b.querySelector(".karte-name").textContent = `${x.fr} · ${x.farbe}`;
+      b.setAttribute("aria-label", `${x.fr}, ${x.farbe}`);
+    }
     b.addEventListener("click", () => klickKarte(i));
     el.grid.appendChild(b);
   });
@@ -113,18 +125,28 @@ function renderStatus() {
   el.fragen.textContent = state.fragen;
   el.punkte.textContent = state.gesamt;
   el.best.textContent = state.best;
+  const dieb = state.phase === "dieb";
   el.accuse.classList.toggle("aktiv", state.anklageModus);
-  el.accuse.textContent = state.anklageModus ? "👆 Tippe auf den Dieb …" : "🔎 Dieb verhaften";
-  el.status.textContent = state.vorbei ? "Runde beendet — starte eine neue!" : "";
+  el.accuse.textContent = state.anklageModus ? "👆 Tippe auf die Karte …" : dieb ? "🔎 Dieb verhaften" : "🎒 Gegenstand wählen";
+  el.status.textContent = state.vorbei ? "Runde beendet — starte eine neue!" : dieb ? "Phase 1: Finde den Dieb / die Diebin." : "Phase 2: Welcher Gegenstand wurde gestohlen? (Farbe = Hintergrund)";
+}
+
+function renderBaukastenPhase() {
+  el.baukasten.innerHTML = "";
+  renderBaukasten(state.phase === "dieb" ? FRAGE_BAUKASTEN_DIEB : FRAGE_BAUKASTEN_OBJEKT);
 }
 
 function neueRunde() {
   state.verdaechtige = erzeugeVerdaechtige(ANZAHL_VERDAECHTIGE);
   state.dieb = zufall(state.verdaechtige);
+  state.objekte = erzeugeObjekte(6);
+  state.objekt = zufall(state.objekte);
+  state.phase = "dieb"; state.rundenPunkte = 0;
   state.fragen = 0; state.falsch = 0; state.ausgeschlossen = new Set();
   state.anklageModus = false; state.vorbei = false; state.verlauf = [];
   el.chat.innerHTML = "";
-  systemMeldung("🕵️ Ein Dieb hat eine Uhr gestohlen! Frag den Zeugen auf Französisch, wie der Dieb aussieht. Tippe Karten an, um sie auszuschliessen.");
+  systemMeldung("🕵️ Es wurde etwas gestohlen! Finde zuerst den Dieb / die Diebin, dann den Gegenstand. Frag den Zeugen auf Französisch. Tippe Karten an, um sie auszuschliessen.");
+  renderBaukastenPhase();
   renderVerdaechtige();
   renderStatus();
 }
@@ -136,27 +158,57 @@ function klickKarte(i) {
   renderVerdaechtige();
 }
 
-function punkteFuerRunde() { return Math.max(10, 100 - 8 * state.fragen - 20 * state.falsch); }
+function punkteFuerPhase() { return Math.max(10, 50 - 4 * state.fragen - 10 * state.falsch); }
 
 function verhafte(i) {
   state.anklageModus = false;
-  const s = state.verdaechtige[i];
-  if (s === state.dieb) gewonnen(); else {
-    state.falsch++;
-    state.ausgeschlossen.add(i);
-    systemMeldung(`❌ ${s.name} ist unschuldig! (Mit „Est-ce que c'est ${s.name} ?“ kannst du auch fragen, bevor du verhaftest.)`, "schlecht");
-    sprich(`Non, ce n'est pas ${s.name}.`);
-    renderVerdaechtige();
+  if (state.phase === "dieb") {
+    const s = state.verdaechtige[i];
+    if (s === state.dieb) diebGefunden(); else {
+      state.falsch++;
+      state.ausgeschlossen.add(i);
+      systemMeldung(`❌ ${s.name} ist unschuldig! (Mit „Est-ce que c'est ${s.name} ?“ kannst du auch fragen, bevor du verhaftest.)`, "schlecht");
+      sprich(`Non, ce n'est pas ${s.name}.`);
+      renderVerdaechtige();
+    }
+  } else {
+    const o = state.objekte[i];
+    if (o === state.objekt) objektGefunden(); else {
+      state.falsch++;
+      state.ausgeschlossen.add(i);
+      systemMeldung(`❌ Es ist nicht ${o.artikel} ${o.farbe}.`, "schlecht");
+      sprich(`Non, ce n'est pas ${o.artikel} ${o.farbe}.`);
+      renderVerdaechtige();
+    }
   }
   renderStatus();
 }
 
-function gewonnen() {
-  const p = punkteFuerRunde();
-  state.gesamt += p; state.best = Math.max(state.best, p); state.vorbei = true;
-  lsSet(LS.punkte, state.gesamt); lsSet(LS.best, state.best);
-  systemMeldung(`🎉 Bravo! ${state.dieb.name} ist der Dieb! +${p} Punkte (${state.fragen} Fragen, ${state.falsch} Fehlversuche).`, "gut");
-  sprich(`Bravo ! C'est ${state.dieb.name} ! La police arrive tout de suite.`);
+function punkteBuchen() {
+  const p = punkteFuerPhase();
+  state.rundenPunkte += p;
+  state.gesamt += p;
+  lsSet(LS.punkte, state.gesamt);
+  return p;
+}
+
+function diebGefunden() {
+  const p = punkteBuchen();
+  systemMeldung(`🎉 Bravo! ${state.dieb.name} ist ${state.dieb.homme ? "der Dieb" : "die Diebin"}! +${p} Punkte (${state.fragen} Fragen, ${state.falsch} Fehlversuche). Jetzt: Welcher Gegenstand wurde gestohlen?`, "gut");
+  sprich(`Bravo ! C'est ${state.dieb.name} ! Maintenant, quel objet est volé ?`);
+  state.phase = "objekt"; state.fragen = 0; state.falsch = 0; state.ausgeschlossen = new Set(); state.verlauf = [];
+  renderBaukastenPhase();
+  renderVerdaechtige();
+  renderStatus();
+}
+
+function objektGefunden() {
+  const p = punkteBuchen();
+  state.vorbei = true;
+  state.best = Math.max(state.best, state.rundenPunkte);
+  lsSet(LS.best, state.best);
+  systemMeldung(`🏆 Super! ${state.objekt.fr} (${state.objekt.farbe}) war gestohlen! +${p} Punkte — Runde: ${state.rundenPunkte} Punkte.`, "gut");
+  sprich(`Bravo ! Le voleur a volé ${state.objekt.artikel}. La police arrive tout de suite.`);
   renderStatus();
 }
 
@@ -165,6 +217,8 @@ function systemPrompt() {
   const vok = VOKABELN.map((v) => `${v.fr} = ${v.de}`).join("\n");
   return `Du bist der Zeuge im Detektivspiel «Le jeu des détectives» für ein Schweizer Kind (5./6. Klasse, Französisch-Anfänger, Lehrmittel «Ça roule 6, Unité 1»).
 Der gesuchte Dieb hat genau diese Merkmale (die Wahrheit, nie davon abweichen): ${beschreibeVerdaechtigen(state.dieb)}.
+Der gestohlene Gegenstand: ${state.objekt.fr} (${state.objekt.de}), Art: ${KAT_DE[state.objekt.kat]} (${KAT_FR[state.objekt.kat]}), Farbe: ${state.objekt.farbe}.
+Aktuelle Phase: ${state.phase === "dieb" ? "1 — das Kind sucht den DIEB. Fragen zum gestohlenen Gegenstand beantwortest du noch nicht, sondern sagst «Cherche d'abord le voleur !»." : "2 — der Dieb ist schon gefunden, das Kind sucht den GEGENSTAND (Fragen wie «Est-ce que c'est un instrument noir ?», «Est-ce qu'il vole un ordinateur ?»). Verrate den Namen des Gegenstands nie, sondern beantworte nur Art/Farbe/Ja-Nein."}
 Das Kind stellt dir Fragen auf Französisch (oft «Est-ce qu'il/elle est/a/porte …?»). Regeln:
 - Antworte ehrlich zu den Merkmalen, in 1–2 sehr kurzen, einfachen französischen Sätzen (Oui, … / Non, …). Nutze möglichst Wörter aus der Vokabelliste. Verrate nie den Namen und nie mehr als gefragt.
 - Wurde etwas gefragt, das nicht in den Merkmalen steht, antworte: «Je ne sais pas.»
@@ -178,7 +232,7 @@ Vokabelliste:\n${vok}`;
 
 async function fragZeuge(frage) {
   const key = lsGet(LS.key);
-  if (!key) return { ...lokalerZeuge(frage, state.dieb), quelle: "lokal" };
+  if (!key) return { ...lokalerZeuge(frage, state.dieb, state.objekt, state.phase), quelle: "lokal" };
   const messages = [...state.verlauf, { role: "user", content: frage }].slice(-12);
   while (messages[0].role !== "user") messages.shift();
   try {
@@ -199,12 +253,15 @@ async function fragZeuge(frage) {
     state.verlauf = [...messages, { role: "assistant", content: JSON.stringify(j) }];
     return { fr: j.antwort_fr, de: j.antwort_de, korrektur: j.korrektur || "", quelle: "ki" };
   } catch (e) {
-    return { ...lokalerZeuge(frage, state.dieb), quelle: "lokal", fehler: e.message };
+    return { ...lokalerZeuge(frage, state.dieb, state.objekt, state.phase), quelle: "lokal", fehler: e.message };
   }
 }
 
 function nameInFrage(frage) {
   const q = normalisiere(frage);
+  if (state.phase === "objekt") {
+    return state.objekte.findIndex((o) => /c'est|vole/.test(q) && q.includes(o.match) && (q.includes(o.farbe) || !/noir|brun|rouge/.test(q)));
+  }
   return state.verdaechtige.findIndex((s) => /c'est/.test(q) && q.includes(normalisiere(s.name)));
 }
 
@@ -218,9 +275,15 @@ async function sendeFrage(text) {
   const idx = nameInFrage(text);
   if (idx >= 0) {
     state.fragen++;
-    const s = state.verdaechtige[idx];
-    if (s === state.dieb) { blase("zeuge", `Oui ! C'est ${s.name} !`, `Ja! Es ist ${s.name}!`); gewonnen(); sprich(`Oui ! C'est ${s.name} !`); }
-    else { state.falsch++; state.ausgeschlossen.add(idx); blase("zeuge", `Non, ce n'est pas ${s.name}.`, `Nein, es ist nicht ${s.name}.`); sprich(`Non, ce n'est pas ${s.name}.`); renderVerdaechtige(); }
+    if (state.phase === "dieb") {
+      const s = state.verdaechtige[idx];
+      if (s === state.dieb) { blase("zeuge", `Oui ! C'est ${s.name} !`, `Ja! Es ist ${s.name}!`); diebGefunden(); }
+      else { state.falsch++; state.ausgeschlossen.add(idx); blase("zeuge", `Non, ce n'est pas ${s.name}.`, `Nein, es ist nicht ${s.name}.`); sprich(`Non, ce n'est pas ${s.name}.`); renderVerdaechtige(); }
+    } else {
+      const o = state.objekte[idx];
+      if (o === state.objekt) { blase("zeuge", `Oui ! C'est ${o.artikel} !`, `Ja! Es ist ${o.de}!`); objektGefunden(); }
+      else { state.falsch++; state.ausgeschlossen.add(idx); blase("zeuge", `Non, ce n'est pas ${o.artikel}.`, `Nein, es ist nicht ${o.de}.`); sprich(`Non, ce n'est pas ${o.artikel}.`); renderVerdaechtige(); }
+    }
     renderStatus();
     return;
   }
@@ -244,8 +307,8 @@ function bereinige(t) {
   return t.replace(/\s*\/\s*elle/g, "").replace(/\(e\)/g, "").replace(/\s*\/\s*vieille/g, "");
 }
 
-function renderBaukasten() {
-  FRAGE_BAUKASTEN.forEach((b) => {
+function renderBaukasten(bloecke) {
+  bloecke.forEach((b) => {
     const box = document.createElement("div");
     box.className = "bk-block";
     const kopf = document.createElement("div");
@@ -254,7 +317,7 @@ function renderBaukasten() {
     box.appendChild(kopf);
     const chips = document.createElement("div");
     chips.className = "bk-chips";
-    b.gruppen.flat().forEach(([fr, de]) => {
+    b.enden.forEach(([fr, de]) => {
       const c = document.createElement("button");
       c.className = "chip";
       c.textContent = fr;
@@ -272,7 +335,9 @@ function renderBaukasten() {
   });
   const nameBox = document.createElement("div");
   nameBox.className = "bk-block";
-  nameBox.innerHTML = `<div class="bk-start">Est-ce que c'est … <small>(Name)</small></div><div class="bk-hinweis">z.B. «Est-ce que c'est Léa ?» – so fragst du direkt nach einer Person.</div>`;
+  nameBox.innerHTML = state.phase === "dieb"
+    ? `<div class="bk-start">Est-ce que c'est … <small>(Name)</small></div><div class="bk-hinweis">z.B. «Est-ce que c'est Sarah ?» oder «Est-ce que c'est Théo ?» – so fragst du direkt nach einer Person.</div>`
+    : `<div class="bk-hinweis">Du kannst auch direkt raten: «Est-ce que c'est un violon ?»</div>`;
   el.baukasten.appendChild(nameBox);
 }
 
@@ -354,7 +419,6 @@ el.key.value = lsGet(LS.key);
 el.model.value = lsGet(LS.model) || STANDARD_MODEL;
 el.stimme.checked = lsGet(LS.stimme, "1") === "1";
 Object.entries(KATEGORIEN).forEach(([k, v]) => el.vokFilter.add(new Option(v, k)));
-renderBaukasten();
 renderVokabeln();
 neueRunde();
 

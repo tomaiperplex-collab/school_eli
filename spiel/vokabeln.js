@@ -43,6 +43,15 @@ const VOKABELN = [
   { fr: "la montre", de: "die Uhr", satz: "Il est quelle heure? Regarde ta montre.", kat: "kleidung" },
   { fr: "l'objet (m)", de: "das Objekt", en: "the object", satz: "Le parapluie est un objet.", kat: "allgemein" },
 
+  { fr: "la chemise", de: "das Hemd, die Bluse", satz: "Il porte une chemise blanche.", kat: "kleidung", ergaenzt: true },
+  { fr: "le pantalon", de: "die Hose", satz: "Il porte un pantalon noir.", kat: "kleidung", ergaenzt: true },
+  { fr: "la jupe", de: "der Rock", satz: "Elle porte une jupe verte.", kat: "kleidung", ergaenzt: true },
+  { fr: "le pull", de: "der Pullover", satz: "Il porte un pull rouge.", kat: "kleidung", ergaenzt: true },
+  { fr: "l'instrument (m)", de: "das Instrument", satz: "Le violon est un instrument.", kat: "allgemein", ergaenzt: true },
+  { fr: "le moyen de transport", de: "das Transportmittel", satz: "Le vélo est un moyen de transport.", kat: "allgemein", ergaenzt: true },
+  { fr: "noir / noire, vert / verte, rouge", de: "schwarz, grün, rot", satz: "Il porte un pull rouge.", kat: "allgemein", ergaenzt: true },
+  { fr: "marron", de: "braun (Augen)", satz: "Elle a les yeux marron.", kat: "aussehen", ergaenzt: true },
+
   // Verben
   { fr: "avoir", de: "haben", satz: "J'ai une question.", kat: "verben" },
   { fr: "voler", de: "stehlen", satz: "L'homme vole une montre.", kat: "verben" },
@@ -63,22 +72,28 @@ const VOKABELN = [
   { fr: "tout à coup", de: "plötzlich", satz: "Tout à coup, Raphaela crie.", kat: "allgemein" },
 ];
 
-// Frage-Baukasten nach dem Spickzettel des Kindes (Satzanfang + Endungen).
-// `fr` ist das, was gesprochen/geschrieben wird; `de` eine Hilfe.
-const FRAGE_BAUKASTEN = [
-  { start: "Est-ce que c'est", gruppen: [
-    [["une femme", "eine Frau"], ["un homme", "ein Mann"]],
+// Frage-Baukästen aus dem Lehrmittel («Des questions pour trouver le voleur /
+// l'objet volé») plus Ergänzungen vom Spickzettel des Kindes.
+// Je Block: Satzanfang + Endungen [fr, de]; `fr` wird zur Frage zusammengesetzt.
+const FRAGE_BAUKASTEN_DIEB = [
+  { start: "Est-ce que c'est", enden: [["une femme", "eine Frau"], ["un homme", "ein Mann"]] },
+  { start: "Est-ce qu'il / elle est", enden: [["grand(e)", "gross"], ["petit(e)", "klein"], ["mince", "schlank"], ["vieux / vieille", "alt"]] },
+  { start: "Est-ce qu'il / elle a", enden: [
+    ["un grand nez", "eine grosse Nase"], ["une moustache", "einen Schnauz"],
+    ["les yeux marron", "braune Augen"], ["les yeux bleus", "blaue Augen"], ["les yeux verts", "grüne Augen"],
+    ["les cheveux bruns", "braune Haare"], ["les cheveux blonds", "blonde Haare"], ["les cheveux courts", "kurze Haare"], ["les cheveux longs", "lange Haare"],
   ] },
-  { start: "Est-ce qu'il / elle est", gruppen: [
-    [["grand(e)", "gross"], ["petit(e)", "klein"], ["mince", "schlank"], ["vieux / vieille", "alt"]],
+  { start: "Est-ce qu'il / elle porte", enden: [
+    ["des lunettes", "eine Brille"], ["un chapeau", "einen Hut"], ["une chemise", "ein Hemd"],
+    ["un pantalon noir", "eine schwarze Hose"], ["une jupe verte", "einen grünen Rock"],
+    ["un pull rouge", "einen roten Pulli"], ["une veste bleue", "eine blaue Jacke"], ["des chaussures rouges", "rote Schuhe"],
   ] },
-  { start: "Est-ce qu'il / elle a", gruppen: [
-    [["un grand nez", "eine grosse Nase"], ["une moustache", "einen Schnauz"]],
-    [["les cheveux blonds", "blonde Haare"], ["les cheveux bruns", "braune Haare"], ["les cheveux longs", "lange Haare"], ["les cheveux courts", "kurze Haare"]],
-    [["les yeux bleus", "blaue Augen"], ["les yeux marron", "braune Augen"], ["les yeux verts", "grüne Augen"]],
+];
+const FRAGE_BAUKASTEN_OBJEKT = [
+  { start: "Est-ce que c'est", enden: [
+    ["un instrument noir", "ein schwarzes Instrument"], ["un moyen de transport brun", "ein braunes Transportmittel"],
+    ["un objet rouge", "ein roter Gegenstand"], ["un instrument", "ein Instrument"],
+    ["un moyen de transport", "ein Transportmittel"], ["un objet", "ein Gegenstand"],
   ] },
-  { start: "Est-ce qu'il / elle porte", gruppen: [
-    [["un pull vert", "einen grünen Pulli"], ["une veste bleue", "eine blaue Jacke"], ["des vêtements noirs", "schwarze Kleider"]],
-    [["des chaussures rouges", "rote Schuhe"], ["un chapeau rayé", "einen gestreiften Hut"], ["des lunettes", "eine Brille"]],
-  ] },
+  { start: "Est-ce qu'il / elle vole", enden: [["un ordinateur", "einen Computer"], ["un violon", "eine Geige"], ["un vélo", "ein Velo"], ["une montre", "eine Uhr"]] },
 ];

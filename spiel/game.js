@@ -3,8 +3,8 @@
 // Die KI (app.js: fragZeuge) kennt dieselben Merkmale und antwortet freier;
 // die lokale Variante ist der Fallback ohne API-Key / ohne Internet.
 
-const NAMEN_M = ["Simon", "Luc", "Hugo", "Marc", "Paul", "Louis", "Jean", "Noah"];
-const NAMEN_F = ["Léa", "Emma", "Chloé", "Zoé", "Inès", "Alice", "Lola", "Rose"];
+const NAMEN_M = ["Théo", "Simon", "Luc", "Hugo", "Marc", "Paul", "Louis", "Noah"];
+const NAMEN_F = ["Sarah", "Léa", "Emma", "Chloé", "Zoé", "Inès", "Alice", "Lola"];
 
 const FARBEN = {
   vert: { fr: "vert(e)", de: "grün", hex: "#3f9a4f" },
@@ -12,6 +12,27 @@ const FARBEN = {
   noir: { fr: "noir(e)", de: "schwarz", hex: "#2b2b2b" },
   rouge: { fr: "rouge", de: "rot", hex: "#c0392b" },
 };
+const FARBE_FEM = { vert: "verte", bleu: "bleue", noir: "noire", rouge: "rouge", brun: "brune" };
+
+// Gestohlene Gegenstände (Kästen im Lehrmittel: instrument / moyen de transport / objet)
+const OBJEKTE = [
+  { fr: "le violon", artikel: "un violon", match: "violon", emoji: "🎻", kat: "instrument", de: "die Geige" },
+  { fr: "la guitare", artikel: "une guitare", match: "guitare", emoji: "🎸", kat: "instrument", de: "die Gitarre" },
+  { fr: "la trompette", artikel: "une trompette", match: "trompette", emoji: "🎺", kat: "instrument", de: "die Trompete" },
+  { fr: "le vélo", artikel: "un vélo", match: "velo", emoji: "🚲", kat: "transport", de: "das Velo" },
+  { fr: "la trottinette", artikel: "une trottinette", match: "trottinette", emoji: "🛴", kat: "transport", de: "der Scooter" },
+  { fr: "l'ordinateur", artikel: "un ordinateur", match: "ordinateur", emoji: "💻", kat: "objet", de: "der Computer" },
+  { fr: "la montre", artikel: "une montre", match: "montre", emoji: "⌚", kat: "objet", de: "die Uhr" },
+  { fr: "le parapluie", artikel: "un parapluie", match: "parapluie", emoji: "☂️", kat: "objet", de: "der Regenschirm" },
+  { fr: "le téléphone", artikel: "un téléphone", match: "telephone", emoji: "📱", kat: "objet", de: "das Telefon" },
+];
+const OBJEKT_FARBEN = { noir: "#2b2b2b", brun: "#8b5a2b", rouge: "#c0392b" };
+const KAT_FR = { instrument: "un instrument", transport: "un moyen de transport", objet: "un objet" };
+const KAT_DE = { instrument: "Instrument", transport: "Transportmittel", objet: "Gegenstand" };
+
+function erzeugeObjekte(n) {
+  return mische(OBJEKTE).slice(0, n).map((o) => ({ ...o, farbe: zufall(Object.keys(OBJEKT_FARBEN)) }));
+}
 
 function zufall(liste) { return liste[Math.floor(Math.random() * liste.length)]; }
 function mische(liste) {
@@ -25,7 +46,7 @@ function mische(liste) {
 
 function signatur(s) {
   return [s.homme, s.taille, s.vieux, s.mince, s.cheveux, s.laenge, s.yeux, s.nez,
-    s.moustache, s.lunettes, s.chapeau, s.haut, s.hautFarbe, s.chaussures].join("|");
+    s.moustache, s.lunettes, s.chapeau, s.haut, s.hautFarbe, s.bas, s.basFarbe, s.chaussures].join("|");
 }
 
 // Erzeugt n Verdächtige mit paarweise verschiedenen Merkmalen.
@@ -47,8 +68,10 @@ function erzeugeVerdaechtige(n) {
       moustache: homme && Math.random() < 0.5,
       lunettes: zufall(["non", "non", "oui"]),
       chapeau: zufall(["non", "non", "uni", "raye"]),
-      haut: zufall(["pull", "veste"]),
+      haut: zufall(["pull", "chemise", "veste"]),
       hautFarbe: zufall(["vert", "bleu", "noir", "rouge"]),
+      bas: homme ? "pantalon" : zufall(["pantalon", "jupe"]),
+      basFarbe: zufall(["noir", "vert"]),
       chaussures: zufall(["rouges", "noires"]),
     };
     const sig = signatur(s);
@@ -74,7 +97,8 @@ function beschreibeVerdaechtigen(s) {
     s.moustache ? "hat einen Schnauz (une moustache)" : "hat keinen Schnauz",
     s.lunettes === "oui" ? "trägt eine Brille (des lunettes)" : "trägt keine Brille",
     s.chapeau === "non" ? "trägt keinen Hut" : s.chapeau === "raye" ? "trägt einen gestreiften Hut (un chapeau rayé)" : "trägt einen einfarbigen Hut (un chapeau)",
-    `Oberteil: ${s.haut === "pull" ? "ein Pullover (un pull)" : "eine Jacke (une veste)"}, Farbe ${f} (${s.hautFarbe})`,
+    `Oberteil: ${{ pull: "ein Pullover (un pull)", chemise: "ein Hemd/eine Bluse (une chemise)", veste: "eine Jacke (une veste)" }[s.haut]}, Farbe ${f} (${s.hautFarbe})`,
+    `Unterteil: ${s.bas === "pantalon" ? "eine Hose (un pantalon)" : "ein Rock (une jupe)"}, Farbe ${FARBEN[s.basFarbe].de} (${s.basFarbe})`,
     `Schuhe: ${s.chaussures === "rouges" ? "rot (rouges)" : "schwarz (noires)"}`,
   ].join("; ");
 }
@@ -90,11 +114,14 @@ function gesichtSvg(s) {
   const skala = s.taille === "grand" ? 1 : 0.8;
   let g = "";
   // Beine + Schuhe
-  g += `<rect x="38" y="112" width="9" height="28" fill="#555"/><rect x="53" y="112" width="9" height="28" fill="#555"/>`;
+  const bas = FARBEN[s.basFarbe].hex;
+  if (s.bas === "pantalon") g += `<rect x="38" y="112" width="9" height="28" fill="${bas}"/><rect x="53" y="112" width="9" height="28" fill="${bas}"/>`;
+  else g += `<rect x="39" y="118" width="7" height="22" fill="#f6d2b0"/><rect x="54" y="118" width="7" height="22" fill="#f6d2b0"/><path d="M34 108 L66 108 L72 128 L28 128Z" fill="${bas}"/>`;
   g += `<rect x="33" y="138" width="16" height="9" rx="4" fill="${schuh}"/><rect x="51" y="138" width="16" height="9" rx="4" fill="${schuh}"/>`;
   // Körper
   g += `<rect x="${50 - bw}" y="84" width="${bw * 2}" height="40" rx="12" fill="${oberteil}"/>`;
   if (s.haut === "veste") g += `<line x1="50" y1="86" x2="50" y2="122" stroke="#00000055" stroke-width="2"/>`;
+  else if (s.haut === "chemise") g += `<path d="M42 84 L50 96 L58 84Z" fill="#fff"/><g fill="#fff"><circle cx="50" cy="102" r="1.8"/><circle cx="50" cy="110" r="1.8"/><circle cx="50" cy="118" r="1.8"/></g>`;
   else g += `<path d="M42 84 Q50 94 58 84" fill="${haut}"/>`;
   // lange Haare hinten
   if (s.laenge === "longs") g += `<rect x="22" y="22" width="56" height="62" rx="22" fill="${haar}"/>`;
@@ -132,7 +159,7 @@ function antwort(wahr, jaText, neinText) {
   return { fr: wahr ? `Oui, ${jaText}` : `Non, ${neinText}`, de: null, korrektur: "" };
 }
 
-function lokalerZeuge(frage, s) {
+function lokalDieb(frage, s) {
   const q = normalisiere(frage);
   const hat = (...w) => w.some((x) => q.includes(x));
   const er = s.homme ? "il" : "elle";
@@ -147,15 +174,21 @@ function lokalerZeuge(frage, s) {
     if (hat("rouge")) return antwort(s.chaussures === "rouges", `${er} porte des chaussures rouges.`, `${er} porte des chaussures noires.`);
     if (hat("noir")) return antwort(s.chaussures === "noires", `${er} porte des chaussures noires.`, `${er} porte des chaussures rouges.`);
   }
-  if (hat("pull", "veste", "vetement")) {
-    const typ = hat("pull") ? "pull" : hat("veste") ? "veste" : null;
+  const kleidung = ["pull", "chemise", "veste", "pantalon", "jupe"].find((k) => q.includes(k));
+  if (kleidung || hat("vetement")) {
     const farbe = ["vert", "bleu", "noir", "rouge"].find((c) => q.includes(c));
-    if (typ && farbe) {
-      const f = typ === "veste" ? { vert: "verte", bleu: "bleue", noir: "noire", rouge: "rouge" }[farbe] : farbe;
-      const k = typ === "pull" ? "un pull" : "une veste";
-      return antwort(s.haut === typ && s.hautFarbe === farbe, `${er} porte ${k} ${f}.`, `${er} ne porte pas ${k} ${f}.`);
+    const istHaut = kleidung && ["pull", "chemise", "veste"].includes(kleidung);
+    const istBas = kleidung === "pantalon" || kleidung === "jupe";
+    const fem = kleidung === "chemise" || kleidung === "veste" || kleidung === "jupe";
+    const art = { pull: "un pull", chemise: "une chemise", veste: "une veste", pantalon: "un pantalon", jupe: "une jupe" };
+    const f = farbe ? (fem ? FARBE_FEM[farbe] : farbe) : "";
+    if (kleidung) {
+      const typOk = istHaut ? s.haut === kleidung : s.bas === kleidung;
+      const farbOk = !farbe || (istHaut ? s.hautFarbe === farbe : s.basFarbe === farbe);
+      if (typOk && farbOk) return { fr: `Oui, ${er} porte ${art[kleidung]}${f ? " " + f : ""}.`, de: null, korrektur: "" };
+      if (typOk) return { fr: `Non, ${er} porte ${art[kleidung]} d'une autre couleur.`, de: null, korrektur: "" };
+      return { fr: `Non, ${er} ne porte pas ${art[kleidung]}.`, de: null, korrektur: "" };
     }
-    if (typ) return antwort(s.haut === typ, `${er} porte ${typ === "pull" ? "un pull" : "une veste"}.`, `${er} porte ${s.haut === "pull" ? "un pull" : "une veste"}.`);
     if (farbe) return antwort(s.hautFarbe === farbe, `les vêtements sont ${farbe}.`, `les vêtements ne sont pas ${farbe}.`);
   }
   if (hat("yeux", "augen")) {
@@ -184,4 +217,26 @@ function lokalerZeuge(frage, s) {
     de: "Ich verstehe nicht. Kannst du es wiederholen? (Tipp: Frag nach Haaren, Augen, Brille, Hut, Kleidung …)",
     korrektur: "",
   };
+}
+
+// Fragen zum gestohlenen Gegenstand (Phase 2): "Est-ce que c'est un instrument noir ?"
+function lokalObjekt(frage, o) {
+  const q = normalisiere(frage);
+  const kat = q.includes("instrument") ? "instrument" : q.includes("transport") ? "transport" : /\bobjet\b/.test(q) ? "objet" : null;
+  const farbe = Object.keys(OBJEKT_FARBEN).find((c) => q.includes(c));
+  if (kat || farbe) {
+    const ok = (!kat || o.kat === kat) && (!farbe || o.farbe === farbe);
+    const text = `${kat ? KAT_FR[kat] : "un objet"}${farbe ? " " + farbe : ""}`;
+    return { fr: ok ? `Oui, c'est ${text}.` : `Non, ce n'est pas ${text}.`, de: null, korrektur: "" };
+  }
+  return { fr: "Je ne comprends pas. Tu peux répéter ?", de: "Ich verstehe nicht. Frag nach der Art (instrument, moyen de transport, objet) oder der Farbe (noir, brun, rouge).", korrektur: "" };
+}
+
+// phase: "dieb" | "objekt"
+function lokalerZeuge(frage, s, o, phase) {
+  const q = normalisiere(frage);
+  const objektFrage = /instrument|transport|\bobjet\b|\bvole\b/.test(q);
+  if (phase === "objekt") return lokalObjekt(frage, o);
+  if (objektFrage) return { fr: "Cherche d'abord le voleur !", de: "Such zuerst den Dieb! Danach den gestohlenen Gegenstand.", korrektur: "" };
+  return lokalDieb(frage, s);
 }
