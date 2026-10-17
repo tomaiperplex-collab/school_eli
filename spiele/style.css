@@ -1,0 +1,263 @@
+/* spiele/style.css — Styling für die Spiele-Einstiegsseite und das
+   Schere-Stein-Papier-Quiz (Chrome/Tabs: shared/shell.css). */
+
+:root {
+  --richtig: #2a9d5c;
+  --falsch: #e63946;
+  --akzent: #219ebc;
+}
+
+/* --- Layout --- */
+#app-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.intro-text {
+  text-align: center;
+  color: #666;
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.link-zurueck {
+  display: inline-block;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 0.95rem;
+  font-weight: bold;
+  font-family: var(--font);
+  cursor: pointer;
+  padding: 0 0 0.8rem;
+}
+.link-zurueck:hover { color: #444; }
+
+.frage-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 0.4rem 0 1rem;
+}
+
+.mc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-top: 0.6rem;
+}
+@media (max-width: 480px) {
+  .mc-grid { grid-template-columns: 1fr; }
+}
+.mc-option {
+  border: none;
+  border-radius: var(--radius);
+  background: #f1f1f1;
+  padding: 1.1rem 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: var(--font);
+  cursor: pointer;
+  min-height: 60px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+}
+.mc-option:hover:not(:disabled) { background: #e6e6e6; }
+.mc-option.richtig { background: var(--richtig); color: #fff; }
+.mc-option.falsch { background: var(--falsch); color: #fff; }
+.mc-option:disabled { cursor: default; }
+
+.big-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem 1.6rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  font-family: var(--font);
+  background: var(--akzent);
+  color: #fff;
+  cursor: pointer;
+  min-height: 52px;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.15);
+}
+.big-btn:active { transform: translateY(1px); }
+.big-btn.warnung { background: var(--falsch); }
+
+.feedback {
+  min-height: 1.6em;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 0.8rem 0;
+}
+.feedback.richtig { color: var(--richtig); }
+.feedback.falsch { color: var(--falsch); }
+
+
+/* --- Spiele-Einstiegsseite --- */
+.spiele-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+.spiel-karte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 1.4rem 1rem;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  border: 3px solid transparent;
+}
+.spiel-karte:hover { border-color: var(--akzent); transform: translateY(-2px); }
+.spiel-karte-icon { font-size: 3rem; }
+.spiel-karte h2 { margin: 0; font-size: 1.25rem; }
+.spiel-karte p { margin: 0; color: #666; font-size: 0.95rem; }
+.spiel-karte-tag {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #fff;
+  background: #8e44ad;
+  border-radius: 999px;
+  padding: 0.15rem 0.7rem;
+}
+
+.link-zurueck { text-decoration: none; }
+
+/* --- Schere-Stein-Papier-Quiz --- */
+.spiel-btn {
+  display: block;
+  margin: 0.8rem auto 1.2rem;
+  background: linear-gradient(135deg, #8e44ad, #e63946);
+}
+
+.spieler-namen-zeile {
+  margin: 1rem 0;
+}
+.spieler-namen-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.4rem;
+}
+.spieler-namen-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.namen-chip {
+  border: 3px solid #ddd;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-family: var(--font);
+  font-weight: bold;
+  cursor: pointer;
+}
+.namen-chip.aktiv { border-color: var(--akzent); background: #e6f6fb; }
+#spieler-namen-wahl .big-btn { display: block; margin: 1.2rem auto 0; }
+
+.scoreboard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  background: #fff8ec;
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+}
+.scoreboard-eintrag { font-size: 0.9rem; }
+
+.rps-runde {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #888;
+  margin: 0 0 0.6rem;
+}
+.rps-wer-dran {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0.4rem 0;
+}
+.rps-wahl-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.rps-option {
+  border: none;
+  border-radius: var(--radius);
+  background: #f1f1f1;
+  padding: 1.2rem 0.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font);
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(0,0,0,0.1);
+}
+.rps-option:hover { background: #e6e6e6; transform: translateY(-2px); }
+.rps-option-icon { font-size: 2.2rem; }
+
+.rps-reveal-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+.rps-reveal-karte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  background: #f9f9f9;
+  border-radius: var(--radius);
+  padding: 1rem;
+  min-width: 90px;
+}
+.rps-reveal-icon { font-size: 2.5rem; }
+.rps-reveal-name { font-weight: bold; font-size: 0.9rem; }
+.rps-reveal-karte.verdeckt { background: #e0e0e0; }
+.rps-reveal-karte.aufgedeckt {
+  background: #fff8ec;
+  animation: rps-pop 0.35s ease;
+}
+@keyframes rps-pop {
+  0% { transform: scale(0.6) rotate(-8deg); opacity: 0.3; }
+  60% { transform: scale(1.15) rotate(4deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0); }
+}
+
+.rps-ergebnis-text {
+  text-align: center;
+  font-size: 1.3rem;
+  margin: 1rem 0;
+}
+
+.spiel-frage-thema {
+  text-align: center;
+  color: #888;
+  font-weight: bold;
+  font-size: 0.9rem;
+  margin: 0 0 0.2rem;
+}
+
+#spiel-runde-inhalt .big-btn { display: block; margin: 1rem auto 0; }
+
+@media (max-width: 600px) {
+  body { font-size: 16px; }
+  .panel { padding: 0.9rem; }
+}

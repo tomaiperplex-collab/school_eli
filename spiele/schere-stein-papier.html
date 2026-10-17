@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Schere-Stein-Papier-Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/shell.css" />
+<!-- ?v=N an style.css/rps.js hochzählen, wenn eine Datei geändert wird
+     (GitHub-Pages-Cache). -->
+<link rel="stylesheet" href="style.css?v=1" />
+</head>
+<body>
+
+<nav class="fach-tabs">
+  <a class="fach-tab" href="../index.html">🏔️ NMG</a>
+  <a class="fach-tab" href="../deutsch/index.html">📖 Deutsch</a>
+  <a class="fach-tab" href="../franzoesisch/index.html">🇫🇷 Französisch</a>
+  <a class="fach-tab aktiv" href="index.html">🎮 Spiele</a>
+  <a class="fach-tab" href="../mathe/index.html">➗ Mathe</a>
+</nav>
+
+<header class="app-header">
+  <h1>⚔️ Schere-Stein-Papier-Quiz</h1>
+  <p class="subtitle">Wer verliert, beantwortet eine Frage aus den Deutsch-Themen</p>
+</header>
+
+<main id="app-main">
+  <section class="panel">
+    <a class="link-zurueck" href="index.html">← Alle Spiele</a>
+
+    <div id="spiel-setup">
+      <p class="intro-text">Wie viele Spieler seid ihr?</p>
+      <div class="mc-grid">
+        <button class="mc-option" id="spiel-anzahl-2">👥 2 Spieler</button>
+        <button class="mc-option" id="spiel-anzahl-3">👥 3 Spieler</button>
+      </div>
+      <div id="spieler-namen-wahl"></div>
+    </div>
+
+    <div id="spiel-scoreboard" class="scoreboard hidden"></div>
+
+    <div id="spiel-runde" class="hidden">
+      <p id="spiel-runde-text" class="rps-runde"></p>
+      <div id="spiel-runde-inhalt"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="app-footer">
+  <p>Erstellt zur Prüfungsvorbereitung · läuft komplett lokal im Browser</p>
+</footer>
+
+<script src="../deutsch/data.js?v=6"></script>
+<script src="rps.js?v=1"></script>
+</body>
+</html>
