@@ -55,6 +55,7 @@ body {
 .fach-tabs {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   gap: 0.3rem;
   background: #402900;
   padding: 0.5rem 0.5rem 0;
@@ -78,6 +79,10 @@ body {
   background: var(--hintergrund);
   color: #402900;
   opacity: 1;
+}
+
+@media (max-width: 600px) {
+  .fach-tab { font-size: 0.9rem; padding: 0.55rem 0.7rem; }
 }
 
 /* --- "Kommt bald"-Seite für noch leere Fächer --- */
