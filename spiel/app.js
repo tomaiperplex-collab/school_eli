@@ -230,8 +230,11 @@ Antworte AUSSCHLIESSLICH mit einem JSON-Objekt: {"antwort_fr": "...", "antwort_d
 Vokabelliste:\n${vok}`;
 }
 
+// Entfernt Leerzeichen/Zeilenumbrüche und unsichtbare Zeichen, die beim Kopieren mitkommen.
+function cleanKey(k) { return k.replace(/[^\x21-\x7e]/g, ""); }
+
 async function fragZeuge(frage) {
-  const key = lsGet(LS.key);
+  const key = cleanKey(lsGet(LS.key));
   if (!key) return { ...lokalerZeuge(frage, state.dieb, state.objekt, state.phase), quelle: "lokal" };
   const messages = [...state.verlauf, { role: "user", content: frage }].slice(-12);
   while (messages[0].role !== "user") messages.shift();
@@ -246,7 +249,11 @@ async function fragZeuge(frage) {
       },
       body: JSON.stringify({ model: lsGet(LS.model) || STANDARD_MODEL, max_tokens: 400, system: systemPrompt(), messages }),
     });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    if (!r.ok) {
+      let detail = "";
+      try { detail = (await r.json()).error?.message || ""; } catch (e) { /* kein JSON */ }
+      throw new Error(`HTTP ${r.status}${r.status === 401 ? " — Key ungültig oder widerrufen (neuen API-Key unter console.anthropic.com erstellen)" : ""}${detail ? ": " + detail : ""}`);
+    }
     const data = await r.json();
     const text = data.content.map((c) => c.text || "").join("");
     const j = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
@@ -391,7 +398,7 @@ function renderVokabeln() {
 
 // ---------- Einstellungen ----------
 async function testeKey() {
-  lsSet(LS.key, el.key.value.trim()); lsSet(LS.model, el.model.value.trim());
+  el.key.value = cleanKey(el.key.value); lsSet(LS.key, el.key.value); lsSet(LS.model, el.model.value.trim());
   el.keyStatus.textContent = "Teste …";
   if (!state.dieb) neueRunde();
   const a = await fragZeuge("Est-ce que c'est une femme ?");
@@ -411,7 +418,7 @@ el.accuse.addEventListener("click", () => { if (state.vorbei) return; state.ankl
 el.neu.addEventListener("click", neueRunde);
 el.vokFilter.addEventListener("change", renderVokabeln);
 el.keyTest.addEventListener("click", testeKey);
-el.key.addEventListener("change", () => lsSet(LS.key, el.key.value.trim()));
+el.key.addEventListener("change", () => { el.key.value = cleanKey(el.key.value); lsSet(LS.key, el.key.value); });
 el.model.addEventListener("change", () => lsSet(LS.model, el.model.value.trim()));
 el.stimme.addEventListener("change", () => lsSet(LS.stimme, el.stimme.checked ? "1" : "0"));
 
