@@ -1,0 +1,70 @@
+/* spiel/style.css — Styling für "Le jeu des détectives" (Chrome/Tabs: shared/shell.css) */
+#app-main { max-width: 900px; margin: 0 auto; padding: 0 0.8rem 1rem; }
+h2 { margin-top: 0; }
+
+.unter-tabs { display: flex; justify-content: center; gap: 0.4rem; padding: 0.6rem 0.8rem; flex-wrap: wrap; }
+.unter-tab { font: inherit; font-weight: 700; font-size: 0.95rem; border: 2px solid #402900; background: #fff; color: #402900; border-radius: 999px; padding: 0.4rem 0.9rem; cursor: pointer; }
+.unter-tab.aktiv { background: #402900; color: #ffe3b3; }
+
+.leiste { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 0.4rem; font-size: 0.95rem; margin-bottom: 0.8rem; }
+
+.verdaechtige { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+.karte { background: #f3ead4; border: 3px solid transparent; border-radius: 14px; padding: 0.3rem 0.2rem 0.2rem; cursor: pointer; font: inherit; display: flex; flex-direction: column; align-items: center; }
+.karte svg { width: 100%; max-width: 90px; height: auto; }
+.karte-name { font-weight: 800; font-size: 0.85rem; }
+.karte.weg { opacity: 0.3; filter: grayscale(1); }
+
+.aktionen { display: flex; gap: 0.5rem; margin: 0.8rem 0 0.3rem; flex-wrap: wrap; }
+.big-btn { flex: 1; font: inherit; font-weight: 800; font-size: 1rem; border: none; border-radius: 14px; padding: 0.7rem 1rem; background: #402900; color: #ffe3b3; cursor: pointer; }
+.big-btn.zweit { background: #e8dcc0; color: #402900; }
+.big-btn.aktiv { background: #c0392b; color: #fff; }
+.status { min-height: 1.2em; margin: 0.2rem 0; color: #a04040; font-size: 0.9rem; }
+
+.chat { background: #faf5e8; border-radius: 14px; padding: 0.6rem; height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem; }
+.blase { position: relative; max-width: 85%; padding: 0.45rem 0.7rem; border-radius: 14px; }
+.blase.kind { align-self: flex-end; background: #402900; color: #ffe3b3; }
+.blase.zeuge { align-self: flex-start; background: #fff; border: 2px solid #e1d2a8; padding-right: 2.4rem; }
+.blase.denkt { color: #999; }
+.blase p { margin: 0; }
+.blase-fr { font-weight: 700; }
+.blase-de { font-size: 0.85rem; color: #666; margin-top: 0.15rem; }
+.blase-korrektur { font-size: 0.85rem; color: #8a5a00; margin-top: 0.25rem; background: #fff3cc; border-radius: 8px; padding: 0.2rem 0.4rem; }
+.blase-ton { border: none; background: transparent; font-size: 1.2rem; cursor: pointer; }
+.blase.zeuge .blase-ton { position: absolute; top: 0.2rem; right: 0.3rem; }
+.systemmeldung { text-align: center; font-size: 0.9rem; color: #555; padding: 0.2rem 0.4rem; }
+.systemmeldung.gut { color: #1d7a3a; font-weight: 800; }
+.systemmeldung.schlecht { color: #a04040; }
+
+.eingabe-zeile { display: flex; gap: 0.4rem; margin-top: 0.6rem; }
+.eingabe-zeile input, .feld input, #vok-filter { flex: 1; font: inherit; border: 2px solid #d8c9a3; border-radius: 12px; padding: 0.55rem 0.7rem; min-width: 0; width: 100%; }
+.eingabe-zeile input { width: auto; }
+.mic-btn, .senden-btn { font-size: 1.3rem; border: none; border-radius: 12px; width: 3rem; background: #402900; color: #ffe3b3; cursor: pointer; }
+.mic-btn.hoert { background: #c0392b; animation: puls 1s infinite; }
+@keyframes puls { 50% { opacity: 0.6; } }
+
+.baukasten-titel { margin: 1rem 0 0.4rem; font-size: 1rem; }
+.bk-block { margin-bottom: 0.6rem; }
+.bk-start { font-weight: 800; color: #402900; font-size: 0.95rem; }
+.bk-hinweis { font-size: 0.85rem; color: #666; }
+.bk-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.25rem; }
+.chip { font: inherit; font-size: 0.9rem; background: #f3ead4; border: 2px solid #e1d2a8; border-radius: 999px; padding: 0.3rem 0.7rem; cursor: pointer; }
+.chip:active { background: #e1d2a8; }
+
+.vok-liste { margin-top: 0.6rem; display: flex; flex-direction: column; gap: 0.4rem; }
+.vok { display: flex; gap: 0.5rem; align-items: flex-start; border-bottom: 1px solid #eee; padding-bottom: 0.4rem; }
+.vok-satz { font-size: 0.85rem; color: #666; font-style: italic; }
+
+.hinweis { font-size: 0.9rem; color: #555; }
+.feld { display: block; font-weight: 700; margin: 0.6rem 0; }
+.feld input { margin-top: 0.2rem; font-weight: 500; }
+.schalter { display: block; margin: 0.6rem 0; }
+#key-test, #install-btn { margin-top: 0.4rem; width: 100%; flex: none; }
+
+@media (max-width: 520px) {
+  .verdaechtige { grid-template-columns: repeat(4, 1fr); gap: 0.3rem; }
+  .karte-name { font-size: 0.75rem; }
+  .chat { height: 220px; }
+}
+
+.verdaechtige.objekte { grid-template-columns: repeat(3, 1fr); }
+.objekt-bild { display: flex; align-items: center; justify-content: center; width: 4.2rem; height: 4.2rem; border-radius: 50%; font-size: 2.2rem; margin: 0.3rem 0; }

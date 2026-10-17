@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Spiel: Le jeu des détectives</title>
+<meta name="theme-color" content="#402900" />
+<link rel="manifest" href="manifest.json" />
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="icons/icon-192.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/shell.css" />
+<!-- ?v=N an style.css/vokabeln.js/game.js/app.js hochzählen, wenn eine Datei
+     geändert wird (GitHub-Pages-Cache); in sw.js die CACHE-Version mitziehen. -->
+<link rel="stylesheet" href="style.css?v=2" />
+</head>
+<body>
+
+<nav class="fach-tabs">
+  <a class="fach-tab" href="../index.html">🏔️ NMG</a>
+  <a class="fach-tab" href="../deutsch/index.html">📖 Deutsch</a>
+  <a class="fach-tab" href="../franzoesisch/index.html">🇫🇷 Französisch</a>
+  <a class="fach-tab aktiv" href="index.html">🕵️ Spiel</a>
+  <a class="fach-tab" href="../mathe/index.html">➗ Mathe</a>
+</nav>
+
+<header class="app-header">
+  <h1>🕵️ Le jeu des détectives</h1>
+  <p class="subtitle">Befrage den Zeugen auf Französisch und finde den Dieb!</p>
+</header>
+
+<nav class="unter-tabs">
+  <button class="unter-tab aktiv" data-ansicht="spiel">🎮 Spiel</button>
+  <button class="unter-tab" data-ansicht="vokabeln">📚 Vokabeln</button>
+  <button class="unter-tab" data-ansicht="einstellungen">⚙️ Einstellungen</button>
+</nav>
+
+<main id="app-main">
+
+  <section id="ansicht-spiel" class="panel">
+    <div class="leiste">
+      <span>❓ Fragen: <b id="anz-fragen">0</b></span>
+      <span>⭐ Punkte: <b id="punkte">0</b></span>
+      <span>🏆 Bestwert: <b id="best">0</b></span>
+    </div>
+
+    <div id="verdaechtige" class="verdaechtige" role="list"></div>
+
+    <div class="aktionen">
+      <button id="anklage-btn" class="big-btn">🔎 Dieb verhaften</button>
+      <button id="neu-btn" class="big-btn zweit">🔄 Neue Runde</button>
+    </div>
+    <p id="status" class="status" aria-live="polite"></p>
+
+    <div id="chat" class="chat" aria-live="polite"></div>
+
+    <div class="eingabe-zeile">
+      <button id="mic-btn" class="mic-btn" aria-label="Frage sprechen">🎤</button>
+      <input id="eingabe" type="text" lang="fr" autocomplete="off" autocapitalize="off"
+             placeholder="Est-ce qu'il porte des lunettes ?" aria-label="Frage auf Französisch" />
+      <button id="senden-btn" class="senden-btn" aria-label="Frage senden">➤</button>
+    </div>
+
+    <h3 class="baukasten-titel">🧩 Fragen bauen (tippe, dann hör dir die Frage an)</h3>
+    <div id="baukasten" class="baukasten"></div>
+  </section>
+
+  <section id="ansicht-vokabeln" class="panel hidden">
+    <h2>📚 Vokabeln «Ça roule 6», Unité 1</h2>
+    <select id="vok-filter" aria-label="Kategorie"><option value="alle">Alle</option></select>
+    <div id="vok-liste" class="vok-liste"></div>
+  </section>
+
+  <section id="ansicht-einstellungen" class="panel hidden">
+    <h2>⚙️ Einstellungen (für Eltern)</h2>
+    <p class="hinweis">Für echte KI-Gespräche trägst du hier einen Anthropic-API-Key ein. Er wird nur in
+    diesem Browser (localStorage) gespeichert und direkt an Anthropic geschickt — also nur auf eigenen Geräten
+    verwenden. Ohne Key antwortet ein einfacher Zeuge (nur Fragen zu Aussehen/Kleidung).</p>
+    <label class="feld">API-Key
+      <input id="api-key" type="password" autocomplete="off" placeholder="sk-ant-…" />
+    </label>
+    <label class="feld">Modell
+      <input id="api-model" type="text" autocomplete="off" />
+    </label>
+    <label class="schalter"><input id="stimme-an" type="checkbox" checked /> 🔊 Französische Stimme an</label>
+    <button id="key-test" class="big-btn">Verbindung testen</button>
+    <p id="key-status" class="hinweis"></p>
+    <button id="install-btn" class="big-btn zweit hidden">📲 App installieren</button>
+    <p class="hinweis">Spracheingabe: Chrome auf Android/PC (Mikrofon erlauben). Vokabeln: Quelle siehe
+    <a href="quellen/CR6_Unite1_Vocabulaire.pdf">PDF</a>.</p>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <p>Erstellt zur Prüfungsvorbereitung · Fortschritt bleibt im Browser</p>
+</footer>
+
+<script src="vokabeln.js?v=2"></script>
+<script src="game.js?v=2"></script>
+<script src="app.js?v=2"></script>
+</body>
+</html>
