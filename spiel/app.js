@@ -351,6 +351,16 @@ function renderBaukasten(bloecke) {
 // ---------- Mikrofon ----------
 const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 let erkenner = null;
+const MIKRO_FEHLER = {
+  "not-allowed": "🎤 Mikrofon nicht erlaubt — in Chrome auf das Schloss neben der Adresse tippen → Mikrofon → Zulassen, dann Seite neu laden. (Nur über https:// oder localhost möglich.)",
+  "service-not-allowed": "🎤 Spracherkennung ist auf diesem Gerät gesperrt (Browser/Google-Dienst). In Chrome Android prüfen: Einstellungen → Apps → Google → Sprache/Spracheingabe aktiv?",
+  "audio-capture": "🎤 Kein Mikrofon gefunden oder es wird von einer anderen App benutzt.",
+  "no-speech": "🎤 Ich habe nichts gehört — nochmal drücken und direkt losreden.",
+  "network": "🎤 Spracherkennung braucht Internet (Google-Dienst) — Verbindung prüfen und nochmal versuchen.",
+  "language-not-supported": "🎤 Französische Spracherkennung wird auf diesem Gerät nicht unterstützt — bitte tippen.",
+  "aborted": "",
+};
+
 function mikro() {
   if (!SR) { el.status.textContent = "Spracheingabe geht in diesem Browser nicht — bitte Chrome (Android/PC) nutzen oder tippen."; return; }
   if (erkenner) { erkenner.stop(); return; }
@@ -366,7 +376,7 @@ function mikro() {
     for (const r of e.results) { t += r[0].transcript; if (r.isFinal) final = t; }
     el.eingabe.value = t;
   };
-  erkenner.onerror = (e) => { el.status.textContent = e.error === "not-allowed" ? "Mikrofon nicht erlaubt — bitte Zugriff freigeben." : `Mikrofon-Fehler: ${e.error}`; };
+  erkenner.onerror = (e) => { el.status.textContent = MIKRO_FEHLER[e.error] || `Mikrofon-Fehler: ${e.error}`; };
   erkenner.onend = () => {
     el.mic.classList.remove("hoert");
     erkenner = null;

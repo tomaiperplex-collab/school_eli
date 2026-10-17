@@ -1,8 +1,8 @@
 // Service Worker: App-Shell offline verfügbar machen (Anthropic-API-Aufrufe
 // werden nie gecacht). Bei Änderungen an Dateien CACHE hochzählen.
-const CACHE = "spiel-v3";
+const CACHE = "spiel-v4";
 const DATEIEN = [
-  "./", "index.html", "style.css?v=3", "vokabeln.js?v=3", "game.js?v=3", "app.js?v=3",
+  "./", "index.html", "style.css?v=4", "vokabeln.js?v=4", "game.js?v=4", "app.js?v=4",
   "manifest.json", "icons/icon.svg", "icons/icon-192.png", "../shared/shell.css",
 ];
 
