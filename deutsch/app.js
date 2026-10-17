@@ -50,6 +50,8 @@ const el = {
   panelIntro: document.getElementById("panel-intro"),
   panelTheorie: document.getElementById("panel-theorie"),
   panelUebung: document.getElementById("panel-uebung"),
+  panelBaumuster: document.getElementById("panel-baumuster"),
+  baumusterZurueck: document.getElementById("baumuster-zurueck"),
   theorieTitel: document.getElementById("theorie-titel"),
   theorieText: document.getElementById("theorie-text"),
   theorieStartBtn: document.getElementById("theorie-start-btn"),
@@ -127,6 +129,7 @@ function zeigePanel(name) {
   el.panelIntro.classList.toggle("hidden", name !== "intro");
   el.panelTheorie.classList.toggle("hidden", name !== "theorie");
   el.panelUebung.classList.toggle("hidden", name !== "uebung");
+  el.panelBaumuster.classList.toggle("hidden", name !== "baumuster");
   // Themenauswahl-Kachelraster nimmt viel Platz weg — sobald ein Thema
   // offen ist, einklappen. Die "← Zurück"-Buttons in jedem Panel führen
   // zurück zu "intro", wo das Raster wieder erscheint.
@@ -147,10 +150,16 @@ function waehleThema(id) {
 
 function renderTheorie() {
   el.theorieTitel.textContent = `${state.thema.icon} ${state.thema.name}`;
-  el.theorieText.innerHTML = state.thema.theorie;
+  el.theorieText.innerHTML = state.thema.theorie +
+    (state.thema.baumusterNr ? baumusterBeispieleHtml(state.thema.baumusterNr) : "");
 }
 
 function starteUebung() {
+  if (state.thema.modus === "baumuster") {
+    zeigePanel("baumuster");
+    baumusterStart();
+    return;
+  }
   el.uebungThemaName.textContent = `${state.thema.icon} ${state.thema.name}`;
   zeigePanel("uebung");
   naechsteFrage();
@@ -183,6 +192,24 @@ function verbucheAntwort(korrekt) {
   fortschrittSpeichern();
   el.punktestand.textContent = `✅ ${state.sessionRichtig} / ${state.sessionGesamt}`;
   el.weiterBtn.classList.remove("hidden");
+}
+
+// Verbucht eine Antwort aus der interaktiven Baumuster-Übung (baumuster.js)
+// im Fortschritt des aktuellen Themas.
+function verbucheBaumusterAntwort(korrekt) {
+  const stat = state.fortschritt[state.thema.id];
+  stat.gesamt++;
+  if (korrekt) stat.richtig++;
+  fortschrittSpeichern();
+}
+
+// Aus der Baumuster-Übung in das normale Multiple-Choice-Quiz wechseln.
+function starteMcUebung() {
+  state.sessionRichtig = 0;
+  state.sessionGesamt = 0;
+  el.uebungThemaName.textContent = `${state.thema.icon} ${state.thema.name}`;
+  zeigePanel("uebung");
+  naechsteFrage();
 }
 
 function zeigeFeedback(korrekt, richtigeAntwort) {
@@ -241,6 +268,7 @@ zeigePanel("intro");
 el.theorieStartBtn.addEventListener("click", starteUebung);
 el.theorieZurueck.addEventListener("click", () => { state.thema = null; zeigePanel("intro"); });
 el.uebungZurueck.addEventListener("click", () => { renderTheorie(); zeigePanel("theorie"); });
+el.baumusterZurueck.addEventListener("click", () => { renderTheorie(); zeigePanel("theorie"); });
 el.weiterBtn.addEventListener("click", naechsteFrage);
 el.resetBtn.addEventListener("click", fortschrittZuruecksetzen);
 

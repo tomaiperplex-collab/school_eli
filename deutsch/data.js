@@ -15,6 +15,90 @@ const DEUTSCH_GRUPPEN = [
   { id: "", titel: "📚 Weitere Themen" },
 ];
 
+// --- Interaktives Baumuster-Modell (baumuster.js) ---
+// Ein Wort = 6 Kästchen: Hauptsilbe (0–2, Vokal immer an Stelle 1) und
+// Nebensilbe (3–5, das e an Stelle 4). "" = leeres Kästchen.
+const BAUMUSTER_WOERTER = {
+  Hase: ["H", "a", "", "s", "e", ""], Rose: ["R", "o", "", "s", "e", ""],
+  Nase: ["N", "a", "", "s", "e", ""], Ofen: ["", "O", "", "f", "e", "n"],
+  Besen: ["B", "e", "", "s", "e", "n"], Wagen: ["W", "a", "", "g", "e", "n"],
+  finden: ["f", "i", "n", "d", "e", "n"], Birne: ["B", "i", "r", "n", "e", ""],
+  winken: ["w", "i", "n", "k", "e", "n"], Winter: ["W", "i", "n", "t", "e", "r"],
+  Kerze: ["K", "e", "r", "z", "e", ""], Wolke: ["W", "o", "l", "k", "e", ""],
+  Hunde: ["H", "u", "n", "d", "e", ""],
+  Sommer: ["S", "o", "m", "m", "e", "r"], Puppe: ["P", "u", "p", "p", "e", ""],
+  Affe: ["", "A", "f", "f", "e", ""], Mutter: ["M", "u", "t", "t", "e", "r"],
+  Tasse: ["T", "a", "s", "s", "e", ""], kommen: ["k", "o", "m", "m", "e", "n"],
+  Katze: ["K", "a", "t", "z", "e", ""],
+  gehen: ["g", "e", "", "h", "e", "n"], sehen: ["s", "e", "", "h", "e", "n"],
+  nähen: ["n", "ä", "", "h", "e", "n"], Zehen: ["Z", "e", "", "h", "e", "n"],
+  mähen: ["m", "ä", "", "h", "e", "n"], wehen: ["w", "e", "", "h", "e", "n"],
+};
+
+// lang: true = Vokal der Hauptsilbe lang (blau), false = kurz (orange)
+const BAUMUSTER_STUFEN = [
+  {
+    nr: 1, titel: "Baumuster 1", tag: "offen · lang", lang: true,
+    erklaerung: `
+      <p><strong>Offene Hauptsilbe:</strong> Nach dem Vokal folgt gleich die
+      nächste Silbe. Das <strong>letzte Kästchen</strong> der Hauptsilbe
+      bleibt <strong>leer</strong>, der Vokal ist <strong>lang</strong>.</p>
+      <p>Ein langes i schreibt man meist <strong>ie</strong>
+      (<em>sie-ben, Flie-ge</em>).</p>`,
+    beispiele: ["Hase", "Rose", "Nase"],
+    woerter: ["Hase", "Rose", "Nase", "Ofen", "Besen", "Wagen"],
+    hinweis: "Baumuster 1: Das letzte Kästchen der Hauptsilbe bleibt leer.",
+  },
+  {
+    nr: 2, titel: "Baumuster 2", tag: "geschlossen · kurz", lang: false,
+    erklaerung: `
+      <p><strong>Geschlossene Hauptsilbe:</strong> Nach dem Vokal stehen
+      <strong>zwei verschiedene Konsonanten</strong>. Der erste schliesst die
+      Hauptsilbe, der zweite beginnt die Nebensilbe. Der Vokal ist
+      <strong>kurz</strong>.</p>`,
+    beispiele: ["finden", "Birne", "winken"],
+    woerter: ["finden", "Birne", "winken", "Winter", "Kerze", "Wolke", "Hunde"],
+    hinweis: "Baumuster 2: Zwei verschiedene Konsonanten — der erste füllt das letzte Kästchen der Hauptsilbe.",
+  },
+  {
+    nr: 3, titel: "Baumuster 3", tag: "geschlossen · kurz · Doppelkonsonant", lang: false,
+    erklaerung: `
+      <p>Du hörst nur <strong>einen</strong> Konsonanten nach dem kurzen
+      Vokal — also wird er <strong>verdoppelt</strong>: Der eine Buchstabe
+      schliesst die Hauptsilbe, der andere beginnt die Nebensilbe.</p>
+      <p>Statt kk schreibt man <strong>ck</strong>, statt zz
+      <strong>tz</strong> (<em>Zu-cker, Kat-ze</em>).</p>`,
+    beispiele: ["Sommer", "Puppe", "Affe"],
+    woerter: ["Sommer", "Puppe", "Affe", "Mutter", "Tasse", "kommen", "Katze"],
+    hinweis: "Baumuster 3: Der Konsonant steht doppelt — einmal am Ende der Hauptsilbe, einmal am Anfang der Nebensilbe.",
+  },
+  {
+    nr: 4, titel: "Baumuster 4", tag: "offen · lang · silbentrennendes h", lang: true,
+    erklaerung: `
+      <p>Zwei Vokale stossen aufeinander: Das <strong>h</strong> trennt sie.
+      Es steht am <strong>Anfang der zweiten Silbe</strong>. Die Hauptsilbe
+      ist offen, der Vokal lang.</p>`,
+    beispiele: ["gehen", "sehen", "nähen"],
+    woerter: ["gehen", "sehen", "nähen", "Zehen", "mähen", "wehen"],
+    hinweis: "Baumuster 4: Das h steht am Anfang der Nebensilbe, das letzte Kästchen der Hauptsilbe bleibt leer.",
+  },
+  {
+    nr: 5, titel: "Alle gemischt", tag: "entscheide selbst", mix: true,
+    erklaerung: `
+      <p>Jetzt entscheidest du selbst: Sprich das Wort in Silben, höre, ob
+      der Vokal <strong>lang</strong> oder <strong>kurz</strong> ist, und
+      wähle das passende Baumuster.</p>
+      <ul>
+        <li><strong>1</strong> offen, lang: <em>Ha-se</em></li>
+        <li><strong>2</strong> zwei verschiedene Konsonanten: <em>fin-den</em></li>
+        <li><strong>3</strong> Doppelkonsonant: <em>Som-mer</em></li>
+        <li><strong>4</strong> silbentrennendes h: <em>ge-hen</em></li>
+      </ul>`,
+    beispiele: ["Hase", "finden", "Sommer", "gehen"],
+    hinweis: "Sprich das Wort in Silben und prüfe, ob der Vokal lang oder kurz ist.",
+  },
+];
+
 const DEUTSCH_THEMEN = [
   {
     id: "satzanfaenge-nomen",
@@ -852,10 +936,146 @@ const DEUTSCH_THEMEN = [
   // Kapitel 1 und 8) ---
 
   {
-    id: "baumuster",
+    id: "baumuster-1",
     gruppe: "pruefung",
+    modus: "baumuster",
+    baumusterNr: 1,
+    icon: "1️⃣",
+    name: "Baumuster 1",
+    theorie: BAUMUSTER_STUFEN[0].erklaerung,
+    aufgaben: [
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Hase“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Sommer“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Rose“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „finden“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Nase“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Puppe“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Wagen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Birne“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Ha-se“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Win-ter“ ist …", optionen: ["offen", "geschlossen"], richtig: 1 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Ro-se“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Pup-pe“ ist …", optionen: ["offen", "geschlossen"], richtig: 1 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Na-se“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „fin-den“ ist …", optionen: ["offen", "geschlossen"], richtig: 1 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 1?", optionen: ["Nase", "Kerze", "Tasse"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 1?", optionen: ["Rose", "Winter", "Puppe"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 1?", optionen: ["Hase", "Sommer", "gehen"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 1?", optionen: ["Besen", "Mutter", "Birne"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 1?", optionen: ["Ofen", "kommen", "winken"], richtig: 0 },
+      { typ: "mc", frage: "Wie schreibt man ein langes i meist?", optionen: ["ie", "i", "ii"], richtig: 0 },
+      { typ: "mc", frage: "Was bleibt bei Baumuster 1 leer?", optionen: ["das letzte Kästchen der Hauptsilbe", "das erste Kästchen der Hauptsilbe", "das e der Nebensilbe"], richtig: 0 },
+      { typ: "mc", frage: "Ha__e (Tier mit langen Ohren) — wie schreibt man das?", optionen: ["s", "ss"], richtig: 0 },
+      { typ: "mc", frage: "Ro__e (Blume) — wie schreibt man das?", optionen: ["s", "ss"], richtig: 0 },
+      { typ: "mc", frage: "Fl__ge (Insekt) — was fehlt?", optionen: ["ie", "i", "ii"], richtig: 0 },
+    ],
+  },
+  {
+    id: "baumuster-2",
+    gruppe: "pruefung",
+    modus: "baumuster",
+    baumusterNr: 2,
+    icon: "2️⃣",
+    name: "Baumuster 2",
+    theorie: BAUMUSTER_STUFEN[1].erklaerung,
+    aufgaben: [
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „finden“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Hase“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Birne“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Rose“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „winken“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „gehen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Winter“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Nase“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Win-ter“ ist …", optionen: ["offen", "geschlossen"], richtig: 1 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Ha-se“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Bir-ne“ ist …", optionen: ["offen", "geschlossen"], richtig: 1 },
+      { typ: "mc", frage: "Die Hauptsilbe von „ge-hen“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 2?", optionen: ["Winter", "Hase", "Sommer"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 2?", optionen: ["finden", "Nase", "Puppe"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 2?", optionen: ["Birne", "Rose", "Tasse"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 2?", optionen: ["winken", "gehen", "Mutter"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 2?", optionen: ["Kerze", "Wagen", "Affe"], richtig: 0 },
+      { typ: "mc", frage: "Was steht bei Baumuster 2 zwischen den Vokalen?", optionen: ["zwei verschiedene Konsonanten", "ein doppelter Konsonant", "ein h"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Konsonant steht bei „fin-den“ am Ende der Hauptsilbe?", optionen: ["n", "d", "f"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Konsonant beginnt bei „Win-ter“ die Nebensilbe?", optionen: ["t", "n", "w"], richtig: 0 },
+      { typ: "mc", frage: "Dun__el (nicht hell) — wie schreibt man das?", optionen: ["k", "ck"], richtig: 0 },
+      { typ: "mc", frage: "Ker__e (brennt am Geburtstagskuchen) — wie schreibt man das?", optionen: ["z", "tz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal bei Baumuster 2 lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+    ],
+  },
+  {
+    id: "baumuster-3",
+    gruppe: "pruefung",
+    modus: "baumuster",
+    baumusterNr: 3,
+    icon: "3️⃣",
+    name: "Baumuster 3",
+    theorie: BAUMUSTER_STUFEN[2].erklaerung,
+    aufgaben: [
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Sommer“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Hase“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Puppe“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „gehen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Mutter“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Rose“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Tasse“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Affe“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 3?", optionen: ["Sommer", "Hase", "Birne"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 3?", optionen: ["Puppe", "finden", "gehen"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 3?", optionen: ["Affe", "Nase", "Winter"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 3?", optionen: ["Mutter", "sehen", "winken"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 3?", optionen: ["Tasse", "Rose", "Kerze"], richtig: 0 },
+      { typ: "mc", frage: "So__er (Jahreszeit) — wie schreibt man das?", optionen: ["mm", "m"], richtig: 0 },
+      { typ: "mc", frage: "Pu__e (Spielzeug) — wie schreibt man das?", optionen: ["pp", "p"], richtig: 0 },
+      { typ: "mc", frage: "A__e (Tier) — wie schreibt man das?", optionen: ["ff", "f"], richtig: 0 },
+      { typ: "mc", frage: "Ta__e (zum Trinken) — wie schreibt man das?", optionen: ["ss", "s"], richtig: 0 },
+      { typ: "mc", frage: "Mu__er (Elternteil) — wie schreibt man das?", optionen: ["tt", "t"], richtig: 0 },
+      { typ: "mc", frage: "ko__en (herkommen) — wie schreibt man das?", optionen: ["mm", "m"], richtig: 0 },
+      { typ: "mc", frage: "Zu__er (zum Backen) — wie schreibt man das?", optionen: ["ck", "k"], richtig: 0 },
+      { typ: "mc", frage: "Ka__e (Haustier) — wie schreibt man das?", optionen: ["tz", "z"], richtig: 0 },
+      { typ: "mc", frage: "Was passiert bei Baumuster 3 mit dem Konsonanten?", optionen: ["Er wird verdoppelt", "Er fällt weg", "Ein h kommt dazu"], richtig: 0 },
+      { typ: "mc", frage: "Statt kk schreibt man …", optionen: ["ck", "kh", "kc"], richtig: 0 },
+      { typ: "mc", frage: "Statt zz schreibt man …", optionen: ["tz", "zt", "zh"], richtig: 0 },
+    ],
+  },
+  {
+    id: "baumuster-4",
+    gruppe: "pruefung",
+    modus: "baumuster",
+    baumusterNr: 4,
+    icon: "4️⃣",
+    name: "Baumuster 4",
+    theorie: BAUMUSTER_STUFEN[3].erklaerung,
+    aufgaben: [
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „gehen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Sommer“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „sehen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „Puppe“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „nähen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in der Hauptsilbe von „finden“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 4?", optionen: ["sehen", "Hase", "Mutter"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 4?", optionen: ["gehen", "Rose", "Winter"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 4?", optionen: ["nähen", "Sommer", "Nase"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 4?", optionen: ["Zehen", "Puppe", "Birne"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort gehört zu Baumuster 4?", optionen: ["wehen", "Tasse", "Wagen"], richtig: 0 },
+      { typ: "mc", frage: "ge__en — fehlt ein Buchstabe?", optionen: ["h", "ss", "ck"], richtig: 0 },
+      { typ: "mc", frage: "se__en — fehlt ein Buchstabe?", optionen: ["h", "ss", "ck"], richtig: 0 },
+      { typ: "mc", frage: "nä__en — fehlt ein Buchstabe?", optionen: ["h", "ss", "ck"], richtig: 0 },
+      { typ: "mc", frage: "Ze__en — fehlt ein Buchstabe?", optionen: ["h", "ss", "ck"], richtig: 0 },
+      { typ: "mc", frage: "Wo steht das silbentrennende h?", optionen: ["am Anfang der zweiten Silbe", "am Ende der ersten Silbe", "am Wortanfang"], richtig: 0 },
+      { typ: "mc", frage: "Was trennt das h bei „ge-hen“?", optionen: ["zwei Vokale", "zwei Konsonanten", "zwei Wörter"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „ge-hen“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
+      { typ: "mc", frage: "Ist der Vokal in „ge-hen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+    ],
+  },
+  {
+    id: "baumuster-mix",
+    gruppe: "pruefung",
+    modus: "baumuster",
+    baumusterNr: 5,
     icon: "🌳",
-    name: "Baumuster 1–4",
+    name: "Baumuster gemischt",
     theorie: `
       <p>Ein zweisilbiges Wort hat eine <strong>Hauptsilbe</strong> (betont)
       und eine <strong>Nebensilbe</strong> (meist mit <strong>e</strong>).

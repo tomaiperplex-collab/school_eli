@@ -11,7 +11,7 @@
 <!-- ?v=N an style.css/data.js/app.js hochzählen, wenn eine dieser Dateien
      geändert wird — GitHub Pages liefert sie sonst gecacht aus und
      Änderungen erscheinen auf Handys/Browsern verzögert oder gar nicht. -->
-<link rel="stylesheet" href="style.css?v=6" />
+<link rel="stylesheet" href="style.css?v=7" />
 </head>
 <body>
 
@@ -50,6 +50,11 @@
     <button class="big-btn" id="theorie-start-btn">Übung starten ▶</button>
   </section>
 
+  <section id="panel-baumuster" class="panel hidden">
+    <button class="link-zurueck" id="baumuster-zurueck">← Zurück zur Theorie</button>
+    <div id="baumuster-inhalt"></div>
+  </section>
+
   <section id="panel-uebung" class="panel hidden">
     <button class="link-zurueck" id="uebung-zurueck">← Zurück zur Theorie</button>
     <div class="uebung-kopf">
@@ -72,7 +77,8 @@
   <p>Erstellt zur Prüfungsvorbereitung · läuft komplett lokal im Browser</p>
 </footer>
 
-<script src="data.js?v=6"></script>
-<script src="app.js?v=9"></script>
+<script src="data.js?v=7"></script>
+<script src="baumuster.js?v=1"></script>
+<script src="app.js?v=10"></script>
 </body>
 </html>
