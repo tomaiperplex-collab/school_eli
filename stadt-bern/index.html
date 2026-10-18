@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Stadt Bern lernen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/shell.css" />
+<link rel="stylesheet" href="../style.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<nav class="fach-tabs">
+  <a class="fach-tab aktiv" href="../index.html">🏔️ NMG</a>
+  <a class="fach-tab" href="../deutsch/index.html">📖 Deutsch</a>
+  <a class="fach-tab" href="../franzoesisch/index.html">🇫🇷 Französisch</a>
+  <a class="fach-tab" href="../spiele/index.html">🎮 Spiele</a>
+  <a class="fach-tab" href="../mathe/index.html">➗ Mathe</a>
+</nav>
+
+<nav class="sub-tabs" aria-label="NMG-Themen">
+  <a class="sub-tab" href="../index.html">🏔️ Kanton Bern</a>
+  <a class="sub-tab aktiv" href="index.html">🐻 Stadt Bern</a>
+</nav>
+
+<header class="app-header">
+  <h1>🐻 Stadt Bern entdecken</h1>
+  <p class="subtitle">Gründung, Altstadt, Münster, Zytglogge, Matte und Legenden</p>
+</header>
+
+<nav class="mode-bar" id="mode-bar">
+  <button class="mode-btn" data-mode="lernmodus">📚 Lernmodus</button>
+  <button class="mode-btn" data-mode="mc">✅ Multiple Choice</button>
+  <button class="mode-btn" data-mode="freitext">⌨️ Freitext</button>
+  <button class="mode-btn" data-mode="fortschritt">📊 Fortschritt</button>
+</nav>
+
+<section class="filter-bar" id="filter-bar" aria-label="Themen-Filter">
+  <span class="filter-label">Themen:</span>
+</section>
+
+<main id="app-main">
+
+  <section id="lernmodus" class="panel">
+    <div class="lernmodus-kopf">
+      <span id="lernmodus-zaehler"></span>
+    </div>
+    <span id="lernmodus-thema" class="frage-thema-chip"></span>
+    <h2 id="lernmodus-titel" class="karte-titel"></h2>
+    <ul id="lernmodus-punkte" class="karten-punkte"></ul>
+    <div class="lernmodus-controls">
+      <button id="lernmodus-prev" class="big-btn">← Zurück</button>
+      <button id="lernmodus-next" class="big-btn">Weiter →</button>
+    </div>
+  </section>
+
+  <section id="uebung" class="panel hidden">
+    <div class="uebung-kopf">
+      <span id="frage-zaehler"></span>
+      <span id="punktestand"></span>
+    </div>
+    <h2 id="frage-text"></h2>
+    <div id="multiple-choice" class="mc-grid hidden"></div>
+    <form id="freitext-form" class="hidden">
+      <input type="text" id="freitext-input" placeholder="Antwort eintippen…" autocomplete="off" />
+      <button type="submit" class="big-btn">Prüfen</button>
+    </form>
+    <p id="feedback" class="feedback" aria-live="polite"></p>
+    <button id="weiter-btn" class="big-btn hidden">Weiter →</button>
+  </section>
+
+  <section id="fortschritt" class="panel hidden">
+    <h2>📊 Dein Fortschritt</h2>
+    <div id="fortschritt-liste"></div>
+    <p class="gesamt-punkte">Gesamtpunkte: <span id="gesamt-punkte">0</span></p>
+    <button id="reset-btn" class="big-btn warnung">Fortschritt zurücksetzen</button>
+  </section>
+
+</main>
+
+<footer class="app-footer">
+  <p>Erstellt zur NMG-Prüfungsvorbereitung · läuft komplett lokal im Browser</p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

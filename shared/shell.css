@@ -114,3 +114,24 @@ body {
   padding: 0.3rem;
 }
 .footer-link-btn:hover { color: #666; }
+
+/* --- Unter-Tabs (zweite Ebene, z.B. NMG: Kanton Bern / Stadt Bern) --- */
+.sub-tabs {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.7rem 0.5rem 0;
+}
+.sub-tab {
+  display: inline-block;
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  background: #fff;
+  border: 3px solid #ffe3b3;
+  color: #5a3d00;
+  font-weight: bold;
+  text-decoration: none;
+}
+.sub-tab:hover { border-color: #ffb703; }
+.sub-tab.aktiv { background: #ffb703; border-color: #ffb703; color: #402900; }
