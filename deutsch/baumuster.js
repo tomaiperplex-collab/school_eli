@@ -74,7 +74,9 @@ function baumusterStart() {
 function bmNeuesWort() {
   const wort = bm.woerter[bm.index];
   const buchstaben = BAUMUSTER_WOERTER[wort].filter(Boolean);
-  const stoer = bmMischen(BM_STOERBUCHSTABEN.filter((b) => !buchstaben.includes(b))).slice(0, 2);
+  // Mehrbuchstaben-Kacheln (au, ie, dr): der erste Buchstabe allein ist die Falle.
+  const fallen = buchstaben.filter((b) => b.length > 1).map((b) => b[0]);
+  const stoer = fallen.concat(bmMischen(BM_STOERBUCHSTABEN.filter((b) => !buchstaben.includes(b) && !fallen.includes(b)))).slice(0, 2);
   bm.kacheln = bmMischen(buchstaben.concat(stoer)).map((buchstabe, id) => ({ id, buchstabe }));
   bm.zellen = [null, null, null, null, null, null];
   bm.auswahl = null;
