@@ -283,6 +283,19 @@
 .bm-knoepfe { display: flex; flex-wrap: wrap; gap: 0.7rem; justify-content: center; margin-top: 0.6rem; }
 .bm-knoepfe .big-btn.zweit { background: #888; }
 
+
+/* --- Satzpuzzle --- */
+.sp-satz { min-height: 64px; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; padding: 0.7rem; background: #f4f9fc; border: 2px dashed #bbb; border-radius: var(--radius); margin: 0.6rem 0; }
+.sp-leer { color: #999; }
+.sp-karte { display: inline-block; padding: 0.55rem 0.9rem; background: #ffb703; border-radius: 12px; font-weight: bold; box-shadow: 0 3px 0 rgba(0,0,0,0.15); cursor: pointer; user-select: none; }
+.sp-karte.gebaut { background: #8ecae6; }
+.sp-karte.f1 { background: #8ecae6; } .sp-karte.f2 { background: #f4a261; }
+.sp-farbkarten { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin: 0.8rem 0; }
+.sp-farbkarten .sp-karte { background: #e5e5e5; }
+.sp-farbkarten .sp-karte.f1 { background: #8ecae6; } .sp-farbkarten .sp-karte.f2 { background: #f4a261; }
+.sp-verschiebe { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin: 0.6rem 0; }
+.sp-neu { min-height: 1.6em; color: var(--akzent); font-size: 1.2rem; }
+
 /* --- Mobile --- */
 @media (max-width: 600px) {
   body { font-size: 16px; }

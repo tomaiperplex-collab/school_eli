@@ -105,6 +105,24 @@ const BAUMUSTER_STUFEN = [
   },
 ];
 
+// --- Satzpuzzle (satzpuzzle.js): Sätze aus Satzgliedern bauen ---
+// karten: Satzglieder in einer möglichen Reihenfolge; verb = Karte, die im
+// Aussagesatz an 2. Stelle steht; partikel = abgetrenntes Verbteil (kommt ans Satzende).
+const SATZPUZZLE_SAETZE = [
+  { karten: ["der Mond", "geht", "in der Nacht", "am Himmelszelt", "schnell", "auf"], verb: "geht", partikel: "auf" },
+  { karten: ["das Elektroauto", "fährt", "am Morgen", "im Osten", "um die Kurve"], verb: "fährt" },
+  { karten: ["die Sonne", "scheint", "am Nachmittag", "hell"], verb: "scheint" },
+  { karten: ["Tila", "suchte", "am Abend", "mit einer Taschenlampe", "nach einem Buch", "im Schrank"], verb: "suchte" },
+  { karten: ["Ramos", "versteckte", "am Geburtstag", "eine geheimnisvolle Kiste", "auf dem Estrich"], verb: "versteckte" },
+  { karten: ["ein Gespenst", "sass", "eine halbe Stunde", "allein", "in einer Kiste"], verb: "sass" },
+  { karten: ["Tila", "entdeckte", "am Boden", "ängstlich", "ein Gespenst"], verb: "entdeckte" },
+  { karten: ["Lisa", "bezahlt", "im Gemüseladen", "schnell", "den Apfel", "mit der Karte", "für die Pause"], verb: "bezahlt" },
+  { karten: ["das alte Fahrrad", "rostet", "seit Jahren", "im Schuppen"], verb: "rostet" },
+  { karten: ["die Athletin", "rennt", "im Training", "jeden Tag"], verb: "rennt" },
+];
+// Paare für «Markiere mit gleicher Farbe alle Satzglieder, die einen Satz bilden»
+const SATZPUZZLE_PAARE = [[0, 1], [2, 3], [4, 5], [6, 1], [7, 8], [9, 3]];
+
 const DEUTSCH_THEMEN = [
   {
     id: "satzanfaenge-nomen",
@@ -1299,6 +1317,13 @@ const DEUTSCH_THEMEN = [
       Wer? Was? <em>die Taube</em> · Wo? <em>am Boden</em> · Wann?
       <em>abends</em> · Womit? <em>mit ihrem Schnabel</em> · Wie?
       <em>schnell</em> · Wen? Was? <em>kleine Körner</em></p>
+      <p class="theorie-beispiel">✍️ <strong>In eigenen Worten:</strong>
+      Satzglieder sind die Bausteine eines Satzes. Ein Satzglied kann ein
+      einzelnes Wort sein oder mehrere Wörter, die zusammengehören. Wenn man
+      den Satz umstellt, bleiben diese Wörter immer zusammen. Beispiel:
+      <em>Lena | kauft | gestern | im Laden | ein Buch.</em> „im Laden“ sind
+      zwei Wörter, aber nur ein Satzglied, weil sie beim Umstellen
+      zusammenbleiben: <em>Im Laden kauft Lena gestern ein Buch.</em></p>
       <p>Ein <strong>Satzglied</strong> ist ein Wort oder eine
       <strong>Wortgruppe</strong>, die beim Umstellen (Verschiebeprobe)
       <strong>immer zusammenbleibt</strong>. Ein Satzglied kann also aus
@@ -1395,6 +1420,43 @@ const DEUTSCH_THEMEN = [
   },
 
   {
+    id: "satzpuzzle",
+    gruppe: "pruefung",
+    modus: "satzpuzzle",
+    icon: "🧩",
+    name: "Satzpuzzle",
+    theorie: `
+      <p>Du kannst mit <strong>Satzgliedern</strong> Sätze bilden: Satzglieder
+      sind die <strong>Bausteine von Sätzen</strong>.</p>
+      <p>Im Verbenfächer steht das <strong>Verb</strong> in der Mitte. Im
+      Aussagesatz steht es immer an <strong>2. Stelle</strong>. Ein
+      abgetrenntes Verbteil (<em>geht … auf</em>) kommt ans
+      <strong>Satzende</strong>.</p>
+      <p class="theorie-beispiel">🧩 Beispiel: der Mond | geht | in der Nacht
+      | am Himmelszelt | schnell | auf → <em>In der Nacht geht der Mond am
+      Himmelszelt schnell auf.</em></p>
+      <p>Mit der <strong>Verschiebeprobe</strong> prüfst du: Alle anderen
+      Satzglieder dürfen den Platz tauschen, das Verb bleibt an 2. Stelle:
+      <em>Der Mond geht am Himmelszelt in der Nacht schnell auf.</em></p>
+    `,
+    aufgaben: [
+      { typ: "mc", frage: "An welcher Stelle steht das Verb in einem Aussagesatz?", optionen: ["an 2. Stelle", "an 1. Stelle", "am Schluss"], richtig: 0 },
+      { typ: "mc", frage: "„geht … auf“: Wo steht „auf“ im Satz „Der Mond geht in der Nacht schnell auf.“?", optionen: ["am Satzende", "an 2. Stelle", "am Satzanfang"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz ist richtig gebildet?", optionen: ["Am Morgen fährt das Elektroauto im Osten um die Kurve.", "Am Morgen das Elektroauto fährt im Osten um die Kurve.", "Fährt am Morgen das Elektroauto im Osten um die Kurve."], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz ist richtig gebildet?", optionen: ["Tila suchte am Abend nach einem Buch im Schrank.", "Tila am Abend suchte nach einem Buch im Schrank.", "Suchte Tila am Abend nach einem Buch, im Schrank."], richtig: 0 },
+      { typ: "mc", frage: "Wofür sind Satzglieder die Bausteine?", optionen: ["für Sätze", "für Silben", "für Wörter mit h"], richtig: 0 },
+      { typ: "mc", frage: "Verschiebeprobe mit „Ramos versteckte am Geburtstag eine Kiste.“ — Welcher Satz stimmt?", optionen: ["Am Geburtstag versteckte Ramos eine Kiste.", "Am Geburtstag Ramos versteckte eine Kiste.", "Versteckte am Geburtstag Ramos eine Kiste."], richtig: 0 },
+      { typ: "mc", frage: "Wie viele Sätze lassen sich aus den Karten „die Sonne, scheint, hell, Tila, suchte, im Schrank“ bilden?", optionen: ["zwei", "einen", "drei"], richtig: 0 },
+      { typ: "mc", frage: "Welche Karten gehören zusammen? „Ein Gespenst | sass | allein | in einer Kiste“ und …", optionen: ["Tila | entdeckte | am Boden | ein Gespenst", "Tila | in einer Kiste | allein", "sass | entdeckte | scheint"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „für die Pause“?", optionen: ["Wofür?", "Wo?", "Wie?"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „mit der Karte“?", optionen: ["Womit?", "Wofür?", "Wen? Was?"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „im Gemüseladen“?", optionen: ["Wo?", "Wie?", "Womit?"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „den Apfel“?", optionen: ["Wen? Was?", "Wer? Was?", "Wofür?"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz passt zum Verbenfächer „bezahlt“ (Lisa · im Gemüseladen · schnell · den Apfel · mit der Karte)?", optionen: ["Lisa bezahlt im Gemüseladen schnell den Apfel mit der Karte.", "Lisa im Gemüseladen bezahlt schnell den Apfel mit der Karte.", "Bezahlt Lisa im Gemüseladen, schnell den Apfel mit der Karte."], richtig: 0 },
+    ],
+  },
+
+  {
     id: "satzproben",
     gruppe: "pruefung",
     icon: "🔬",
@@ -1463,6 +1525,14 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Satzglieder bleiben beim Verändern des Satzes immer …", optionen: ["zusammen", "getrennt", "am Satzende"], richtig: 0 },
       { typ: "mc", frage: "Satzproben helfen beim …", optionen: ["inhaltlichen Überarbeiten eines Textes", "Auswendiglernen von Wörtern", "Zählen von Silben"], richtig: 0 },
       { typ: "mc", frage: "Welche Satzproben gibt es?", optionen: ["Verschiebe-, Weglass-, Erweiterungs- und Ersatzprobe", "Silben-, Verlängerungs-, Umstell- und Zählprobe", "Frage-, Antwort-, Streich- und Schreibprobe"], richtig: 0 },
+      { typ: "mc", frage: "Weglassprobe: „Die Athletin rennt im Training jeden Tag.“ — Welche Kürzung ist richtig?", optionen: ["Die Athletin rennt im Training.", "Rennt im Training jeden Tag.", "Die Athletin im Training jeden Tag."], richtig: 0 },
+      { typ: "mc", frage: "Weglassprobe: Was bleibt am Schluss mindestens übrig? „Die Athletin rennt im Training jeden Tag.“", optionen: ["Die Athletin rennt.", "Die Athletin.", "Rennt."], richtig: 0 },
+      { typ: "mc", frage: "Erweiterungsprobe: „Romano fährt.“ — Welche Erweiterung stimmt?", optionen: ["Romano fährt schnell mit dem Skateboard.", "Romano fährt, schnell mit Skateboard dem.", "Schnell Romano fährt mit dem Skateboard."], richtig: 0 },
+      { typ: "mc", frage: "Verschiebeprobe: „Im Herbst wird es am Abend wieder früher dunkel.“ — Welcher Satz stimmt?", optionen: ["Am Abend wird es im Herbst wieder früher dunkel.", "Am Abend es wird im Herbst wieder früher dunkel.", "Wird es am Abend im Herbst, wieder früher dunkel."], richtig: 0 },
+      { typ: "mc", frage: "Ersatzprobe: „Ich schreibe dir eine Mail.“ — Ersetze „dir“.", optionen: ["Ich schreibe meinem Freund eine Mail.", "Ich schreibe eine dir Mail.", "Ich schreibe Freund meinem eine Mail."], richtig: 0 },
+      { typ: "mc", frage: "Ersatzprobe: „Heute komme ich spät nach Hause.“ — Ersetze „spät“.", optionen: ["Heute komme ich schon nach Hause.", "Heute komme ich Haus spät.", "Spät komme heute ich nach Hause."], richtig: 0 },
+      { typ: "mc", frage: "Was passiert beim Verschieben von Satzgliedern?", optionen: ["Die Wirkung des Satzes verändert sich.", "Der Satz bekommt ein anderes Verb.", "Der Satz wird immer falsch."], richtig: 0 },
+      { typ: "mc", frage: "„Schon lange kenne ich deine Wünsche.“ und „Ich kenne deine Wünsche schon lange.“ — Was ist anders?", optionen: ["Die Betonung und die Wirkung", "Die Wörter", "Die Zahl der Satzglieder"], richtig: 0 },
     ],
   },
 ];

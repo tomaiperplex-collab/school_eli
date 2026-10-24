@@ -51,6 +51,8 @@ const el = {
   panelTheorie: document.getElementById("panel-theorie"),
   panelUebung: document.getElementById("panel-uebung"),
   panelBaumuster: document.getElementById("panel-baumuster"),
+  panelSatzpuzzle: document.getElementById("panel-satzpuzzle"),
+  satzpuzzleZurueck: document.getElementById("satzpuzzle-zurueck"),
   baumusterZurueck: document.getElementById("baumuster-zurueck"),
   theorieTitel: document.getElementById("theorie-titel"),
   theorieText: document.getElementById("theorie-text"),
@@ -130,6 +132,7 @@ function zeigePanel(name) {
   el.panelTheorie.classList.toggle("hidden", name !== "theorie");
   el.panelUebung.classList.toggle("hidden", name !== "uebung");
   el.panelBaumuster.classList.toggle("hidden", name !== "baumuster");
+  el.panelSatzpuzzle.classList.toggle("hidden", name !== "satzpuzzle");
   // Themenauswahl-Kachelraster nimmt viel Platz weg — sobald ein Thema
   // offen ist, einklappen. Die "← Zurück"-Buttons in jedem Panel führen
   // zurück zu "intro", wo das Raster wieder erscheint.
@@ -155,6 +158,11 @@ function renderTheorie() {
 }
 
 function starteUebung() {
+  if (state.thema.modus === "satzpuzzle") {
+    zeigePanel("satzpuzzle");
+    satzpuzzleStart();
+    return;
+  }
   if (state.thema.modus === "baumuster") {
     zeigePanel("baumuster");
     baumusterStart();
@@ -268,6 +276,7 @@ zeigePanel("intro");
 el.theorieStartBtn.addEventListener("click", starteUebung);
 el.theorieZurueck.addEventListener("click", () => { state.thema = null; zeigePanel("intro"); });
 el.uebungZurueck.addEventListener("click", () => { renderTheorie(); zeigePanel("theorie"); });
+el.satzpuzzleZurueck.addEventListener("click", () => { renderTheorie(); zeigePanel("theorie"); });
 el.baumusterZurueck.addEventListener("click", () => { renderTheorie(); zeigePanel("theorie"); });
 el.weiterBtn.addEventListener("click", naechsteFrage);
 el.resetBtn.addEventListener("click", fortschrittZuruecksetzen);

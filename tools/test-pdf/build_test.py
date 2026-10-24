@@ -32,8 +32,10 @@ def bogen(silben):
 def zeilen(n, h="8.2mm"):
     return '<div class="zeilen">' + "".join(f'<div class="zeile" style="height:{h}"></div>' for _ in range(n)) + "</div>"
 
-def faecher(verb, inhalt):
-    boxes = [(20,20,170,"Wer? Was?"),(370,20,170,"Wo?"),(4,113,150,"Wann?"),(406,113,150,"Womit?"),(20,214,170,"Wie?"),(370,214,170,"Wen? Was?")]
+FRAGEN_STANDARD = ["Wer? Was?", "Wo?", "Wann?", "Womit?", "Wie?", "Wen? Was?"]
+def faecher(verb, inhalt, fragen=None):
+    f = fragen or FRAGEN_STANDARD
+    boxes = [(20,20,170,f[0]),(370,20,170,f[1]),(4,113,150,f[2]),(406,113,150,f[3]),(20,214,170,f[4]),(370,214,170,f[5])]
     cx, cy = 280, 135
     o = ['<svg class="faecher" viewBox="0 0 560 270" role="img">']
     for (x, y, w, f) in boxes:
@@ -59,6 +61,8 @@ W = {  # Wort: (Zellen, Vokal lang?, Baumuster, Silben)
  "blitzen": (None, None, 3, ["blit","zen"]),
 }
 BM_BEISPIEL = {1: "Rose", 2: "Pinsel", 3: "Keller", 4: "drehen"}
+
+EIGENE_WORTE = 'Satzglieder sind die Bausteine eines Satzes. Ein Satzglied kann ein einzelnes Wort sein oder mehrere Wörter, die zusammengehören. Wenn man den Satz umstellt, bleiben diese Wörter immer zusammen. Beispiel: Lena | kauft | gestern | im Laden | ein Buch. „im Laden“ sind zwei Wörter, aber nur ein Satzglied, weil sie beim Umstellen zusammenbleiben: Im Laden kauft Lena gestern ein Buch.'
 
 # ---------------- Kurztests ----------------
 BM_ERKL = {
@@ -149,8 +153,7 @@ def kt_wort(v, l):
 def kt_saetze(v, l):
     d = KT_S[v]
     a1 = f'<p class="aufg"><b>1.</b> {e(d["erkl"])}</p>'
-    a1 += ('<div class="loesungstext">Ein Satzglied ist ein Wort oder eine Wortgruppe. Satzglieder bleiben beim Verändern des Satzes (Satzproben) immer zusammen. '
-           'Beispiel: Am Morgen | spricht | meine Oma — „meine Oma“ bleibt bei der Verschiebeprobe zusammen und ist ein Satzglied.</div>') if l else zeilen(5)
+    a1 += f'<div class="loesungstext">{e(EIGENE_WORTE)}</div>' if l else zeilen(5)
     a1 += punkte(4)
     a2 = '<p class="aufg"><b>2.</b> Trenne die Satzglieder mit senkrechten Strichen.</p>'
     for s, ls in zip(d["trenne"], d["trenne_l"]):
@@ -173,6 +176,84 @@ def kt_saetze(v, l):
     return (f'<section class="seite kt"><div class="rahmen">{kopf("Kurztest – Sätze " + v)}{a1}{a2}</div></section>'
             f'<section class="seite kt"><div class="rahmen">{a3}{a4}{fuss()}</div></section>')
 
+
+# ---------------- Satzpuzzle (Übungsblatt) ----------------
+def karten_spalten(spalten):
+    return f'<div class="kspalten" style="--n:{len(spalten)}">' + "".join('<div class="kspalte">' + "".join(f'<div class="kk">{e(t)}</div>' for t in sp) + "</div>" for sp in spalten) + "</div>"
+
+def seite_puzzle(l):
+    s1 = [["auf", "schnell", "in der Nacht", "am Himmelszelt", "geht"], ["das Elektroauto", "im Osten", "am Morgen", "fährt", "um die Kurve"], ["am Nachmittag", "scheint", "hell", "die Sonne", "der Mond"]]
+    s3 = [["ein Gespenst", "sass", "auf dem Estrich", "am Geburtstag"], ["in einer Kiste", "allein", "Ramos", "versteckte"], ["Tila", "suchte", "am Abend", "mit einer Taschenlampe"], ["nach einem Buch", "im Schrank", "eine halbe Stunde", "eine geheimnisvolle Kiste"]]
+    def zl(txts, n):
+        return "".join(f'<div class="zl"><span class="ein">{e(t)}</span></div>' for t in txts) if l else zeilen(n)
+    p1 = f'''<section class="seite kt"><div class="rahmen">{kopf("Übungsblatt – Satzpuzzle")}
+    <p class="aufg"><b>1.</b> Bilde mit den Satzgliedern drei korrekte Sätze. Verwende alle Satzglieder einmal.</p>
+    <p class="klein"><b>a)</b> Markiere mit gleicher Farbe alle Satzglieder, die einen Satz bilden.</p>{karten_spalten(s1)}
+    <p class="klein"><b>b)</b> Schreibe die Sätze auf.</p>
+    {zl(["In der Nacht geht der Mond am Himmelszelt schnell auf.", "Das Elektroauto fährt am Morgen im Osten um die Kurve.", "Am Nachmittag scheint die Sonne hell."], 6)}
+    {punkte(3)}
+    <p class="klein"><b>c)</b> Führe mit jedem Satz die Verschiebeprobe durch.</p>
+    {zl(["Der Mond geht in der Nacht am Himmelszelt schnell auf.", "Am Morgen fährt das Elektroauto im Osten um die Kurve.", "Die Sonne scheint am Nachmittag hell."], 6)}
+    {punkte(3)}</div></section>'''
+    p2 = f'''<section class="seite kt"><div class="rahmen">
+    <p class="aufg"><b>2.</b> Bilde drei neue Sätze. Jeder Satz enthält ein Satzglied aus einem Satz der Aufgabe 1b.</p>
+    {zl(["Am Abend ist der Mond sehr hell.", "Es hat einen Berg im Osten.", "Die Sonne ist heute sehr heiss."], 3)}{punkte(3)}
+    <p class="aufg"><b>3.</b> Bilde mit den Satzgliedern korrekte Sätze (Verb an 2. Stelle!). Schreibe sie auf.</p>{karten_spalten(s3)}
+    {zl(["Tila suchte am Abend mit einer Taschenlampe nach einem Buch im Schrank.", "Ramos versteckte am Geburtstag eine geheimnisvolle Kiste.", "Ein Gespenst sass eine halbe Stunde allein in einer Kiste auf dem Estrich."], 6)}{punkte(3)}
+    {fuss(12)}</div></section>'''
+    return p1 + p2
+
+
+# ---------------- Übungsblatt: Verbenfächer und Satzproben (Lehrmittel-Aufgaben) ----------------
+def seite_uebung(l):
+    def zl(txts, n):
+        return "".join(f'<div class="zl"><span class="ein">{e(t)}</span></div>' for t in txts) if l else zeilen(n)
+    treppe = lambda n, txts: ("".join(f'<div class="zl"><span class="ein">{e(t)}</span></div>' for t in txts) if l else "".join(f'<div class="zeile" style="height:8.2mm;width:{100-(n-1-i)*18}%"></div>' for i in range(n)))
+    bezahlt_f = ["Wer? Was?", "Wofür?", "Wie?", "Wo?", "Wen? Was?", "Womit?"]
+    p1 = f'''<section class="seite kt"><div class="rahmen">{kopf("Übungsblatt – Verbenfächer")}
+    <p class="aufg"><b>1.</b> Schreibe die Satzglieder zu den entsprechenden Fragen im Verbenfächer hin.</p>
+    <p class="satz kk-reihe">mit der Karte &nbsp;·&nbsp; im Gemüseladen &nbsp;·&nbsp; schnell &nbsp;·&nbsp; den Apfel &nbsp;·&nbsp; für die Pause</p>
+    {faecher("bezahlt", {"Wer? Was?": "Lisa", "Wofür?": "für die Pause", "Wie?": "schnell", "Wo?": "im Gemüseladen", "Wen? Was?": "den Apfel", "Womit?": "mit der Karte"} if l else {"Wer? Was?": "Lisa"}, bezahlt_f)}
+    <p class="aufg"><b>2.</b> Bilde mit den Satzgliedern einen korrekten Satz.</p>
+    {zl(["Lisa bezahlt im Gemüseladen schnell den Apfel mit der Karte für die Pause."], 3)}
+    <p class="aufg"><b>3.</b> Verschiebe die Satzglieder und bilde einen weiteren korrekten Satz.</p>
+    {zl(["Im Gemüseladen bezahlt Lisa schnell den Apfel mit der Karte für die Pause."], 3)}
+    <p class="aufg"><b>4.</b> Fülle einen eigenen Verbenfächer aus. Schreibe eines der Verben in die Mitte: <i>werfen, kommen, stehen, tanzen, befehlen</i>.</p>
+    {faecher("tanzen" if l else "", {"Wer? Was?": "die Kinder", "Wo?": "im Garten", "Wann?": "am Abend", "Womit?": "mit Musik", "Wie?": "fröhlich"} if l else {})}
+    <p class="aufg"><b>5.</b> Bilde mit den Satzgliedern aus deinem Verbenfächer zwei korrekte Sätze.</p>
+    {zl(["Die Kinder tanzen am Abend fröhlich mit Musik im Garten.", "Im Garten tanzen die Kinder am Abend fröhlich mit Musik."], 4)}
+    </div></section>'''
+    p2 = f'''<section class="seite kt"><div class="rahmen">{kopf("Übungsblatt – Satzproben")}
+    <p class="aufg"><b>Verschiebeprobe 1.</b> Bilde mit den Satzgliedern einen korrekten Satz und schreibe ihn auf.</p>
+    <p class="satz kk-reihe">das alte Fahrrad &nbsp;·&nbsp; seit Jahren &nbsp;·&nbsp; im Schuppen &nbsp;·&nbsp; rostet</p>
+    {zl(["Das alte Fahrrad rostet seit Jahren im Schuppen."], 2)}
+    <p class="klein"><b>b)</b> Verschiebe die Satzglieder im Satz. Bilde verschiedene korrekte Sätze und schreibe sie auf.</p>
+    {zl(["Seit Jahren rostet das alte Fahrrad im Schuppen.", "Im Schuppen rostet das alte Fahrrad seit Jahren."], 4)}
+    <p class="aufg"><b>2.</b> Verschiebe die Satzglieder. Schreibe die Sätze auf.<br><i>Im Herbst wird es am Abend wieder früher dunkel.</i></p>
+    {zl(["Am Abend wird es im Herbst wieder früher dunkel.", "Wieder früher wird es im Herbst am Abend dunkel."], 3)}
+    <p class="aufg"><b>3.</b> Lies die drei Sätze. Wie wirkt der Satz nach dem Verschieben?<br>
+    <i>Ich kenne deine Wünsche schon lange. · Schon lange kenne ich deine Wünsche. · Deine Wünsche kenne ich schon lange.</i></p>
+    {zl(["Durch das Verschieben von Satzgliedern verändert sich die Wirkung des Satzes: Was vorne steht, wird betont."], 3)}
+    <p class="aufg"><b>Weglassprobe 4.</b> Lasse bei diesem Satz immer ein Satzglied mehr weg.<br><i>Die Kinder freuen sich am Abend auf das Spielen im Garten.</i></p>
+    {treppe(3, ["Die Kinder freuen sich am Abend auf das Spielen.", "Die Kinder freuen sich auf das Spielen.", "Die Kinder freuen sich."])}
+    <p class="aufg"><b>5.</b> Schreibe einen eigenen Satz auf. Lasse Satzglieder schrittweise weg.</p>
+    {treppe(4, ["Die Athletin rennt im Training jeden Tag.", "Die Athletin rennt im Training.", "Die Athletin rennt."])}
+    </div></section>'''
+    p3 = f'''<section class="seite kt"><div class="rahmen">{kopf("Übungsblatt – Satzproben")}
+    <p class="aufg"><b>Erweiterungsprobe 6.</b> Erweitere den Satz immer mit einem zusätzlichen Satzglied.<br><i>Die Ärztin kommt.</i></p>
+    {treppe(4, ["Die Ärztin kommt heute.", "Die Ärztin kommt heute mit dem Auto.", "Die Ärztin kommt heute mit dem Auto zu uns."])}
+    <p class="aufg"><b>7.</b> Schreibe einen eigenen Satz auf. Erweitere ihn schrittweise mit zusätzlichen Satzgliedern.</p>
+    {treppe(4, ["Romano fährt.", "Romano fährt schnell.", "Romano fährt schnell mit dem Skateboard.", "Romano fährt schnell mit dem Skateboard über die Stufe."])}
+    <p class="aufg"><b>Ersatzprobe 8.</b> Ersetze die markierten Satzglieder durch andere Satzglieder.</p>
+    <p class="satz">Im Sommer <mark>geht</mark> der Fischer mit dem Boot auf den See hinaus.</p>{zl(["Im Sommer fährt der Fischer mit dem Boot auf den See hinaus."], 1)}
+    <p class="satz">Ich schreibe <mark>dir</mark> eine Mail.</p>{zl(["Ich schreibe meinem Freund eine Mail."], 1)}
+    <p class="satz">«Alle Billette vorweisen!», ruft <mark>der Mann</mark> im Zug.</p>{zl(["«Alle Billette vorweisen!», ruft der Kontrolleur im Zug."], 1)}
+    <p class="satz"><mark>Heute</mark> komme ich <mark>spät</mark> nach Hause.</p>{zl(["Morgen komme ich früh nach Hause."], 1)}
+    <p class="satz"><mark>Die Kinder</mark> <mark>rennen</mark> draussen im <mark>Regen</mark> herum.</p>{zl(["Die Hunde laufen draussen im Schnee herum."], 1)}
+    <div class="regeln"><p><b>Merke dir:</b> Satzproben helfen, Satzglieder zu bestimmen. Satzglieder bleiben beim Verändern des Satzes immer zusammen. Satzproben sind: Verschiebeprobe, Weglassprobe, Erweiterungsprobe, Ersatzprobe. Sie helfen auch beim inhaltlichen Überarbeiten eines Textes.</p></div>
+    </div></section>'''
+    return p1 + p2 + p3
+
 # ---------------- Lernziele + Merkblatt ----------------
 LERNZIELE = ["Ich weiss, wie die Wörter der Baumuster 1, 2, 3 und 4 gebildet werden.",
  "Ich kann das silbentrennende h vom Dehnungs-h unterscheiden.",
@@ -191,6 +272,8 @@ def seite_lernziele():
     <ol class="inhalt"><li><b>Merkblatt</b> — alles Wichtige auf zwei Seiten</li>
     <li><b>Kurztest – Wortstrukturen A und B</b> (je 16 Punkte)</li>
     <li><b>Kurztest – Sätze A und B</b> (je 16 Punkte)</li>
+    <li><b>Übungsblatt – Satzpuzzle</b> (12 Punkte)</li>
+    <li><b>Übungsblätter – Verbenfächer und Satzproben</b> (Aufgaben wie im Lehrmittel)</li>
     <li><b>Lösungen</b> in einer eigenen Datei — erst nach dem Üben nachschauen!</li></ol>
     <p class="klein">Tipp: Mache einen Kurztest, korrigiere mit den Lösungen und trage die Punkte ein. Mit dem Merkblatt kannst du alles nachschlagen. Üben kannst du auch in der Deutsch-App unter «Prüfung 26.10.».</p>
     </div></section>'''
@@ -215,6 +298,7 @@ def seite_merk2():
     return f'''<section class="seite"><div class="rahmen"><h1 class="kt-titel">Merkblatt 2 – Sätze</h1>
     <div class="regeln"><p><b>Verbenfächer:</b> Ein Satz besteht aus verschiedenen Satzgliedern. Die W-Fragen im Verbenfächer helfen, Satzglieder zu finden. Im Zentrum steht immer das <b>konjugierte Verb</b>.</p></div>
     {faecher("pickt", {"Wer? Was?": "die Taube", "Wo?": "am Boden", "Wann?": "abends", "Womit?": "mit ihrem Schnabel", "Wie?": "schnell", "Wen? Was?": "kleine Körner"})}
+    <div class="eigene"><b>Satzglieder in eigenen Worten (Beispiel):</b><br>{e(EIGENE_WORTE)}</div>
     <div class="regeln"><p><b>Satzglied:</b> ein Wort oder eine Wortgruppe, die beim Verändern des Satzes <b>immer zusammenbleibt</b>. Nicht jeder Satz hat jedes Satzglied (Felder dürfen leer bleiben). Zweiteilige Verben gehören beide in die Mitte: <i>ruft … an</i>.</p>
     <p><b>Satzproben</b> helfen, Satzglieder zu bestimmen und Texte zu überarbeiten: Verschiebeprobe, Weglassprobe, Erweiterungsprobe, Ersatzprobe.</p></div>
     <p class="satz"><b>Wir | warten | an der Haltestelle | auf den Bus.</b></p>
@@ -245,13 +329,13 @@ h2 { font-size: 13pt; margin: 6mm 0 3mm; } h3 { font-size: 11pt; margin: 0 0 3px
 .modell { display: inline-flex; gap: 5px; } .silbe { display: inline-flex; } .silbe.haupt { outline: 2px solid #777; outline-offset: -1px; border-radius: 3px; }
 .k { width: 9mm; height: 10mm; border: 1px solid #aaa; border-style: dotted solid dotted solid; margin-left: -1px; display: inline-grid; place-items: center; font-size: 14pt; font-weight: 700; background: #fff; }
 .k.lang { background: #d6ebfb; color: #1d5f93; } .k.kurz { background: #f9d9cf; color: #a3402a; } .k.nebe { background: #fdf0d3; color: #8a6410; }
-.fussbox { display: grid; grid-template-columns: 1.6fr 1fr 0.8fr; border: 1.5px dotted #444; margin-top: 12mm; font-size: 9.5pt; } .fussbox > div { padding: 3px 7px; min-height: 17mm; } .fussbox b { display: block; font-size: 14pt; margin-top: 3mm; text-align: center; }
+.fussbox { display: grid; grid-template-columns: 1.6fr 1fr 0.8fr; border: 1.5px dotted #444; margin-top: 5mm; font-size: 9.5pt; } .fussbox > div { padding: 3px 7px; min-height: 17mm; } .fussbox b { display: block; font-size: 14pt; margin-top: 3mm; text-align: center; }
 .fussbox .erreicht, .fussbox .note { border-left: 1.5px dotted #444; } .lin2 { border-bottom: 1px solid #555; margin-top: 8mm; }
 .loesungstext, .ein { color: #1a7a3d; font-family: "DejaVu Sans", sans-serif; font-style: italic; font-size: 10pt; } .loesungstext { margin: 2mm 0; padding: 3mm; border: 1px solid #1a7a3d; border-radius: 6px; background: #f3fbf6; }
 .bogenwort .bogen { color: #1a7a3d; font-weight: 700; } .bmn { color: #1a7a3d; font-weight: 700; } .hint, .hint2 { color: #1a7a3d; font-size: 9.5pt; } .ok { color: #1a7a3d; }
 .faecher { width: 100%; max-width: 112mm; display: block; margin: 2px auto; } .faecher .feld { fill: #fff; stroke: #4b3a9e; stroke-width: 2; stroke-dasharray: 5 4; } .faecher .mitte { fill: #ece8fb; stroke: #4b3a9e; stroke-width: 2; }
 .faecher .strahl { stroke: #999; stroke-width: 1.6; } .faecher .frage { fill: #4b3a9e; font-weight: 700; } .faecher .ein { fill: #1a7a3d; font-weight: 700; font-style: normal; }
-.probe { margin: 4mm 0 0; } .klein { font-size: 10pt; margin: 2mm 0; }
+.probe { margin: 4mm 0 0; } .kspalten { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 3mm; margin: 3mm 0 4mm; } .kspalte { display: flex; flex-direction: column; gap: 2mm; } .kk { border: 1px solid #555; border-radius: 6px; padding: 2px 8px; font-size: 10.5pt; background: #fff; } .klein { font-size: 10pt; margin: 2mm 0; } .eigene { border: 2px solid #1a7a3d; background: #f3fbf6; border-radius: 8px; padding: 3mm; margin: 3mm 0; font-size: 10.5pt; } .kk-reihe { text-align: center; font-size: 10.5pt; }
 .lz { width: 100%; border-collapse: collapse; margin-top: 4mm; } .lz th { font-size: 10pt; text-align: center; } .lz td { border-top: 1px solid #aaa; padding: 3.5mm 2mm; } .lz .chk { text-align: center; width: 18mm; font-size: 16pt; }
 .inhalt { line-height: 1.8; }
 .bmgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } .bmk { border: 1.5px solid #cfc8f0; border-radius: 10px; padding: 7px 9px; background: #faf9ff; } .bmk p { margin: 5px 0 0; font-size: 10pt; } .wn { font-weight: 700; margin-top: 2px; }
@@ -274,6 +358,8 @@ def teil(l):
         s.append(kt_wort(v, l))
     for v in ("A", "B"):
         s.append(kt_saetze(v, l))
+    s.append(seite_puzzle(l))
+    s.append(seite_uebung(l))
     return "".join(s)
 
 HTML = f'''<!DOCTYPE html>
@@ -286,3 +372,81 @@ HTML = f'''<!DOCTYPE html>
 </body></html>'''
 OUT.write_text(HTML, encoding="utf8")
 print("geschrieben:", OUT)
+
+
+# =====================================================================
+# Probeprüfung (ca. 45 Minuten, keine Multiple-Choice-Aufgaben)
+# =====================================================================
+OUT_PRUEFUNG = OUT.with_name("probepruefung-26-10.html")
+
+def pruefung_kopf(titel, teil, l):
+    zeit = "" if l else '<div class="zeitbox"><b>Zeit:</b> 45 Minuten &nbsp;·&nbsp; <b>Punkte:</b> 40 &nbsp;·&nbsp; keine Hilfsmittel</div>'
+    return kopf(titel) + zeit + f'<h2 class="teil">{teil}</h2>'
+
+def pruefung(l):
+    # ---------- Teil A ----------
+    a1 = '<p class="aufg"><b>1.</b> Erkläre, wie die Wörter des Baumuster 3 gebildet werden. Mache dazu ein Beispiel.</p>'
+    a1 += f'<div class="loesungstext">{e(BM_ERKL[3])}</div>' if l else zeilen(5)
+    a1 += punkte(4)
+    a2 = '<p class="aufg"><b>2.</b> Erkläre den Unterschied zwischen dem <b>Dehnungs-h</b> und dem <b>silbentrennenden h</b>. Schreibe zu jedem h zwei Beispiele auf.</p>'
+    a2 += ('<div class="loesungstext">Dehnungs-h: steht am Ende der ersten Silbe und verlängert den Vokal, nur vor l, m, n, r (Feh-ler, woh-nen, zah-me, Oh-ren). '
+           'Silbentrennendes h: steht am Anfang der zweiten Silbe und trennt zwei Vokale (ge-hen, se-hen, dre-hen, nä-hen).</div>') if l else zeilen(5)
+    a2 += punkte(4)
+    wl = ["Wolke", "Hase", "Kinder", "sehen", "Katze", "Taube", "Pinsel", "lieben"]
+    a3 = '<p class="aufg"><b>3.</b> Zeichne die Silbenbögen ein.</p><div class="bwgrid">' + "".join(f'<div class="bw">{bogen(W[w][3]) if l else e(w)}</div>' for w in wl) + "</div>" + punkte(2)
+    sat = [("Wir <u>sehen/seen</u> im Garten eine <u>Taube/Taupe</u>.", [("sehen", ["se","hen"], 4, "sehen"), ("Taube", ["Tau","be"], 1, "")]),
+           ("Der <u>Hunt/Hund</u> springt über den <u>Zaun/Zaum</u>.", [("Hund", ["Hun","de"], 2, "Hund → Hunde"), ("Zaun", ["Zäu","ne"], 1, "Zaun → Zäune")])]
+    a4 = '<p class="aufg"><b>4.</b> Entscheide, welche Schreibweise richtig ist. Schreibe das korrekte Wort mit Silbenbögen auf. Zu welchem Baumuster gehört das Wort? Schreibe auf. Verlängere bei Bedarf.</p>'
+    for satz, items in sat:
+        a4 += f'<p class="satz">{satz}</p>'
+        for wort, silben, bm, h in items:
+            a4 += (f'<div class="zl">{bogen(silben)} <span class="bmn">Baumuster {bm}</span> <span class="hint">{e(h)}</span></div>' if l else '<div class="zl"></div>')
+    a4 += punkte(4)
+    a5 = '<p class="aufg"><b>5.</b> Mache zu jedem Baumuster ein Beispiel und schreibe das Wort korrekt in die Vorlagen.</p>' + vorlagen(l)
+    if l: a5 += '<p class="hint2">Beispiele (andere Wörter sind möglich): Rose · Pinsel · Keller · drehen</p>'
+    a5 += punkte(2)
+    seiteA1 = f'<section class="seite kt"><div class="rahmen">{pruefung_kopf("Deutsch-Prüfung · Baumuster und Satzglieder", "Teil A · Wortstrukturen (ca. 20 Minuten · 20 Punkte)", l)}{a1}{a2}</div></section>'
+    seiteA2 = f'<section class="seite kt"><div class="rahmen">{a3}{a4}{a5}</div></section>'
+
+    # ---------- Teil B ----------
+    zl = lambda txts, n: "".join(f'<div class="zl"><span class="ein">{e(t)}</span></div>' for t in txts) if l else zeilen(n)
+    b6 = '<p class="aufg"><b>6.</b> Erkläre mit eigenen Worten, was Satzglieder sind. Mache dazu ein Beispiel.</p>'
+    b6 += f'<div class="loesungstext">{e(EIGENE_WORTE)}</div>' if l else zeilen(4)
+    b6 += punkte(3)
+    b7 = '<p class="aufg"><b>7.</b> Schreibe die Satzglieder zu den entsprechenden Fragen im Verbenfächer hin.</p><p class="satz kk-reihe">im Laden &nbsp;·&nbsp; gestern &nbsp;·&nbsp; ein Buch &nbsp;·&nbsp; mit Bargeld &nbsp;·&nbsp; Lena</p>'
+    b7 += faecher("kauft", {"Wer? Was?": "Lena", "Wann?": "gestern", "Wo?": "im Laden", "Wen? Was?": "ein Buch", "Womit?": "mit Bargeld"} if l else {})
+    b7 += '<p class="klein">Leeres Feld: ' + ('<b class="ok">Wie?</b>' if l else "____________") + "</p>" + punkte(4)
+    b8 = '<p class="aufg"><b>8.</b> Bilde mit den Satzgliedern aus Aufgabe 7 einen korrekten Satz. Verschiebe danach die Satzglieder und bilde einen weiteren korrekten Satz.</p>'
+    b8 += zl(["Lena kauft gestern im Laden mit Bargeld ein Buch.", "Im Laden kauft Lena gestern mit Bargeld ein Buch."], 4) + punkte(3)
+    b9 = '<p class="aufg"><b>9.</b> Fülle einen eigenen Verbenfächer aus. Schreibe eines der Verben in die Mitte: <i>werfen, kommen, stehen, tanzen, befehlen</i>. Bilde mit den Satzgliedern zwei korrekte Sätze.</p>'
+    b9 += faecher("tanzen" if l else "", {"Wer? Was?": "die Kinder", "Wo?": "im Garten", "Wann?": "am Abend", "Womit?": "mit Musik", "Wie?": "fröhlich"} if l else {})
+    b9 += zl(["Die Kinder tanzen am Abend fröhlich mit Musik im Garten.", "Im Garten tanzen die Kinder am Abend fröhlich mit Musik."], 2) + punkte(4)
+    seiteB1 = f'<section class="seite kt"><div class="rahmen">{pruefung_kopf("Deutsch-Prüfung · Baumuster und Satzglieder", "Teil B · Sätze (ca. 25 Minuten · 20 Punkte)", l)}{b6}{b7}{b8}</div></section>'
+    b10 = '<p class="aufg"><b>10.</b> Wende die vier Satzproben auf den Satz an.<br><i>Die Kinder spielen am Nachmittag im Garten.</i></p>'
+    for name, hint, lo in zip(["Verschiebeprobe", "Weglassprobe", "Erweiterungsprobe", "Ersatzprobe"],
+                              ["(stelle um)", "(lasse ein Satzglied weg)", "(ergänze ein Satzglied)", "(ersetze ein Satzglied)"],
+                              ["Am Nachmittag spielen die Kinder im Garten.", "Die Kinder spielen im Garten.", "Die Kinder spielen am Nachmittag fröhlich im Garten.", "Sie spielen am Nachmittag im Garten."]):
+        b10 += f'<p class="probe"><b>{name}</b> {hint}</p>' + (f'<div class="zl"><span class="ein">{e(lo)}</span></div>' if l else '<div class="zl"></div>')
+    b10 += punkte(4)
+    b11 = '<p class="aufg"><b>11.</b> Ersetze die markierten Satzglieder durch andere Satzglieder.</p>'
+    b11 += '<p class="satz"><mark>Heute</mark> komme ich <mark>spät</mark> nach Hause.</p>' + zl(["Morgen komme ich früh nach Hause."], 1)
+    b11 += '<p class="satz">Ich schreibe <mark>dir</mark> eine Mail.</p>' + zl(["Ich schreibe meinem Freund eine Mail."], 1) + punkte(2)
+    seiteB2 = f'<section class="seite kt"><div class="rahmen">{b9}{b10}{b11}{fuss(40)}</div></section>'
+    return seiteA1 + seiteA2 + seiteB1 + seiteB2
+
+CSS2 = CSS + '''
+.zeitbox { border: 1.5px solid #333; padding: 2mm 3mm; margin: -2mm 0 3mm; font-size: 10.5pt; }
+h2.teil { background: #eee; font-size: 11.5pt; padding: 2mm 3mm; margin: 3mm 0 0; border-left: 4px solid #333; }
+'''
+def dokument(titel, inhalt_test, inhalt_loesung):
+    return f'''<!DOCTYPE html>
+<html lang="de-CH"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{titel}</title><style>{CSS2}</style></head>
+<body>
+<div class="druckleiste"><a href="index.html">← Deutsch</a><button onclick="document.body.classList.remove('nur-loesung')">📝 Prüfung</button>
+<button onclick="document.body.classList.add('nur-loesung')">✅ Lösungen</button><button onclick="window.print()">🖨️ Drucken / PDF speichern</button></div>
+<div class="test-teil">{inhalt_test}</div><div class="loesung-teil">{inhalt_loesung}</div>
+</body></html>'''
+
+OUT_PRUEFUNG.write_text(dokument("Probeprüfung Deutsch 26.10.", pruefung(False), pruefung(True)), encoding="utf8")
+print("geschrieben:", OUT_PRUEFUNG)
