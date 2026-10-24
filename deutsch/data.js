@@ -22,64 +22,70 @@ const BAUMUSTER_WOERTER = {
   Hase: ["H", "a", "", "s", "e", ""], Rose: ["R", "o", "", "s", "e", ""],
   Nase: ["N", "a", "", "s", "e", ""], Ofen: ["", "O", "", "f", "e", "n"],
   Besen: ["B", "e", "", "s", "e", "n"], Wagen: ["W", "a", "", "g", "e", "n"],
+  Taube: ["T", "au", "", "b", "e", ""], lieben: ["l", "ie", "", "b", "e", "n"],
   finden: ["f", "i", "n", "d", "e", "n"], Birne: ["B", "i", "r", "n", "e", ""],
   winken: ["w", "i", "n", "k", "e", "n"], Winter: ["W", "i", "n", "t", "e", "r"],
   Kerze: ["K", "e", "r", "z", "e", ""], Wolke: ["W", "o", "l", "k", "e", ""],
-  Hunde: ["H", "u", "n", "d", "e", ""],
+  Hunde: ["H", "u", "n", "d", "e", ""], Pinsel: ["P", "i", "n", "s", "e", "l"],
   Sommer: ["S", "o", "m", "m", "e", "r"], Puppe: ["P", "u", "p", "p", "e", ""],
   Affe: ["", "A", "f", "f", "e", ""], Mutter: ["M", "u", "t", "t", "e", "r"],
   Tasse: ["T", "a", "s", "s", "e", ""], kommen: ["k", "o", "m", "m", "e", "n"],
-  Katze: ["K", "a", "t", "z", "e", ""],
+  Katze: ["K", "a", "t", "z", "e", ""], Keller: ["K", "e", "l", "l", "e", "r"],
+  gucken: ["g", "u", "c", "k", "e", "n"], sitzen: ["s", "i", "t", "z", "e", "n"],
   gehen: ["g", "e", "", "h", "e", "n"], sehen: ["s", "e", "", "h", "e", "n"],
+  drehen: ["dr", "e", "", "h", "e", "n"],
   nähen: ["n", "ä", "", "h", "e", "n"], Zehen: ["Z", "e", "", "h", "e", "n"],
   mähen: ["m", "ä", "", "h", "e", "n"], wehen: ["w", "e", "", "h", "e", "n"],
 };
 
-// lang: true = Vokal der Hauptsilbe lang (blau), false = kurz (orange)
+// Texte nach dem Lehrmittel (Seite «Wortstrukturen erkunden»).
+// lang: true = Vokal der Hauptsilbe lang (blau), false = kurz (rot)
 const BAUMUSTER_STUFEN = [
   {
     nr: 1, titel: "Baumuster 1", tag: "offen · lang", lang: true,
     erklaerung: `
-      <p><strong>Offene Hauptsilbe:</strong> Nach dem Vokal folgt gleich die
-      nächste Silbe. Das <strong>letzte Kästchen</strong> der Hauptsilbe
-      bleibt <strong>leer</strong>, der Vokal ist <strong>lang</strong>.</p>
-      <p>Ein langes i schreibt man meist <strong>ie</strong>
-      (<em>sie-ben, Flie-ge</em>).</p>`,
-    beispiele: ["Hase", "Rose", "Nase"],
-    woerter: ["Hase", "Rose", "Nase", "Ofen", "Besen", "Wagen"],
-    hinweis: "Baumuster 1: Das letzte Kästchen der Hauptsilbe bleibt leer.",
+      <p><strong>Die Hauptsilbe ist offen.</strong> Sie endet mit einem Vokal
+      oder Diphthong (z. B. au). Der Vokal wird <strong>lang</strong>
+      gelesen.</p>
+      <p><strong>i oder ie?</strong> Bei offenen Silben (Baumuster 1) wird der
+      Vokal i lang gelesen. Er wird als <strong>ie</strong> geschrieben:
+      <em>lie-ben</em>.</p>`,
+    beispiele: ["Rose", "Taube", "lieben"],
+    woerter: ["Rose", "Taube", "lieben", "Hase", "Nase", "Ofen", "Besen", "Wagen"],
+    hinweis: "Baumuster 1: Die Hauptsilbe ist offen — das letzte Kästchen der Hauptsilbe bleibt leer. Ein Diphthong (au) oder ie steht zusammen in einem Kästchen.",
   },
   {
     nr: 2, titel: "Baumuster 2", tag: "geschlossen · kurz", lang: false,
     erklaerung: `
-      <p><strong>Geschlossene Hauptsilbe:</strong> Nach dem Vokal stehen
-      <strong>zwei verschiedene Konsonanten</strong>. Der erste schliesst die
-      Hauptsilbe, der zweite beginnt die Nebensilbe. Der Vokal ist
-      <strong>kurz</strong>.</p>`,
-    beispiele: ["finden", "Birne", "winken"],
-    woerter: ["finden", "Birne", "winken", "Winter", "Kerze", "Wolke", "Hunde"],
-    hinweis: "Baumuster 2: Zwei verschiedene Konsonanten — der erste füllt das letzte Kästchen der Hauptsilbe.",
+      <p><strong>Die Hauptsilbe ist geschlossen.</strong> Sie endet mit einem
+      <strong>Konsonanten</strong>. Der Vokal wird <strong>kurz</strong>
+      gelesen.</p>
+      <p><strong>i oder ie?</strong> Bei geschlossenen Silben (Baumuster 2)
+      wird der Vokal i kurz gelesen: <em>Pin-sel</em>.</p>`,
+    beispiele: ["Wolke", "Pinsel", "finden"],
+    woerter: ["Wolke", "Pinsel", "finden", "Birne", "winken", "Winter", "Kerze", "Hunde"],
+    hinweis: "Baumuster 2: Die Hauptsilbe endet mit einem Konsonanten — er füllt das letzte Kästchen der Hauptsilbe, der nächste beginnt die Nebensilbe.",
   },
   {
-    nr: 3, titel: "Baumuster 3", tag: "geschlossen · kurz · Doppelkonsonant", lang: false,
+    nr: 3, titel: "Baumuster 3", tag: "geschlossen · kurz · zwei Konsonanten", lang: false,
     erklaerung: `
-      <p>Du hörst nur <strong>einen</strong> Konsonanten nach dem kurzen
-      Vokal — also wird er <strong>verdoppelt</strong>: Der eine Buchstabe
-      schliesst die Hauptsilbe, der andere beginnt die Nebensilbe.</p>
-      <p>Statt kk schreibt man <strong>ck</strong>, statt zz
-      <strong>tz</strong> (<em>Zu-cker, Kat-ze</em>).</p>`,
-    beispiele: ["Sommer", "Puppe", "Affe"],
-    woerter: ["Sommer", "Puppe", "Affe", "Mutter", "Tasse", "kommen", "Katze"],
-    hinweis: "Baumuster 3: Der Konsonant steht doppelt — einmal am Ende der Hauptsilbe, einmal am Anfang der Nebensilbe.",
+      <p>Der Vokal der Hauptsilbe soll <strong>kurz</strong> gelesen werden.
+      Deshalb braucht es <strong>zwei Konsonanten</strong>.</p>
+      <p>Die Konsonanten <strong>k</strong> und <strong>z</strong> werden
+      <strong>nicht verdoppelt</strong>: <em>gucken</em> anstatt
+      <s>gukken</s>, <em>sitzen</em> anstatt <s>sizzen</s>.</p>`,
+    beispiele: ["Keller", "gucken", "sitzen"],
+    woerter: ["Keller", "gucken", "sitzen", "Sommer", "Puppe", "Affe", "Mutter", "Tasse", "kommen", "Katze"],
+    hinweis: "Baumuster 3: Zwei Konsonanten — einer schliesst die Hauptsilbe, einer beginnt die Nebensilbe. k und z werden nicht verdoppelt (ck, tz).",
   },
   {
     nr: 4, titel: "Baumuster 4", tag: "offen · lang · silbentrennendes h", lang: true,
     erklaerung: `
-      <p>Zwei Vokale stossen aufeinander: Das <strong>h</strong> trennt sie.
-      Es steht am <strong>Anfang der zweiten Silbe</strong>. Die Hauptsilbe
-      ist offen, der Vokal lang.</p>`,
-    beispiele: ["gehen", "sehen", "nähen"],
-    woerter: ["gehen", "sehen", "nähen", "Zehen", "mähen", "wehen"],
+      <p>Das <strong>silbentrennende h</strong> trennt die Vokale der beiden
+      Silben. Es steht am <strong>Anfang der zweiten Silbe</strong>:
+      <em>dre-hen</em> anstatt <s>dre-en</s>.</p>`,
+    beispiele: ["drehen", "gehen", "nähen"],
+    woerter: ["drehen", "gehen", "sehen", "nähen", "Zehen", "mähen", "wehen"],
     hinweis: "Baumuster 4: Das h steht am Anfang der Nebensilbe, das letzte Kästchen der Hauptsilbe bleibt leer.",
   },
   {
@@ -89,15 +95,33 @@ const BAUMUSTER_STUFEN = [
       der Vokal <strong>lang</strong> oder <strong>kurz</strong> ist, und
       wähle das passende Baumuster.</p>
       <ul>
-        <li><strong>1</strong> offen, lang: <em>Ha-se</em></li>
-        <li><strong>2</strong> zwei verschiedene Konsonanten: <em>fin-den</em></li>
-        <li><strong>3</strong> Doppelkonsonant: <em>Som-mer</em></li>
-        <li><strong>4</strong> silbentrennendes h: <em>ge-hen</em></li>
+        <li><strong>1</strong> offen, Vokal lang: <em>Ro-se, Tau-be</em></li>
+        <li><strong>2</strong> geschlossen, Vokal kurz: <em>Pin-sel, Wol-ke</em></li>
+        <li><strong>3</strong> zwei Konsonanten (k und z nicht verdoppelt): <em>Kel-ler, gu-cken</em></li>
+        <li><strong>4</strong> silbentrennendes h: <em>dre-hen</em></li>
       </ul>`,
-    beispiele: ["Hase", "finden", "Sommer", "gehen"],
+    beispiele: ["Rose", "Pinsel", "Keller", "drehen"],
     hinweis: "Sprich das Wort in Silben und prüfe, ob der Vokal lang oder kurz ist.",
   },
 ];
+
+// --- Satzpuzzle (satzpuzzle.js): Sätze aus Satzgliedern bauen ---
+// karten: Satzglieder in einer möglichen Reihenfolge; verb = Karte, die im
+// Aussagesatz an 2. Stelle steht; partikel = abgetrenntes Verbteil (kommt ans Satzende).
+const SATZPUZZLE_SAETZE = [
+  { karten: ["der Mond", "geht", "in der Nacht", "am Himmelszelt", "schnell", "auf"], verb: "geht", partikel: "auf" },
+  { karten: ["das Elektroauto", "fährt", "am Morgen", "im Osten", "um die Kurve"], verb: "fährt" },
+  { karten: ["die Sonne", "scheint", "am Nachmittag", "hell"], verb: "scheint" },
+  { karten: ["Tila", "suchte", "am Abend", "mit einer Taschenlampe", "nach einem Buch", "im Schrank"], verb: "suchte" },
+  { karten: ["Ramos", "versteckte", "am Geburtstag", "eine geheimnisvolle Kiste", "auf dem Estrich"], verb: "versteckte" },
+  { karten: ["ein Gespenst", "sass", "eine halbe Stunde", "allein", "in einer Kiste"], verb: "sass" },
+  { karten: ["Tila", "entdeckte", "am Boden", "ängstlich", "ein Gespenst"], verb: "entdeckte" },
+  { karten: ["Lisa", "bezahlt", "im Gemüseladen", "schnell", "den Apfel", "mit der Karte", "für die Pause"], verb: "bezahlt" },
+  { karten: ["das alte Fahrrad", "rostet", "seit Jahren", "im Schuppen"], verb: "rostet" },
+  { karten: ["die Athletin", "rennt", "im Training", "jeden Tag"], verb: "rennt" },
+];
+// Paare für «Markiere mit gleicher Farbe alle Satzglieder, die einen Satz bilden»
+const SATZPUZZLE_PAARE = [[0, 1], [2, 3], [4, 5], [6, 1], [7, 8], [9, 3]];
 
 const DEUTSCH_THEMEN = [
   {
@@ -968,6 +992,11 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Ha__e (Tier mit langen Ohren) — wie schreibt man das?", optionen: ["s", "ss"], richtig: 0 },
       { typ: "mc", frage: "Ro__e (Blume) — wie schreibt man das?", optionen: ["s", "ss"], richtig: 0 },
       { typ: "mc", frage: "Fl__ge (Insekt) — was fehlt?", optionen: ["ie", "i", "ii"], richtig: 0 },
+      { typ: "mc", frage: "Wie wird ein langes i in einer offenen Hauptsilbe (Baumuster 1) geschrieben?", optionen: ["ie", "i", "ih"], richtig: 0 },
+      { typ: "mc", frage: "l__ben (die Hauptsilbe ist offen) — was fehlt?", optionen: ["ie", "i"], richtig: 0 },
+      { typ: "mc", frage: "Die Hauptsilbe von „Tau-be“ endet mit …", optionen: ["einem Diphthong", "einem Konsonanten", "einem h"], richtig: 0 },
+      { typ: "mc", frage: "Wie viele Kästchen belegt der Diphthong „au“ in „Taube“?", optionen: ["eines", "zwei", "keines"], richtig: 0 },
+      { typ: "mc", frage: "Wie wird der Vokal in einer offenen Hauptsilbe gelesen?", optionen: ["lang", "kurz"], richtig: 0 },
     ],
   },
   {
@@ -1002,6 +1031,10 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Dun__el (nicht hell) — wie schreibt man das?", optionen: ["k", "ck"], richtig: 0 },
       { typ: "mc", frage: "Ker__e (brennt am Geburtstagskuchen) — wie schreibt man das?", optionen: ["z", "tz"], richtig: 0 },
       { typ: "mc", frage: "Ist der Vokal bei Baumuster 2 lang oder kurz?", optionen: ["lang", "kurz"], richtig: 1 },
+      { typ: "mc", frage: "Wie wird der Vokal i in einer geschlossenen Hauptsilbe (Baumuster 2) gelesen?", optionen: ["kurz", "lang"], richtig: 0 },
+      { typ: "mc", frage: "P__sel (die Hauptsilbe ist geschlossen) — was fehlt?", optionen: ["i", "ie"], richtig: 0 },
+      { typ: "mc", frage: "Womit endet die Hauptsilbe bei „Wol-ke“?", optionen: ["mit einem Konsonanten", "mit einem Vokal", "mit einem Diphthong"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["Pinsel", "Piensel", "Pihnsel"], richtig: 0 },
     ],
   },
   {
@@ -1037,6 +1070,11 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Was passiert bei Baumuster 3 mit dem Konsonanten?", optionen: ["Er wird verdoppelt", "Er fällt weg", "Ein h kommt dazu"], richtig: 0 },
       { typ: "mc", frage: "Statt kk schreibt man …", optionen: ["ck", "kh", "kc"], richtig: 0 },
       { typ: "mc", frage: "Statt zz schreibt man …", optionen: ["tz", "zt", "zh"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["gucken", "gukken", "guken"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["sitzen", "sizzen", "sitsen"], richtig: 0 },
+      { typ: "mc", frage: "Welche Konsonanten werden nicht verdoppelt?", optionen: ["k und z", "m und n", "l und r"], richtig: 0 },
+      { typ: "mc", frage: "Wie viele Konsonanten braucht es bei Baumuster 3 nach dem kurzen Vokal?", optionen: ["zwei", "einen", "keinen"], richtig: 0 },
+      { typ: "mc", frage: "Wie schreibt man „Kel-ler“ richtig?", optionen: ["Keller", "Keler", "Kehler"], richtig: 0 },
     ],
   },
   {
@@ -1067,6 +1105,10 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Was trennt das h bei „ge-hen“?", optionen: ["zwei Vokale", "zwei Konsonanten", "zwei Wörter"], richtig: 0 },
       { typ: "mc", frage: "Die Hauptsilbe von „ge-hen“ ist …", optionen: ["offen", "geschlossen"], richtig: 0 },
       { typ: "mc", frage: "Ist der Vokal in „ge-hen“ lang oder kurz?", optionen: ["lang", "kurz"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["drehen", "dreen", "drehhen"], richtig: 0 },
+      { typ: "mc", frage: "Was trennt das silbentrennende h?", optionen: ["die Vokale der beiden Silben", "zwei Konsonanten", "zwei Wörter"], richtig: 0 },
+      { typ: "mc", frage: "dre-hen anstatt …", optionen: ["dre-en", "dre-hhen", "dre-n"], richtig: 0 },
+      { typ: "mc", frage: "Wo steht das silbentrennende h in „dre-hen“?", optionen: ["am Anfang der zweiten Silbe", "am Ende der ersten Silbe", "am Wortanfang"], richtig: 0 },
     ],
   },
   {
@@ -1190,6 +1232,16 @@ const DEUTSCH_THEMEN = [
       zie-hen, Kü-he</em>. Nach <strong>au, äu, eu</strong> steht es nie.
       Verlängere das Wort, dann hörst du es: <em>Kuh → Kü-he</em>,
       <em>geht → ge-hen</em>.</p>
+      <p><strong>Doppelvokale:</strong> In wenigen Wörtern verlängert
+      derselbe Vokal die Hauptsilbe — bei <strong>aa, ee, oo</strong>:
+      <em>Haare, leeren, Boote</em>.</p>
+      <p><strong>Rechtschreibtipps:</strong> Markiere die Silben mit
+      Silbenbögen oder trage zweisilbige Wörter ins Silbenmodell ein.
+      Verlängere ein einsilbiges Wort und trage es ins Silbenmodell ein.
+      Achte auf die Betonung des Vokals in der Hauptsilbe: Lang oder kurz
+      gelesene Vokale ändern neben der Schreibweise auch die Bedeutung —
+      <em>Die Clowns tragen lustige Hüte. Wir machen Ferien in einer Hütte
+      im Wald.</em></p>
     `,
     aufgaben: [
       // 1) Silbenprobe: richtige Schreibung nach dem Verlängern
@@ -1243,6 +1295,11 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["sehen", "seen", "sehhen"], richtig: 0 },
       { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["ziehen", "zieen", "zihen"], richtig: 0 },
       { typ: "mc", frage: "Welches Wort ist richtig geschrieben? (Ausnahme: kein h)", optionen: ["Schule", "Schuhle", "Schuule"], richtig: 0 },
+      { typ: "mc", frage: "Die Clowns tragen lustige ___.", optionen: ["Hüte", "Hütte"], richtig: 0 },
+      { typ: "mc", frage: "Wir machen Ferien in einer ___ im Wald.", optionen: ["Hütte", "Hüte"], richtig: 0 },
+      { typ: "mc", frage: "Bei welchen Vokalen gibt es Doppelvokale?", optionen: ["aa, ee, oo", "ii, uu, ee", "aa, ii, uu"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort hat einen Doppelvokal?", optionen: ["Boote", "Hüte", "Hase"], richtig: 0 },
+      { typ: "mc", frage: "Welches Wort ist richtig geschrieben?", optionen: ["Haare", "Hahre", "Hare"], richtig: 0 },
     ],
   },
 
@@ -1252,6 +1309,21 @@ const DEUTSCH_THEMEN = [
     icon: "👑",
     name: "Satzglieder & Verbenfächer",
     theorie: `
+      <p>Ein Satz besteht aus verschiedenen <strong>Satzgliedern</strong>.
+      Die <strong>W-Fragen im Verbenfächer</strong> helfen, Satzglieder zu
+      finden. Im Zentrum des Verbenfächers steht immer das
+      <strong>konjugierte Verb</strong>.</p>
+      <p class="theorie-beispiel">🔎 Beispiel: <strong>pickt</strong> —
+      Wer? Was? <em>die Taube</em> · Wo? <em>am Boden</em> · Wann?
+      <em>abends</em> · Womit? <em>mit ihrem Schnabel</em> · Wie?
+      <em>schnell</em> · Wen? Was? <em>kleine Körner</em></p>
+      <p class="theorie-beispiel">✍️ <strong>In eigenen Worten:</strong>
+      Satzglieder sind die Bausteine eines Satzes. Ein Satzglied kann ein
+      einzelnes Wort sein oder mehrere Wörter, die zusammengehören. Wenn man
+      den Satz umstellt, bleiben diese Wörter immer zusammen. Beispiel:
+      <em>Lena | kauft | gestern | im Laden | ein Buch.</em> „im Laden“ sind
+      zwei Wörter, aber nur ein Satzglied, weil sie beim Umstellen
+      zusammenbleiben: <em>Im Laden kauft Lena gestern ein Buch.</em></p>
       <p>Ein <strong>Satzglied</strong> ist ein Wort oder eine
       <strong>Wortgruppe</strong>, die beim Umstellen (Verschiebeprobe)
       <strong>immer zusammenbleibt</strong>. Ein Satzglied kann also aus
@@ -1290,6 +1362,8 @@ const DEUTSCH_THEMEN = [
           glieder: [["Die Kinder", 0], ["heute", 3], ["auf dem Pausenplatz", 4]] },
         { satz: "Der Briefträger fährt jeden Morgen mit dem Velo.", verb: "fährt",
           glieder: [["Der Briefträger", 0], ["jeden Morgen", 3], ["mit dem Velo", 6]] },
+        { satz: "Die Taube pickt abends schnell kleine Körner mit ihrem Schnabel am Boden.", verb: "pickt",
+          glieder: [["Die Taube", 0], ["abends", 3], ["schnell", 5], ["kleine Körner", 1], ["mit ihrem Schnabel", 6], ["am Boden", 4]] },
         { satz: "Leise öffnet Anna die Tür.", verb: "öffnet",
           glieder: [["Leise", 5], ["Anna", 0], ["die Tür", 1]] },
       ];
@@ -1328,6 +1402,9 @@ const DEUTSCH_THEMEN = [
         { typ: "mc", frage: "Woran erkennst du ein Satzglied?", optionen: ["Es bleibt bei der Verschiebeprobe zusammen", "Es beginnt mit einem Grossbuchstaben", "Es hat immer zwei Wörter"], richtig: 0 },
         { typ: "mc", frage: "„Meine Oma“ im Satz „Meine Oma spricht am Morgen.“ — wie viele Satzglieder sind das?", optionen: ["eins", "zwei", "drei"], richtig: 0 },
         // 5) Verbenfächer
+        { typ: "mc", frage: "Was steht im Zentrum des Verbenfächers?", optionen: ["das konjugierte Verb", "das Subjekt", "das Nomen"], richtig: 0 },
+        { typ: "mc", frage: "„Die Taube pickt abends kleine Körner.“ — Welche W-Frage führt zu „kleine Körner“?", optionen: ["Wen? Was?", "Wann?", "Wo?"], richtig: 0 },
+        { typ: "mc", frage: "Wozu helfen die W-Fragen im Verbenfächer?", optionen: ["Satzglieder zu finden", "Silben zu zählen", "Wörter zu verlängern"], richtig: 0 },
         { typ: "mc", frage: "Wer ist der König im Verbenfächer?", optionen: ["das Verb", "das Nomen", "das Adjektiv"], richtig: 0 },
         { typ: "mc", frage: "Wo steht das Verb im Verbenfächer?", optionen: ["in der Mitte", "ganz aussen links", "am Schluss"], richtig: 0 },
         { typ: "mc", frage: "Wie fragst du richtig nach dem Subjekt in „Oma spricht“?", optionen: ["Wer spricht?", "Wer?", "Spricht Oma?"], richtig: 0 },
@@ -1343,30 +1420,67 @@ const DEUTSCH_THEMEN = [
   },
 
   {
+    id: "satzpuzzle",
+    gruppe: "pruefung",
+    modus: "satzpuzzle",
+    icon: "🧩",
+    name: "Satzpuzzle",
+    theorie: `
+      <p>Du kannst mit <strong>Satzgliedern</strong> Sätze bilden: Satzglieder
+      sind die <strong>Bausteine von Sätzen</strong>.</p>
+      <p>Im Verbenfächer steht das <strong>Verb</strong> in der Mitte. Im
+      Aussagesatz steht es immer an <strong>2. Stelle</strong>. Ein
+      abgetrenntes Verbteil (<em>geht … auf</em>) kommt ans
+      <strong>Satzende</strong>.</p>
+      <p class="theorie-beispiel">🧩 Beispiel: der Mond | geht | in der Nacht
+      | am Himmelszelt | schnell | auf → <em>In der Nacht geht der Mond am
+      Himmelszelt schnell auf.</em></p>
+      <p>Mit der <strong>Verschiebeprobe</strong> prüfst du: Alle anderen
+      Satzglieder dürfen den Platz tauschen, das Verb bleibt an 2. Stelle:
+      <em>Der Mond geht am Himmelszelt in der Nacht schnell auf.</em></p>
+    `,
+    aufgaben: [
+      { typ: "mc", frage: "An welcher Stelle steht das Verb in einem Aussagesatz?", optionen: ["an 2. Stelle", "an 1. Stelle", "am Schluss"], richtig: 0 },
+      { typ: "mc", frage: "„geht … auf“: Wo steht „auf“ im Satz „Der Mond geht in der Nacht schnell auf.“?", optionen: ["am Satzende", "an 2. Stelle", "am Satzanfang"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz ist richtig gebildet?", optionen: ["Am Morgen fährt das Elektroauto im Osten um die Kurve.", "Am Morgen das Elektroauto fährt im Osten um die Kurve.", "Fährt am Morgen das Elektroauto im Osten um die Kurve."], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz ist richtig gebildet?", optionen: ["Tila suchte am Abend nach einem Buch im Schrank.", "Tila am Abend suchte nach einem Buch im Schrank.", "Suchte Tila am Abend nach einem Buch, im Schrank."], richtig: 0 },
+      { typ: "mc", frage: "Wofür sind Satzglieder die Bausteine?", optionen: ["für Sätze", "für Silben", "für Wörter mit h"], richtig: 0 },
+      { typ: "mc", frage: "Verschiebeprobe mit „Ramos versteckte am Geburtstag eine Kiste.“ — Welcher Satz stimmt?", optionen: ["Am Geburtstag versteckte Ramos eine Kiste.", "Am Geburtstag Ramos versteckte eine Kiste.", "Versteckte am Geburtstag Ramos eine Kiste."], richtig: 0 },
+      { typ: "mc", frage: "Wie viele Sätze lassen sich aus den Karten „die Sonne, scheint, hell, Tila, suchte, im Schrank“ bilden?", optionen: ["zwei", "einen", "drei"], richtig: 0 },
+      { typ: "mc", frage: "Welche Karten gehören zusammen? „Ein Gespenst | sass | allein | in einer Kiste“ und …", optionen: ["Tila | entdeckte | am Boden | ein Gespenst", "Tila | in einer Kiste | allein", "sass | entdeckte | scheint"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „für die Pause“?", optionen: ["Wofür?", "Wo?", "Wie?"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „mit der Karte“?", optionen: ["Womit?", "Wofür?", "Wen? Was?"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „im Gemüseladen“?", optionen: ["Wo?", "Wie?", "Womit?"], richtig: 0 },
+      { typ: "mc", frage: "Verbenfächer „bezahlt“ — Welche Frage führt zu „den Apfel“?", optionen: ["Wen? Was?", "Wer? Was?", "Wofür?"], richtig: 0 },
+      { typ: "mc", frage: "Welcher Satz passt zum Verbenfächer „bezahlt“ (Lisa · im Gemüseladen · schnell · den Apfel · mit der Karte)?", optionen: ["Lisa bezahlt im Gemüseladen schnell den Apfel mit der Karte.", "Lisa im Gemüseladen bezahlt schnell den Apfel mit der Karte.", "Bezahlt Lisa im Gemüseladen, schnell den Apfel mit der Karte."], richtig: 0 },
+    ],
+  },
+
+  {
     id: "satzproben",
     gruppe: "pruefung",
     icon: "🔬",
     name: "Die 4 Satzproben",
     theorie: `
-      <p>Mit den <strong>Satzproben</strong> veränderst du einen Satz und
-      prüfst, ob er noch stimmt.</p>
-      <p><strong>Verschiebeprobe</strong> (Umstellprobe): Satzglieder
-      umstellen. Wörter, die zusammen wandern, sind <strong>ein
-      Satzglied</strong>. Das Verb bleibt an <strong>2. Stelle</strong>.<br>
-      <em>Meine Oma spricht am Morgen … → Am Morgen spricht meine
-      Oma …</em></p>
-      <p><strong>Ersatzprobe:</strong> Wörter ersetzen. So vermeidest du
-      Wiederholungen.<br>
-      <em>Meine Oma → Sie · dem Briefträger → ihm</em></p>
-      <p><strong>Weglassprobe:</strong> Wörter streichen. So findest du heraus,
-      was nötig ist, und kannst Texte kürzen. Nicht jedes Satzglied lässt
-      sich weglassen.<br>
-      <em>Meine Oma spricht <s>am Morgen</s> mit dem Briefträger.</em></p>
-      <p><strong>Erweiterungsprobe:</strong> Wörter ergänzen. So wird der Text
-      genauer. Die Nominalgruppe wird um das <strong>Kernwort</strong>
-      (Nomen) herum erweitert.<br>
-      <em>der Hund → der kleine Hund → der kleine Hund mit dem roten
-      Halsband</em></p>
+      <p><strong>Satzproben helfen, Satzglieder zu bestimmen.</strong>
+      Satzglieder bleiben beim Verändern des Satzes immer
+      <strong>zusammen</strong>. Die Satzproben sind:
+      <strong>Verschiebeprobe, Weglassprobe, Erweiterungsprobe,
+      Ersatzprobe</strong>.</p>
+      <p><em>Wir | warten | an der Haltestelle | auf den Bus.</em></p>
+      <p><strong>Verschiebeprobe:</strong> Satzglieder umstellen. Das Verb
+      bleibt an 2. Stelle.<br>
+      <em>An der Haltestelle warten wir auf den Bus.</em></p>
+      <p><strong>Weglassprobe:</strong> Ein Satzglied streichen.<br>
+      <em>Wir warten an der Haltestelle. <s>auf den Bus.</s></em></p>
+      <p><strong>Erweiterungsprobe:</strong> Wörter ergänzen.<br>
+      <em>Wir warten <strong>mit der Klasse</strong> an der Haltestelle auf
+      den Bus.</em></p>
+      <p><strong>Ersatzprobe:</strong> Ein Satzglied durch ein anderes Wort
+      ersetzen.<br>
+      <em>Wir warten <strong>gemeinsam</strong> auf den Bus.</em></p>
+      <p>Satzproben helfen auch beim <strong>inhaltlichen Überarbeiten eines
+      Textes</strong>.</p>
     `,
     aufgaben: [
       // 1) Welche Probe ist gemeint?
@@ -1404,6 +1518,21 @@ const DEUTSCH_THEMEN = [
       { typ: "mc", frage: "Erweitere „Die Katze schläft.“ — welche Fragen helfen dir?", optionen: ["Wann? Wo? Womit?", "Wer? Wen?", "Was? Wem?"], richtig: 0 },
       { typ: "mc", frage: "Um welches Wort wird eine Nominalgruppe bei der Erweiterungsprobe erweitert?", optionen: ["um das Kernwort (Nomen)", "um das Verb", "um das Satzzeichen"], richtig: 0 },
       { typ: "mc", frage: "Welcher Satz ist eine Erweiterung von „Tim liest.“?", optionen: ["Tim liest abends im Bett ein Buch.", "Tim liest nicht.", "Liest Tim?"], richtig: 0 },
+      { typ: "mc", frage: "„Wir | warten | an der Haltestelle | auf den Bus.“ — Verschiebeprobe: Welcher Satz stimmt?", optionen: ["An der Haltestelle warten wir auf den Bus.", "An der Haltestelle wir warten auf den Bus.", "Wir an der Haltestelle warten auf den Bus."], richtig: 0 },
+      { typ: "mc", frage: "Weglassprobe: Was bleibt, wenn du „auf den Bus“ weglässt?", optionen: ["Wir warten an der Haltestelle.", "Wir warten auf den Bus.", "Warten an der Haltestelle."], richtig: 0 },
+      { typ: "mc", frage: "Welche Probe zeigt: „Wir warten mit der Klasse an der Haltestelle auf den Bus.“?", optionen: ["Erweiterungsprobe", "Weglassprobe", "Verschiebeprobe", "Ersatzprobe"], richtig: 0 },
+      { typ: "mc", frage: "Ersatzprobe: Ersetze „an der Haltestelle“ — welcher Satz passt?", optionen: ["Wir warten gemeinsam auf den Bus.", "Wir warten Haltestelle auf den Bus.", "Wir warten an gemeinsam auf den Bus."], richtig: 0 },
+      { typ: "mc", frage: "Satzglieder bleiben beim Verändern des Satzes immer …", optionen: ["zusammen", "getrennt", "am Satzende"], richtig: 0 },
+      { typ: "mc", frage: "Satzproben helfen beim …", optionen: ["inhaltlichen Überarbeiten eines Textes", "Auswendiglernen von Wörtern", "Zählen von Silben"], richtig: 0 },
+      { typ: "mc", frage: "Welche Satzproben gibt es?", optionen: ["Verschiebe-, Weglass-, Erweiterungs- und Ersatzprobe", "Silben-, Verlängerungs-, Umstell- und Zählprobe", "Frage-, Antwort-, Streich- und Schreibprobe"], richtig: 0 },
+      { typ: "mc", frage: "Weglassprobe: „Die Athletin rennt im Training jeden Tag.“ — Welche Kürzung ist richtig?", optionen: ["Die Athletin rennt im Training.", "Rennt im Training jeden Tag.", "Die Athletin im Training jeden Tag."], richtig: 0 },
+      { typ: "mc", frage: "Weglassprobe: Was bleibt am Schluss mindestens übrig? „Die Athletin rennt im Training jeden Tag.“", optionen: ["Die Athletin rennt.", "Die Athletin.", "Rennt."], richtig: 0 },
+      { typ: "mc", frage: "Erweiterungsprobe: „Romano fährt.“ — Welche Erweiterung stimmt?", optionen: ["Romano fährt schnell mit dem Skateboard.", "Romano fährt, schnell mit Skateboard dem.", "Schnell Romano fährt mit dem Skateboard."], richtig: 0 },
+      { typ: "mc", frage: "Verschiebeprobe: „Im Herbst wird es am Abend wieder früher dunkel.“ — Welcher Satz stimmt?", optionen: ["Am Abend wird es im Herbst wieder früher dunkel.", "Am Abend es wird im Herbst wieder früher dunkel.", "Wird es am Abend im Herbst, wieder früher dunkel."], richtig: 0 },
+      { typ: "mc", frage: "Ersatzprobe: „Ich schreibe dir eine Mail.“ — Ersetze „dir“.", optionen: ["Ich schreibe meinem Freund eine Mail.", "Ich schreibe eine dir Mail.", "Ich schreibe Freund meinem eine Mail."], richtig: 0 },
+      { typ: "mc", frage: "Ersatzprobe: „Heute komme ich spät nach Hause.“ — Ersetze „spät“.", optionen: ["Heute komme ich schon nach Hause.", "Heute komme ich Haus spät.", "Spät komme heute ich nach Hause."], richtig: 0 },
+      { typ: "mc", frage: "Was passiert beim Verschieben von Satzgliedern?", optionen: ["Die Wirkung des Satzes verändert sich.", "Der Satz bekommt ein anderes Verb.", "Der Satz wird immer falsch."], richtig: 0 },
+      { typ: "mc", frage: "„Schon lange kenne ich deine Wünsche.“ und „Ich kenne deine Wünsche schon lange.“ — Was ist anders?", optionen: ["Die Betonung und die Wirkung", "Die Wörter", "Die Zahl der Satzglieder"], richtig: 0 },
     ],
   },
 ];
