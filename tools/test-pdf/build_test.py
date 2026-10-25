@@ -549,3 +549,86 @@ def pruefung_bern(l):
 
 OUT_BERN.write_text(dokument("Probeprüfung Deutsch · Stadt Bern", pruefung_bern(False), pruefung_bern(True)), encoding="utf8")
 print("geschrieben:", OUT_BERN)
+
+
+# =====================================================================
+# English Test «Unit 1 – My town» (45 Minuten, ohne Multiple Choice)
+# =====================================================================
+import math
+OUT_ENG = OUT.parents[1] / "englisch" / "test-unit1-my-town.html"
+
+def uhr(h, m):
+    cx = cy = 50
+    o = ['<svg class="uhr" viewBox="0 0 100 100"><circle cx="50" cy="50" r="46" fill="#fff" stroke="#222" stroke-width="2.5"/>']
+    for i in range(60):
+        a = math.radians(i * 6); r1 = 46 if i % 5 else 41
+        o.append(f'<line x1="{cx+math.sin(a)*r1:.1f}" y1="{cy-math.cos(a)*r1:.1f}" x2="{cx+math.sin(a)*44:.1f}" y2="{cy-math.cos(a)*44:.1f}" stroke="#222" stroke-width="{1.4 if i % 5 == 0 else .6}"/>')
+    for n in range(1, 13):
+        a = math.radians(n * 30)
+        o.append(f'<text x="{cx+math.sin(a)*33:.1f}" y="{cy-math.cos(a)*33+3.5:.1f}" text-anchor="middle" font-size="10" font-weight="700" fill="#222">{n}</text>')
+    ah = math.radians((h % 12) * 30 + m * 0.5); am = math.radians(m * 6)
+    o.append(f'<line x1="50" y1="50" x2="{cx+math.sin(ah)*22:.1f}" y2="{cy-math.cos(ah)*22:.1f}" stroke="#111" stroke-width="3.6" stroke-linecap="round"/>')
+    o.append(f'<line x1="50" y1="50" x2="{cx+math.sin(am)*33:.1f}" y2="{cy-math.cos(am)*33:.1f}" stroke="#111" stroke-width="2" stroke-linecap="round"/><circle cx="50" cy="50" r="2.5" fill="#111"/></svg>')
+    return "".join(o)
+
+def stadtplan():
+    def haus(x, y, w, name, farbe):
+        return f'<rect x="{x}" y="{y}" width="{w}" height="38" rx="3" fill="{farbe}" stroke="#444" stroke-width="1.5"/><text x="{x+w/2}" y="{y+23}" text-anchor="middle" font-size="9.5" font-weight="700" fill="#222">{name}</text>'
+    return ('<svg class="plan" viewBox="0 0 260 130">'
+        '<rect x="0" y="56" width="236" height="18" fill="#d9d9d9"/><rect x="226" y="0" width="22" height="130" fill="#d9d9d9"/>'
+        '<line x1="0" y1="65" x2="236" y2="65" stroke="#fff" stroke-width="1.5" stroke-dasharray="6 5"/>'
+        + haus(10, 14, 62, "hospital", "#f8d7d7") + haus(78, 14, 62, "church", "#e8dcc4") + haus(146, 14, 62, "bakery", "#fbe7b5")
+        + haus(10, 78, 62, "school", "#d6ebfb") + haus(78, 78, 62, "park", "#c7e8c0") + haus(146, 78, 62, "library", "#e5d9f2")
+        + '<rect x="106" y="50" width="3" height="10" fill="#444"/><rect x="99" y="44" width="17" height="8" rx="2" fill="#2a7bd0"/><text x="107.5" y="50.5" text-anchor="middle" font-size="5.5" font-weight="700" fill="#fff">BUS</text>'
+        + '<text x="237" y="122" text-anchor="middle" font-size="7.5" fill="#444" transform="rotate(-90 237 122)">corner</text></svg>')
+
+def english(l):
+    T = "English Test · Unit 1 – My town"
+    zl = lambda txts, n, h="8mm": "".join(f'<div class="zl"><span class="ein">{e(t)}</span></div>' for t in txts) if l else zeilen(n, h)
+    def paare(items, spalten=2):
+        zellen = []
+        for de, en in items:
+            antw = f'<span class="ein">{e(en)}</span>' if l else ""
+            zellen.append(f'<div class="paar"><span class="de">{e(de)}</span><span class="pf">→ {antw}</span></div>')
+        return f'<div class="paargrid" style="--c:{spalten}">' + "".join(zellen) + "</div>"
+    # ---- Teil A
+    t1 = '<p class="aufg"><b>1.</b> Schreibe den Beruf auf Englisch. <i>(Bei zwei Formen genügt eine.)</i></p>' + paare([("der/die Bäcker/in", "baker"), ("der/die Metzger/in", "butcher"), ("der/die Verkäufer/in", "shop assistant"), ("der/die Kellner/in", "waiter / waitress"), ("der Arzt / die Ärztin", "doctor"), ("der/die Briefträger/in", "postman / postwoman"), ("der/die Polizist/in", "police officer"), ("der/die Büroangestellte", "office worker")]) + punkte(4)
+    t2 = '<p class="aufg"><b>2.</b> Schreibe den Ort auf Englisch.</p>' + paare([("die Bäckerei", "bakery"), ("die Metzgerei", "butcher’s shop"), ("das Krankenhaus", "hospital"), ("der Bahnhof", "train station"), ("die Post", "post office"), ("die Polizeiwache", "police station"), ("das Büro", "office"), ("das Gebäude", "building")]) + punkte(4)
+    kasten = "reporter &nbsp;·&nbsp; waiter &nbsp;·&nbsp; doctor &nbsp;·&nbsp; butcher"
+    lk = lambda a: f'<b class="ok">{e(a)}</b>' if l else '<span class="luecke"></span>'
+    t3 = ('<p class="aufg"><b>3.</b> Setze das passende Wort aus dem Kasten ein.</p><p class="kk-reihe kasten">' + kasten + '</p>'
+          f'<p class="lueckentext">A {lk("butcher")} makes fresh sausages. &nbsp; A {lk("doctor")} helps patients.<br>A {lk("waiter")} serves food and drinks. &nbsp; A {lk("reporter")} interviews people for a newspaper.</p>' + punkte(4))
+    A = f'<section class="seite kt"><div class="rahmen">{pruefung_kopf(T, "Teil A · Vocabulary (ca. 12 Minuten · 12 Punkte)", l)}{t1}{t2}{t3}</div></section>'
+    # ---- Teil B
+    t4 = '<p class="aufg"><b>4.</b> Schreibe <b>a</b> oder <b>an</b>.</p><div class="paargrid" style="--c:3">' + "".join(
+        f'<div class="paar"><span class="ein-l">{("<b class=ok>%s</b>" % art) if l else "____"}</span> {w}</div>' for art, w in [("an", "architect"), ("an", "umbrella"), ("a", "university"), ("an", "uncle"), ("an", "office worker"), ("a", "baker")]) + "</div>" + punkte(3)
+    zeiten = [(5, 0, "It’s five o’clock."), (7, 15, "It’s a quarter past seven."), (6, 30, "It’s half past six."), (7, 45, "It’s a quarter to eight."), (12, 5, "It’s five (minutes) past twelve."), (12, 50, "It’s ten (minutes) to one.")]
+    t5 = '<p class="aufg"><b>5.</b> Wie spät ist es? Schreibe die Uhrzeit auf Englisch.</p><div class="uhrgrid">' + "".join(
+        f'<div class="uhrz">{uhr(h, m)}<div class="uhrl">{("<span class=ein>%s</span>" % e(txt)) if l else ""}</div></div>' for h, m, txt in zeiten) + "</div>" + punkte(6)
+    t6 = '<p class="aufg"><b>6.</b> Bringe die Wörter in die richtige Reihenfolge (Subject – Verb – Object – Date). Schreibe den Satz auf.</p>'
+    for teile, lo in [("my birthday &nbsp;/&nbsp; celebrate &nbsp;/&nbsp; on the 1<sup>st</sup> of May &nbsp;/&nbsp; I", "I celebrate my birthday on the 1st of May."),
+                      ("football &nbsp;/&nbsp; on the 2<sup>nd</sup> of September &nbsp;/&nbsp; play &nbsp;/&nbsp; they", "They play football on the 2nd of September."),
+                      ("On the 3<sup>rd</sup> of October, &nbsp;/&nbsp; writes &nbsp;/&nbsp; emails &nbsp;/&nbsp; she", "On the 3rd of October, she writes emails.")]:
+        t6 += f'<p class="satz">{teile}</p>' + zl([lo], 1)
+    t6 += '<p class="klein"><b>Schreibe die ersten beiden Sätze noch einmal und setze das Datum an den Anfang des Satzes.</b></p>' + zl(["On the 1st of May, I celebrate my birthday.", "On the 2nd of September, they play football."], 2) + punkte(5)
+    B = f'<section class="seite kt"><div class="rahmen">{pruefung_kopf(T, "Teil B · Language focus (ca. 15 Minuten · 14 Punkte)", l)}{t4}{t5}{t6}</div></section>'
+    # ---- Teil C
+    t7 = '<p class="aufg"><b>7.</b> Übersetze die Wegbeschreibung ins Englische.</p>' + paare([("Biege links ab.", "Turn left."), ("Biege rechts ab.", "Turn right."), ("Gehe geradeaus.", "Walk straight on."), ("Überquere die Strasse.", "Cross the street.")], 1) + punkte(4)
+    kasten2 = "next to &nbsp;·&nbsp; in front of &nbsp;·&nbsp; across from &nbsp;·&nbsp; at the corner"
+    t8 = ('<p class="aufg"><b>8.</b> Schau den Plan an. Setze das passende Wort aus dem Kasten ein.</p>' + stadtplan() + '<p class="kk-reihe kasten">' + kasten2 + '</p>'
+          f'<p class="lueckentext">1. The park is {lk("next to")} the school. &nbsp; 2. The hospital is {lk("across from")} the school.<br>3. The bus stop is {lk("in front of")} the church. &nbsp; 4. {lk("At the corner")}, you turn left.</p>' + punkte(4))
+    t9 = '<p class="aufg"><b>9.</b> Schreibe drei Sätze über deine Stadt. Verwende (a) einen Beruf und einen Ort, (b) ein Datum, (c) eine Ortsangabe (z. B. <i>next to, in front of</i>).</p>'
+    t9 += zl(["A police officer works at the police station.", "My birthday is on the 1st of May.", "The supermarket is next to the train station."], 3, "9mm") + punkte(6)
+    C = f'<section class="seite kt"><div class="rahmen">{pruefung_kopf(T, "Teil C · Directions and writing (ca. 18 Minuten · 14 Punkte)", l)}{t7}{t8}{t9}{fuss(40)}</div></section>'
+    return A + B + C
+
+ENG_CSS = CSS2 + '''
+.paargrid { display: grid; grid-template-columns: repeat(var(--c, 2), 1fr); gap: 2.2mm 6mm; margin: 2mm 0; }
+.paar { display: flex; gap: 2mm; align-items: baseline; border-bottom: 1px solid #aaa; padding-bottom: 1mm; font-size: 10.5pt; min-height: 7mm; } .paar .de { flex: 0 0 auto; } .paar .pf { flex: 1; min-width: 12mm; }
+.uhrgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2mm 6mm; margin: 2mm 0; } .uhrz { text-align: center; } .uhr { width: 24mm; height: 24mm; } .uhrl { border-bottom: 1px solid #222; min-height: 7mm; font-size: 9.5pt; text-align: left; }
+.plan { display: block; width: 100%; max-width: 92mm; margin: 1mm auto; } .ein-l { display: inline-block; min-width: 10mm; }
+'''
+def dokument_eng(titel, a, b):
+    return dokument(titel, a, b).replace(CSS2, ENG_CSS)
+OUT_ENG.write_text(dokument_eng("English Test Unit 1 – My town", english(False), english(True)), encoding="utf8")
+print("geschrieben:", OUT_ENG)
