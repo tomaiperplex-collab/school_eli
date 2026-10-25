@@ -41,11 +41,11 @@ def faecher(verb, inhalt, fragen=None):
     for (x, y, w, f) in boxes:
         o.append(f'<line x1="{cx}" y1="{cy}" x2="{x+w/2}" y2="{y+20}" class="strahl"/>')
     o.append(f'<circle cx="{cx}" cy="{cy}" r="52" class="mitte"/><text x="{cx}" y="{cy-22}" text-anchor="middle" font-size="16">♛</text>')
-    if verb: o.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="ein" font-size="19">{e(verb)}</text>')
+    if verb: o.append(f'<text x="{cx}" y="{cy+6}" text-anchor="middle" class="ein" style="font-size:19px">{e(verb)}</text>')
     for (x, y, w, f) in boxes:
         t = inhalt.get(f, "")
         o.append(f'<rect x="{x}" y="{y}" width="{w}" height="40" rx="12" class="feld"/><text x="{x+w/2}" y="{y-4}" text-anchor="middle" class="frage" font-size="13">{e(f)}</text>')
-        if t: o.append(f'<text x="{x+w/2}" y="{y+25}" text-anchor="middle" class="ein" font-size="{14 if len(t)<20 else 12}">{e(t)}</text>')
+        if t: o.append(f'<text x="{x+w/2}" y="{y+25}" text-anchor="middle" class="ein" style="font-size:{14 if len(t)<=14 else 12 if len(t)<=19 else 10.5 if len(t)<=22 else 9}px">{e(t)}</text>')
     o.append("</svg>")
     return "".join(o)
 
@@ -341,7 +341,7 @@ h2 { font-size: 13pt; margin: 6mm 0 3mm; } h3 { font-size: 11pt; margin: 0 0 3px
 .bogenwort .bogen { color: #1a7a3d; font-weight: 700; } .bmn { color: #1a7a3d; font-weight: 700; } .hint, .hint2 { color: #1a7a3d; font-size: 9.5pt; } .ok { color: #1a7a3d; }
 .faecher { width: 100%; max-width: 112mm; display: block; margin: 2px auto; } .faecher .feld { fill: #fff; stroke: #4b3a9e; stroke-width: 2; stroke-dasharray: 5 4; } .faecher .mitte { fill: #ece8fb; stroke: #4b3a9e; stroke-width: 2; }
 .faecher .strahl { stroke: #999; stroke-width: 1.6; } .faecher .frage { fill: #4b3a9e; font-weight: 700; } .faecher .ein { fill: #1a7a3d; font-weight: 700; font-style: normal; }
-.probe { margin: 4mm 0 0; } .kspalten { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 3mm; margin: 3mm 0 4mm; } .kspalte { display: flex; flex-direction: column; gap: 2mm; } .kk { border: 1px solid #555; border-radius: 6px; padding: 2px 8px; font-size: 10.5pt; background: #fff; } .klein { font-size: 10pt; margin: 2mm 0; } .eigene { border: 2px solid #1a7a3d; background: #f3fbf6; border-radius: 8px; padding: 3mm; margin: 3mm 0; font-size: 10.5pt; } .kk-reihe { text-align: center; font-size: 10.5pt; }
+.probe { margin: 4mm 0 0; } .kspalten { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 3mm; margin: 3mm 0 4mm; } .kspalte { display: flex; flex-direction: column; gap: 2mm; } .kk { border: 1px solid #555; border-radius: 6px; padding: 2px 8px; font-size: 10.5pt; background: #fff; } .klein { font-size: 10pt; margin: 2mm 0; } .eigene { border: 2px solid #1a7a3d; background: #f3fbf6; border-radius: 8px; padding: 3mm; margin: 3mm 0; font-size: 10.5pt; } .faktengrid { columns: 2; column-gap: 6mm; margin-top: 3mm; } .fakt { break-inside: avoid; border: 1.5px solid #cfc8f0; border-radius: 8px; padding: 2mm 3mm; margin-bottom: 3mm; background: #faf9ff; } .fakt h3 { margin: 0 0 1mm; } .fakt p { margin: 1mm 0; font-size: 9.5pt; } .kk-reihe { text-align: center; font-size: 10.5pt; }
 .lz { width: 100%; border-collapse: collapse; margin-top: 4mm; } .lz th { font-size: 10pt; text-align: center; } .lz td { border-top: 1px solid #aaa; padding: 3.5mm 2mm; } .lz .chk { text-align: center; width: 18mm; font-size: 16pt; }
 .inhalt { line-height: 1.8; }
 .bmgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } .bmk { border: 1.5px solid #cfc8f0; border-radius: 10px; padding: 7px 9px; background: #faf9ff; } .bmk p { margin: 5px 0 0; font-size: 10pt; } .wn { font-weight: 700; margin-top: 2px; }
@@ -463,59 +463,74 @@ print("geschrieben:", OUT_PRUEFUNG)
 # =====================================================================
 OUT_BERN = OUT.with_name("probepruefung-stadt-bern.html")
 
+def faktenblatt():
+    fakten = [
+     ("Gründung & Name", ["Herzog Berchtold V. von Zähringen gründete Bern im Jahr 1191.", "Er liess die Stadt von Osten nach Westen bauen.", "Der Herzog wollte die Stadt nach dem ersten erlegten Tier benennen – es war ein Bär. Darum heisst die Stadt Bern, und der Bär ist das Wappentier."]),
+     ("Aufbau der Stadt", ["Auf drei Seiten schützte die Aare die Stadt. Im Westen schützten ein Stadttor, eine hohe Stadtmauer und ein Stadtgraben.", "Schon im Mittelalter war Bern ein wichtiges Handelszentrum."]),
+     ("Nydegghöfli", ["Hier bauten die Zähringer eine Burg zur Sicherung des Aareübergangs.", "Die kleine Brücke (Untere Brücke) war Berns erste Brücke (1256, Holz; 1461 aus Stein neu gebaut). Man bezahlte Zoll.", "Die Aare ist grün wegen der Mineralien im Gletscherwasser. Die erste Schokoladenfabrik von Lindt stand hier."]),
+     ("Münster", ["Der Turm ist mit 100,6 Metern der höchste Kirchturm der Schweiz (Bauzeit 1421–1590; oberster Teil 1893).", "Das Münster hat neun Glocken. Die grösste, die «Gewichtige Susanna», wiegt 10'000 kg.", "Das Hauptportal zeigt das Jüngste Gericht. Die Wasserspeier dienen als Regenrinnen."]),
+     ("Zytglogge", ["Die Zytglogge zeigt seit 1405 die Zeit an. Von 1191 bis 1346 war sie das westliche Stadttor.", "Das Uhrwerk schmiedete 1530 der Schlosser Kaspar Brunner.", "Zur vollen Stunde tanzt der Narr, die Bären drehen sich und der Hahn kräht. Der goldene Stundenschläger (Hans von Thann, 2,55 m) schlägt die grosse Glocke."]),
+     ("Junkerngasse & Kramgasse", ["Die Junkerngasse hiess früher «Edle Gasse». Der Löwe mit Stern auf dem Brunnen ist das Wappen der Familie von Bubenberg. Das Gespensterhaus steht an der Junkerngasse 54.", "Napoleons Truppen besetzten Bern und nummerierten die Häuser.", "In der Kramgasse entstanden die Lauben. Der Affe ist das Zeichen der Steinmetze. Der Kindlifresserbrunnen ist der berühmteste Brunnen. Albert Einstein wohnte 1905 an der Kramgasse 49."]),
+     ("Mattequartier", ["In der Matte wohnten Handwerker (Müller, Gerber, Fischer, Flösser, Säger, Goldschmiede). Sie war der Hafen Berns.", "Die Aare trat oft über die Ufer. Darum liegen die Laubengänge der Schifflaube tiefer als die Strasse.", "Die Matte hat eine eigene Sprache: das Mattenenglisch."]),
+    ]
+    teile = "".join(f'<div class="fakt"><h3>{e(t)}</h3>' + "".join(f"<p>{e(x)}</p>" for x in xs) + "</div>" for t, xs in fakten)
+    return f'''<section class="seite kt"><div class="rahmen"><h1 class="kt-titel">Beilage – Das musst du über Stadt Bern wissen</h1>
+    <p class="klein">Alle Sätze dieser Prüfung stammen aus dem NMG-Thema «Stadt Bern». Lies die Fakten vor oder nach der Prüfung — so lernst du gleichzeitig Deutsch und NMG.</p>
+    <div class="faktengrid">{teile}</div></div></section>'''
+
 def pruefung_bern(l):
     T = "Deutsch-Prüfung · Stadt Bern"
     # ---------- Teil A ----------
     a1 = '<p class="aufg"><b>1.</b> Erkläre, wie die Wörter des Baumuster 3 gebildet werden. Mache dazu ein Beispiel aus dem Thema Stadt Bern.</p>'
-    a1 += f'<div class="loesungstext">{e(BM_ERKL[3])} Beispiele aus Bern: Gas-se, Brun-nen, Rit-ter, Mat-te.</div>' if l else zeilen(5)
+    a1 += f'<div class="loesungstext">{e(BM_ERKL[3])} Beispiele aus Bern: Gas-se (Junkerngasse), Brun-nen (Kindlifresserbrunnen), Rit-ter (Zähringerbrunnen), Mat-te (Mattequartier).</div>' if l else zeilen(5)
     a1 += punkte(4)
     a2 = '<p class="aufg"><b>2.</b> Erkläre den Unterschied zwischen dem <b>Dehnungs-h</b> und dem <b>silbentrennenden h</b>. Schreibe zu jedem h zwei Beispiele auf.</p>'
-    a2 += ('<div class="loesungstext">Dehnungs-h: steht am Ende der ersten Silbe und verlängert den Vokal, nur vor l, m, n, r (Uhr, Fäh-re, woh-nen, Zäh-ringer). '
+    a2 += ('<div class="loesungstext">Dehnungs-h: steht am Ende der ersten Silbe und verlängert den Vokal, nur vor l, m, n, r (Uhr, Fäh-re, Zäh-ringer, woh-nen). '
            'Silbentrennendes h: steht am Anfang der zweiten Silbe und trennt zwei Vokale (ste-hen, se-hen, dre-hen, Ze-hen).</div>') if l else zeilen(5)
     a2 += punkte(4)
     wl = ["Bären", "Lauben", "Hafen", "Löwe", "Glocke", "Brunnen", "Münster", "Gasse"]
-    a3 = '<p class="aufg"><b>3.</b> Zeichne die Silbenbögen ein.</p><div class="bwgrid">' + "".join(f'<div class="bw">{bogen(W[w][3]) if l else e(w)}</div>' for w in wl) + "</div>" + punkte(4)
+    a3 = '<p class="aufg"><b>3.</b> Zeichne die Silbenbögen ein. <i>(Wörter aus dem Thema Stadt Bern)</i></p><div class="bwgrid">' + "".join(f'<div class="bw">{bogen(W[w][3]) if l else e(w)}</div>' for w in wl) + "</div>" + punkte(4)
     sat = [("Früher war die Matte der <u>Hafen/Haffen</u> von Bern.", ("Hafen", ["Ha","fen"], 1, "")),
-           ("Der Kindlifresser steht auf einem <u>Brunnen/Brunen</u>.", ("Brunnen", ["Brun","nen"], 3, "")),
-           ("An der Brücke musste man <u>Zoll/Zol</u> bezahlen.", ("Zoll", ["Zöl","le"], 3, "Zoll → Zölle")),
-           ("Hier <u>steht/steet</u> die Statue von Berchtold V.", ("steht", ["ste","hen"], 4, "steht → stehen"))]
+           ("Der Kindlifresserbrunnen ist der berühmteste <u>Brunnen/Brunen</u> der Stadt.", ("Brunnen", ["Brun","nen"], 3, "")),
+           ("An der kleinen Brücke musste man früher <u>Zoll/Zol</u> bezahlen.", ("Zoll", ["Zöl","le"], 3, "Zoll → Zölle")),
+           ("Hinter der Statue von Berchtold V. <u>stehen/steen</u> vier Bronzetafeln.", ("stehen", ["ste","hen"], 4, ""))]
     a4 = '<p class="aufg"><b>4.</b> Entscheide, welche Schreibweise richtig ist. Schreibe das korrekte Wort mit Silbenbögen auf. Zu welchem Baumuster gehört das Wort? Schreibe auf. Verlängere bei Bedarf.</p>'
     for satz, (wort, silben, bm, h) in sat:
         a4 += f'<p class="satz">{satz}</p>' + (f'<div class="zl">{bogen(silben)} <span class="bmn">Baumuster {bm}</span> <span class="hint">{e(h)}</span></div>' if l else '<div class="zl"></div>')
     a4 += punkte(6)
     a5 = '<p class="aufg"><b>5.</b> Schreibe zu jedem Baumuster ein Wort aus dem Thema Stadt Bern in die Vorlage. <i>(Tipp: Bär, Matte, Zytglogge, Münster, Aare …)</i></p>'
     a5 += vorlagen(l, {1: "Bären", 2: "Gerber", 3: "Ritter", 4: "drehen"})
-    if l: a5 += '<p class="hint2">Beispiele (andere Wörter sind möglich): Bären · Hafen · Löwe · Gerber · Ritter · Gasse · drehen</p>'
+    if l: a5 += '<p class="hint2">Beispiele (andere Wörter sind möglich): Bären · Hafen · Löwe · Gerber (Matte) · Ritter · Gasse · drehen (Zytglogge)</p>'
     a5 += punkte(2)
     A1 = f'<section class="seite kt"><div class="rahmen">{pruefung_kopf(T, "Teil A · Wortstrukturen (ca. 20 Minuten · 20 Punkte)", l)}{a1}{a2}</div></section>'
     A2 = f'<section class="seite kt"><div class="rahmen">{a3}{a4}{a5}</div></section>'
     # ---------- Teil B ----------
     zl = lambda txts, n: "".join(f'<div class="zl"><span class="ein">{e(t)}</span></div>' for t in txts) if l else zeilen(n)
-    b6 = '<p class="aufg"><b>6.</b> Erkläre mit eigenen Worten, was Satzglieder sind. Mache dazu ein Beispiel mit einem Satz über Bern.</p>'
+    b6 = '<p class="aufg"><b>6.</b> Erkläre mit eigenen Worten, was Satzglieder sind. Mache dazu ein Beispiel mit diesem Satz:<br><i>Herzog Berchtold V. von Zähringen gründete Bern im Jahr 1191.</i></p>'
     b6 += ('<div class="loesungstext">Satzglieder sind die Bausteine eines Satzes. Ein Satzglied kann ein einzelnes Wort sein oder mehrere Wörter, die zusammengehören. '
-           'Wenn man den Satz umstellt, bleiben diese Wörter immer zusammen. Beispiel: Der Herzog | gründete | 1191 | die Stadt Bern. '
-           '„die Stadt Bern“ sind drei Wörter, aber nur ein Satzglied, weil sie beim Umstellen zusammenbleiben: 1191 gründete der Herzog die Stadt Bern.</div>') if l else zeilen(4)
+           'Wenn man den Satz umstellt, bleiben diese Wörter immer zusammen. Beispiel: Herzog Berchtold V. von Zähringen | gründete | Bern | im Jahr 1191. '
+           '„Herzog Berchtold V. von Zähringen“ sind fünf Wörter, aber nur ein Satzglied: Im Jahr 1191 gründete Herzog Berchtold V. von Zähringen Bern.</div>') if l else zeilen(4)
     b6 += punkte(3)
-    b7 = '<p class="aufg"><b>7.</b> Schreibe die Satzglieder zu den entsprechenden Fragen im Verbenfächer hin.</p><p class="satz kk-reihe">am Zytglogge &nbsp;·&nbsp; mit dem Hammer &nbsp;·&nbsp; die grosse Glocke &nbsp;·&nbsp; der goldene Stundenschläger &nbsp;·&nbsp; zur vollen Stunde</p>'
-    b7 += faecher("schlägt", {"Wer? Was?": "der goldene Stundenschläger", "Wann?": "zur vollen Stunde", "Wo?": "am Zytglogge", "Wen? Was?": "die grosse Glocke", "Womit?": "mit dem Hammer"} if l else {})
+    b7 = '<p class="aufg"><b>7.</b> Schreibe die Satzglieder zu den entsprechenden Fragen im Verbenfächer hin.</p><p class="satz kk-reihe">an der Zytglogge &nbsp;·&nbsp; mit dem Hammer &nbsp;·&nbsp; die grosse Glocke &nbsp;·&nbsp; der goldene Stundenschläger &nbsp;·&nbsp; zur vollen Stunde</p>'
+    b7 += faecher("schlägt", {"Wer? Was?": "der goldene Stundenschläger", "Wann?": "zur vollen Stunde", "Wo?": "an der Zytglogge", "Wen? Was?": "die grosse Glocke", "Womit?": "mit dem Hammer"} if l else {})
     b7 += '<p class="klein">Leeres Feld: ' + ('<b class="ok">Wie?</b>' if l else "____________") + "</p>" + punkte(4)
-    b8 = '<p class="aufg"><b>8.</b> Bilde mit den Satzgliedern einen korrekten Satz. Verschiebe danach die Satzglieder und bilde einen weiteren korrekten Satz.</p>' + karten_spalten([["in der Matte", "oft"], ["die Aare", "trat"], ["über die Ufer"]])
-    b8 += zl(["Die Aare trat oft in der Matte über die Ufer.", "In der Matte trat die Aare oft über die Ufer."], 4) + punkte(3)
-    b9 = '<p class="aufg"><b>9.</b> Fülle einen eigenen Verbenfächer aus. Schreibe eines der Verben in die Mitte: <i>bauen, jagen, wohnen, fahren, schlagen</i>. Bilde mit den Satzgliedern zwei korrekte Sätze.</p>'
-    b9 += faecher("bauen" if l else "", {"Wer? Was?": "die Zähringer", "Wo?": "an der Aare", "Wann?": "im Jahr 1191", "Wen? Was?": "eine Burg", "Wie?": "mit viel Mühe"} if l else {})
-    b9 += zl(["Die Zähringer bauten im Jahr 1191 mit viel Mühe eine Burg an der Aare.", "An der Aare bauten die Zähringer im Jahr 1191 eine Burg."], 2) + punkte(4)
+    b8 = '<p class="aufg"><b>8.</b> Bilde mit den Satzgliedern einen korrekten Satz. Verschiebe danach die Satzglieder und bilde einen weiteren korrekten Satz.</p>' + karten_spalten([["in der Stadt", "seit 1405"], ["die Zytglogge", "zeigt"], ["die Zeit", "an"]])
+    b8 += zl(["Die Zytglogge zeigt seit 1405 in der Stadt die Zeit an.", "Seit 1405 zeigt die Zytglogge in der Stadt die Zeit an."], 4) + punkte(3)
+    b9 = '<p class="aufg"><b>9.</b> Fülle einen eigenen Verbenfächer aus. Schreibe eines der Verben in die Mitte: <i>gründen, bauen, wohnen, hängen, besetzen</i>. Bilde mit den Satzgliedern zwei korrekte Sätze über Stadt Bern.</p>'
+    b9 += faecher("bauen" if l else "", {"Wer? Was?": "die Zähringer", "Wo?": "am Nydegghöfli", "Wann?": "im Mittelalter", "Wen? Was?": "eine Burg", "Womit?": "mit grossem Aufwand"} if l else {})
+    b9 += zl(["Die Zähringer bauten im Mittelalter am Nydegghöfli mit grossem Aufwand eine Burg.", "Am Nydegghöfli bauten die Zähringer im Mittelalter eine Burg."], 2) + punkte(4)
     B1 = f'<section class="seite kt"><div class="rahmen">{pruefung_kopf(T, "Teil B · Sätze (ca. 25 Minuten · 20 Punkte)", l)}{b6}{b7}{b8}</div></section>'
-    b10 = '<p class="aufg"><b>10.</b> Wende die vier Satzproben auf den Satz an.<br><i>Die Berner bauten im Mittelalter Lauben an die Häuser.</i></p>'
+    b10 = '<p class="aufg"><b>10.</b> Wende die vier Satzproben auf den Satz an.<br><i>Herzog Berchtold gründete im Jahr 1191 die Stadt Bern an der Aare.</i></p>'
     for name, hint, lo in zip(["Verschiebeprobe", "Weglassprobe", "Erweiterungsprobe", "Ersatzprobe"],
                               ["(stelle um)", "(lasse ein Satzglied weg)", "(ergänze ein Satzglied)", "(ersetze ein Satzglied)"],
-                              ["Im Mittelalter bauten die Berner Lauben an die Häuser.", "Die Berner bauten Lauben an die Häuser.", "Die Berner bauten im Mittelalter schöne Lauben an die Häuser.", "Sie bauten im Mittelalter Lauben an die Häuser."]):
+                              ["Im Jahr 1191 gründete Herzog Berchtold die Stadt Bern an der Aare.", "Herzog Berchtold gründete die Stadt Bern an der Aare.", "Herzog Berchtold gründete im Jahr 1191 mit seinen Leuten die Stadt Bern an der Aare.", "Er gründete im Jahr 1191 die Stadt Bern an der Aare."]):
         b10 += f'<p class="probe"><b>{name}</b> {hint}</p>' + (f'<div class="zl"><span class="ein">{e(lo)}</span></div>' if l else '<div class="zl"></div>')
     b10 += punkte(4)
     b11 = '<p class="aufg"><b>11.</b> Ersetze die markierten Satzglieder durch andere Satzglieder.</p>'
-    b11 += '<p class="satz"><mark>Die Bären</mark> schwimmen im Sommer in der Aare.</p>' + zl(["Die Kinder schwimmen im Sommer in der Aare."], 1)
-    b11 += '<p class="satz">Einstein wohnte <mark>1905</mark> in der Kramgasse.</p>' + zl(["Einstein wohnte damals in der Kramgasse."], 1) + punkte(2)
+    b11 += '<p class="satz"><mark>Albert Einstein</mark> wohnte <mark>1905</mark> an der Kramgasse 49.</p>' + zl(["Der Physiker wohnte damals an der Kramgasse 49."], 1)
+    b11 += '<p class="satz">Das Münster hat <mark>neun Glocken</mark>.</p>' + zl(["Das Münster hat die schwerste Glocke der Schweiz."], 1) + punkte(2)
     B2 = f'<section class="seite kt"><div class="rahmen">{b9}{b10}{b11}{fuss(40)}</div></section>'
-    return A1 + A2 + B1 + B2
+    return A1 + A2 + B1 + B2 + faktenblatt()
 
 OUT_BERN.write_text(dokument("Probeprüfung Deutsch · Stadt Bern", pruefung_bern(False), pruefung_bern(True)), encoding="utf8")
 print("geschrieben:", OUT_BERN)
