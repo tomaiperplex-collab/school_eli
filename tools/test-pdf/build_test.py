@@ -341,7 +341,7 @@ h2 { font-size: 13pt; margin: 6mm 0 3mm; } h3 { font-size: 11pt; margin: 0 0 3px
 .bogenwort .bogen { color: #1a7a3d; font-weight: 700; } .bmn { color: #1a7a3d; font-weight: 700; } .hint, .hint2 { color: #1a7a3d; font-size: 9.5pt; } .ok { color: #1a7a3d; }
 .faecher { width: 100%; max-width: 112mm; display: block; margin: 2px auto; } .faecher .feld { fill: #fff; stroke: #4b3a9e; stroke-width: 2; stroke-dasharray: 5 4; } .faecher .mitte { fill: #ece8fb; stroke: #4b3a9e; stroke-width: 2; }
 .faecher .strahl { stroke: #999; stroke-width: 1.6; } .faecher .frage { fill: #4b3a9e; font-weight: 700; } .faecher .ein { fill: #1a7a3d; font-weight: 700; font-style: normal; }
-.probe { margin: 4mm 0 0; } .kspalten { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 3mm; margin: 3mm 0 4mm; } .kspalte { display: flex; flex-direction: column; gap: 2mm; } .kk { border: 1px solid #555; border-radius: 6px; padding: 2px 8px; font-size: 10.5pt; background: #fff; } .klein { font-size: 10pt; margin: 2mm 0; } .eigene { border: 2px solid #1a7a3d; background: #f3fbf6; border-radius: 8px; padding: 3mm; margin: 3mm 0; font-size: 10.5pt; } .faktengrid { columns: 2; column-gap: 6mm; margin-top: 3mm; } .fakt { break-inside: avoid; border: 1.5px solid #cfc8f0; border-radius: 8px; padding: 2mm 3mm; margin-bottom: 3mm; background: #faf9ff; } .fakt h3 { margin: 0 0 1mm; } .fakt p { margin: 1mm 0; font-size: 9.5pt; } .kk-reihe { text-align: center; font-size: 10.5pt; }
+.probe { margin: 4mm 0 0; } .kspalten { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 3mm; margin: 3mm 0 4mm; } .kspalte { display: flex; flex-direction: column; gap: 2mm; } .kk { border: 1px solid #555; border-radius: 6px; padding: 2px 8px; font-size: 10.5pt; background: #fff; } .klein { font-size: 10pt; margin: 2mm 0; } .eigene { border: 2px solid #1a7a3d; background: #f3fbf6; border-radius: 8px; padding: 3mm; margin: 3mm 0; font-size: 10.5pt; } .faktengrid { columns: 2; column-gap: 6mm; margin-top: 3mm; } .fakt { break-inside: avoid; border: 1.5px solid #cfc8f0; border-radius: 8px; padding: 2mm 3mm; margin-bottom: 3mm; background: #faf9ff; } .fakt h3 { margin: 0 0 1mm; } .fakt p { margin: 1mm 0; font-size: 9.5pt; } .faktengrid.kompakt .fakt { padding: .6mm 2mm; margin-bottom: 1.5mm; } .faktengrid.kompakt .fakt h3 { font-size: 8.8pt; margin: 0; } .faktengrid.kompakt .fakt p { font-size: 7.6pt; margin: .3mm 0; line-height: 1.2; } .luecke { display: inline-block; width: 22mm; border-bottom: 1px solid #222; } .lueckentext { line-height: 1.85; font-size: 10pt; margin: 1mm 0; } .kasten { border: 1.5px solid #333; padding: 1.5mm; margin: 1mm 0; } .kk-reihe { text-align: center; font-size: 10.5pt; }
 .lz { width: 100%; border-collapse: collapse; margin-top: 4mm; } .lz th { font-size: 10pt; text-align: center; } .lz td { border-top: 1px solid #aaa; padding: 3.5mm 2mm; } .lz .chk { text-align: center; width: 18mm; font-size: 16pt; }
 .inhalt { line-height: 1.8; }
 .bmgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; } .bmk { border: 1.5px solid #cfc8f0; border-radius: 10px; padding: 7px 9px; background: #faf9ff; } .bmk p { margin: 5px 0 0; font-size: 10pt; } .wn { font-weight: 700; margin-top: 2px; }
@@ -463,7 +463,7 @@ print("geschrieben:", OUT_PRUEFUNG)
 # =====================================================================
 OUT_BERN = OUT.with_name("probepruefung-stadt-bern.html")
 
-def faktenblatt():
+def faktenblatt(l=False):
     fakten = [
      ("Gründung & Name", ["Herzog Berchtold V. von Zähringen gründete Bern im Jahr 1191.", "Er liess die Stadt von Osten nach Westen bauen.", "Der Herzog wollte die Stadt nach dem ersten erlegten Tier benennen – es war ein Bär. Darum heisst die Stadt Bern, und der Bär ist das Wappentier."]),
      ("Aufbau der Stadt", ["Auf drei Seiten schützte die Aare die Stadt. Im Westen schützten ein Stadttor, eine hohe Stadtmauer und ein Stadtgraben.", "Schon im Mittelalter war Bern ein wichtiges Handelszentrum."]),
@@ -474,9 +474,24 @@ def faktenblatt():
      ("Mattequartier", ["In der Matte wohnten Handwerker (Müller, Gerber, Fischer, Flösser, Säger, Goldschmiede). Sie war der Hafen Berns.", "Die Aare trat oft über die Ufer. Darum liegen die Laubengänge der Schifflaube tiefer als die Strasse.", "Die Matte hat eine eigene Sprache: das Mattenenglisch."]),
     ]
     teile = "".join(f'<div class="fakt"><h3>{e(t)}</h3>' + "".join(f"<p>{e(x)}</p>" for x in xs) + "</div>" for t, xs in fakten)
-    return f'''<section class="seite kt"><div class="rahmen"><h1 class="kt-titel">Beilage – Das musst du über Stadt Bern wissen</h1>
-    <p class="klein">Alle Sätze dieser Prüfung stammen aus dem NMG-Thema «Stadt Bern». Lies die Fakten vor oder nach der Prüfung — so lernst du gleichzeitig Deutsch und NMG.</p>
-    <div class="faktengrid">{teile}</div></div></section>'''
+    luecken = ["1191", "Bär", "drei", "Aare", "100,6", "neun", "1405", "Lauben"]
+    kasten = " &nbsp;·&nbsp; ".join(luecken[i] for i in (4, 1, 6, 0, 7, 2, 5, 3))
+    def lk(i, t):
+        return f'<b class="ok">{e(t)}</b>' if l else "<span class=\"luecke\"></span>"
+    text = (f'Herzog Berchtold V. gründete Bern im Jahr {lk(0, luecken[0])}. Die Stadt heisst Bern, weil der Herzog zuerst einen {lk(1, luecken[1])} erlegte. '
+            f'Auf {lk(2, luecken[2])} Seiten schützte die {lk(3, luecken[3])} die Stadt. Der Münsterturm ist {lk(4, luecken[4])} Meter hoch und das Münster hat {lk(5, luecken[5])} Glocken. '
+            f'Die Zytglogge zeigt seit {lk(6, luecken[6])} die Zeit an. In der Kramgasse entstanden die {lk(7, luecken[7])}.')
+    zl = lambda txts, n: "".join(f'<div class="zl"><span class="ein">{e(t)}</span></div>' for t in txts) if l else zeilen(n, "7.5mm")
+    aufgaben = f'''<h2 class="teil" style="margin:2mm 0 0">Übungsaufgaben zum Lernen (ohne Punkte)</h2>
+    <p class="aufg"><b>A.</b> Lückentext: Setze die Wörter aus dem Kasten ein.</p><p class="kk-reihe kasten">{kasten}</p><p class="lueckentext">{text}</p>
+    <p class="aufg"><b>B.</b> Schreibe zu einem Fakt aus der Beilage einen Satz. Trenne die Satzglieder mit senkrechten Strichen.</p>
+    {zl(["Die Zähringer | bauten | am Nydegghöfli | eine Burg."], 1)}
+    <p class="aufg"><b>C.</b> Verschiebeprobe und Weglassprobe: <i>Albert Einstein wohnte 1905 an der Kramgasse 49.</i></p>
+    {zl(["1905 wohnte Albert Einstein an der Kramgasse 49.", "Albert Einstein wohnte an der Kramgasse 49."], 2)}
+    <p class="aufg"><b>D.</b> Bilde mit den Karten einen korrekten Satz.</p>{karten_spalten([["im Mittelalter", "Bern"], ["ein wichtiges Handelszentrum", "war"]])}
+    {zl(["Bern war im Mittelalter ein wichtiges Handelszentrum."], 1)}'''
+    return f'''<section class="seite kt"><div class="rahmen"><h1 class="kt-titel" style="font-size:17pt;margin-bottom:3mm">Beilage – Das musst du über Stadt Bern wissen</h1>
+    <div class="faktengrid kompakt">{teile}</div>{aufgaben}</div></section>'''
 
 def pruefung_bern(l):
     T = "Deutsch-Prüfung · Stadt Bern"
@@ -530,7 +545,7 @@ def pruefung_bern(l):
     b11 += '<p class="satz"><mark>Albert Einstein</mark> wohnte <mark>1905</mark> an der Kramgasse 49.</p>' + zl(["Der Physiker wohnte damals an der Kramgasse 49."], 1)
     b11 += '<p class="satz">Das Münster hat <mark>neun Glocken</mark>.</p>' + zl(["Das Münster hat die schwerste Glocke der Schweiz."], 1) + punkte(2)
     B2 = f'<section class="seite kt"><div class="rahmen">{b9}{b10}{b11}{fuss(40)}</div></section>'
-    return A1 + A2 + B1 + B2 + faktenblatt()
+    return A1 + A2 + B1 + B2 + faktenblatt(l)
 
 OUT_BERN.write_text(dokument("Probeprüfung Deutsch · Stadt Bern", pruefung_bern(False), pruefung_bern(True)), encoding="utf8")
 print("geschrieben:", OUT_BERN)
