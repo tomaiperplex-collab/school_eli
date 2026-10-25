@@ -5,7 +5,7 @@ const path = require('path');
   const root = path.resolve(__dirname, '../../deutsch');
   const b = await chromium.launch({ executablePath: process.env.CHROMIUM || '/opt/pw-browsers/chromium' });
   const opt = { format: 'A4', printBackground: true, preferCSSPageSize: true };
-  for (const name of ['lernmaterial-pruefung-26-10', 'probepruefung-26-10']) {
+  for (const name of ['lernmaterial-pruefung-26-10', 'probepruefung-26-10', 'probepruefung-stadt-bern']) {
     const p = await b.newPage();
     await p.goto('file://' + root + '/' + name + '.html');
     await p.pdf({ ...opt, path: root + '/' + name + '.pdf' });
