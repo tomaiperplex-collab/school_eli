@@ -1,0 +1,234 @@
+/* spiele/kahoot.css — Kahoot-ähnliches Stadt-Bern-Quiz.
+   Chrome/Tabs kommen aus shared/shell.css. */
+
+:root {
+  --kh-lila: #46178f;
+  --kh-lila-dunkel: #2d0e5f;
+  --kh-rot: #e21b3c;
+  --kh-blau: #1368ce;
+  --kh-gelb: #d89e00;
+  --kh-gruen: #26890c;
+  --kh-richtig: #26890c;
+  --kh-falsch: #e21b3c;
+}
+
+#app-main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1rem 1rem 2rem;
+}
+.link-zurueck {
+  display: inline-block;
+  color: #888;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 0 0 0.8rem;
+}
+.link-zurueck:hover { color: #444; }
+
+.kh-stage {
+  background: var(--kh-lila);
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  min-height: 460px;
+  box-shadow: 0 6px 18px rgba(70, 23, 143, 0.35);
+}
+.kh-stage h1, .kh-stage h2, .kh-stage h3 { margin: 0; }
+.kh-karte {
+  background: #fff;
+  color: #2b2b2b;
+  border-radius: 14px;
+  padding: 1rem 1.2rem;
+}
+
+/* --- Buttons --- */
+.kh-btn {
+  border: none;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--kh-lila);
+  font-family: var(--font);
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 0.8rem 1.6rem;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+.kh-btn:hover { filter: brightness(0.96); }
+.kh-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25); }
+.kh-btn.gross { font-size: 1.4rem; padding: 1rem 2.4rem; background: #333; color: #fff; }
+.kh-btn.zweit { background: transparent; color: #fff; border: 2px solid rgba(255, 255, 255, 0.6); box-shadow: none; }
+.kh-mitte { text-align: center; }
+
+/* --- Startbildschirm --- */
+.kh-titel { text-align: center; font-size: clamp(2rem, 6vw, 3.2rem); font-weight: 900; letter-spacing: -0.02em; }
+.kh-lead { text-align: center; opacity: 0.9; margin: 0.4rem 0 1.2rem; font-size: 1.1rem; }
+.kh-setup-grid { display: grid; gap: 0.9rem; }
+.kh-setup-grid .kh-karte h3 { font-size: 1.05rem; margin-bottom: 0.6rem; color: var(--kh-lila); }
+.kh-seg { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.kh-seg label {
+  flex: 1 1 0;
+  min-width: 4rem;
+  text-align: center;
+  background: #f1ecf9;
+  border: 3px solid transparent;
+  border-radius: 10px;
+  padding: 0.55rem 0.6rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.kh-seg input { position: absolute; opacity: 0; pointer-events: none; }
+.kh-seg label:has(input:checked) { border-color: var(--kh-lila); background: #e4d8f7; }
+.kh-seg label:has(input:focus-visible) { outline: 3px solid var(--kh-blau); }
+.kh-namen { display: grid; gap: 0.5rem; margin-top: 0.7rem; }
+.kh-namen input[type="text"] {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  padding: 0.55rem 0.8rem;
+  border: 2px solid #c9b8e6;
+  border-radius: 10px;
+  width: 100%;
+}
+.kh-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.7rem; }
+.kh-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  background: #f1ecf9;
+  border: 2px solid #f1ecf9;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.kh-chip:has(input:checked) { border-color: var(--chip, var(--kh-lila)); background: #fff; }
+.kh-chip input { accent-color: var(--chip, var(--kh-lila)); }
+.kh-fakten-hinweis { margin: 0.7rem 0 0; font-size: 0.95rem; color: #555; }
+.kh-fakten-hinweis strong { color: var(--kh-lila); }
+.kh-zeile { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.kh-zeile select { font-family: var(--font); font-size: 1rem; padding: 0.4rem 0.6rem; border-radius: 8px; border: 2px solid #c9b8e6; }
+.kh-start { margin-top: 1.2rem; text-align: center; }
+
+/* --- Kopfzeile während des Spiels --- */
+.kh-kopf { display: flex; justify-content: space-between; align-items: center; gap: 0.6rem; margin-bottom: 0.8rem; font-weight: 800; flex-wrap: wrap; }
+.kh-pille { background: rgba(0, 0, 0, 0.3); border-radius: 999px; padding: 0.25rem 0.9rem; font-size: 1rem; }
+.kh-thema { color: #fff; border-radius: 999px; padding: 0.25rem 0.9rem; font-size: 0.9rem; font-weight: 800; }
+.kh-ton { background: transparent; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; }
+
+/* --- Zeitbalken --- */
+.kh-zeitbalken { height: 14px; background: rgba(255, 255, 255, 0.25); border-radius: 999px; overflow: hidden; margin-bottom: 0.9rem; }
+.kh-zeitbalken > div { height: 100%; width: 100%; background: #fff; border-radius: 999px; transition: width 0.1s linear; }
+.kh-zeitbalken.knapp > div { background: #ffd23f; }
+.kh-zeitbalken.sehr-knapp > div { background: var(--kh-rot); }
+
+/* --- Frage --- */
+.kh-frage {
+  background: #fff;
+  color: #222;
+  border-radius: 14px;
+  padding: 1.3rem 1.2rem;
+  text-align: center;
+  font-size: clamp(1.3rem, 3.6vw, 2rem);
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 1rem;
+  min-height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kh-timer-zahl { font-size: 1.3rem; }
+
+.kh-antworten { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+.kh-antworten.tf { grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .kh-antworten { grid-template-columns: 1fr; } }
+.kh-antwort {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-height: 84px;
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1rem;
+  color: #fff;
+  font-family: var(--font);
+  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, 0.3);
+  transition: opacity 0.2s, transform 0.1s;
+}
+.kh-antwort:hover:not(:disabled) { filter: brightness(1.08); }
+.kh-antwort:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3); }
+.kh-antwort .form { font-size: 2rem; line-height: 1; flex: 0 0 2.2rem; text-align: center; }
+.kh-antwort.rot { background: var(--kh-rot); }
+.kh-antwort.blau { background: var(--kh-blau); }
+.kh-antwort.gelb { background: var(--kh-gelb); }
+.kh-antwort.gruen { background: var(--kh-gruen); }
+.kh-antwort.tf { justify-content: center; min-height: 110px; font-size: 1.6rem; }
+.kh-antwort:disabled { cursor: default; }
+.kh-antwort.gewaehlt { outline: 5px solid #fff; }
+.kh-antwort.weg { opacity: 0.25; }
+.kh-antwort.ok::after { content: "✔"; margin-left: auto; font-size: 2rem; }
+.kh-antwort.nein::after { content: "✘"; margin-left: auto; font-size: 2rem; }
+.kh-warten { text-align: center; font-weight: 800; margin-top: 1rem; font-size: 1.2rem; }
+
+/* --- Auflösung --- */
+.kh-banner {
+  border-radius: 14px;
+  padding: 1.2rem;
+  text-align: center;
+  font-weight: 900;
+  font-size: clamp(1.6rem, 5vw, 2.4rem);
+  margin-bottom: 0.9rem;
+}
+.kh-banner.richtig { background: var(--kh-richtig); }
+.kh-banner.falsch { background: var(--kh-falsch); }
+.kh-banner small { display: block; font-size: 1.1rem; font-weight: 700; margin-top: 0.3rem; opacity: 0.95; }
+.kh-info { font-size: 1.15rem; line-height: 1.4; }
+.kh-info b { color: var(--kh-lila); }
+.kh-rangliste { list-style: none; margin: 0.9rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
+.kh-rangliste li {
+  display: flex; justify-content: space-between; gap: 1rem;
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 800;
+}
+.kh-rangliste li.dran { background: rgba(255, 255, 255, 0.3); }
+
+/* --- Spielerwechsel --- */
+.kh-wechsel { text-align: center; padding: 2rem 0.5rem; }
+.kh-wechsel .name { font-size: clamp(2rem, 7vw, 3.4rem); font-weight: 900; margin: 0.6rem 0 1.4rem; }
+
+/* --- Ergebnis --- */
+.kh-podium { display: flex; justify-content: center; align-items: flex-end; gap: 0.6rem; margin: 1.2rem 0; min-height: 190px; }
+.kh-podium .platz { flex: 0 1 28%; text-align: center; font-weight: 800; }
+.kh-podium .balken {
+  margin-top: 0.4rem;
+  border-radius: 10px 10px 0 0;
+  background: #fff;
+  color: var(--kh-lila);
+  font-size: 2rem;
+  font-weight: 900;
+  padding-top: 0.5rem;
+}
+.kh-podium .p1 .balken { height: 130px; background: #ffd23f; }
+.kh-podium .p2 .balken { height: 95px; background: #dfe3e8; }
+.kh-podium .p3 .balken { height: 70px; background: #e0a56a; }
+.kh-gross-punkte { text-align: center; font-size: clamp(2.4rem, 9vw, 4rem); font-weight: 900; margin: 0.2rem 0; }
+.kh-statistik { display: grid; gap: 0.5rem; margin-top: 0.6rem; }
+.kh-stat-zeile { display: grid; grid-template-columns: minmax(110px, 220px) 1fr 3.4rem; align-items: center; gap: 0.6rem; font-size: 0.95rem; font-weight: 700; }
+.kh-stat-balken { height: 14px; border-radius: 999px; background: #eee; overflow: hidden; }
+.kh-stat-balken > div { height: 100%; border-radius: 999px; }
+.kh-ueben { list-style: none; padding: 0; margin: 0.6rem 0 0; display: grid; gap: 0.6rem; }
+.kh-ueben li { border-left: 6px solid var(--kh-rot); background: #fdf1f3; border-radius: 8px; padding: 0.6rem 0.9rem; }
+.kh-ueben .antwort { color: var(--kh-richtig); font-weight: 800; }
+.kh-ueben .erklaerung { color: #555; font-size: 0.95rem; }
+.kh-aktionen { display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; margin-top: 1.2rem; }
+.kh-ergebnis-block { margin-top: 1rem; }
+.kh-ergebnis-block h3 { color: var(--kh-lila); margin-bottom: 0.4rem; }

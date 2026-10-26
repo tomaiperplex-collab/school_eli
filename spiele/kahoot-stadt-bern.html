@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+<title>Stadt-Bern-Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../shared/shell.css" />
+<!-- ?v=N an kahoot.css/kahoot.js/kahoot-data.js hochzählen, wenn eine Datei
+     geändert wird (GitHub-Pages-Cache). -->
+<link rel="stylesheet" href="kahoot.css?v=1" />
+</head>
+<body>
+
+<nav class="fach-tabs">
+  <a class="fach-tab" href="../index.html">🏔️ NMG</a>
+  <a class="fach-tab" href="../deutsch/index.html">📖 Deutsch</a>
+  <a class="fach-tab" href="../franzoesisch/index.html">🇫🇷 Französisch</a>
+  <a class="fach-tab aktiv" href="index.html">🎮 Spiele</a>
+  <a class="fach-tab" href="../mathe/index.html">➗ Mathe</a>
+</nav>
+
+<main id="app-main">
+  <a class="link-zurueck" href="index.html">← Alle Spiele</a>
+  <!-- Alle Bildschirme (Start, Frage, Auflösung, Ergebnis) werden von
+       kahoot.js in diesen Container gerendert. -->
+  <div id="kh-stage" class="kh-stage" aria-live="polite"></div>
+</main>
+
+<footer class="app-footer">
+  <p>Erstellt zur NMG-Prüfungsvorbereitung · läuft komplett lokal im Browser</p>
+</footer>
+
+<script src="kahoot-data.js?v=1"></script>
+<script src="kahoot.js?v=1"></script>
+</body>
+</html>
