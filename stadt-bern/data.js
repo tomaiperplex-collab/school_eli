@@ -103,7 +103,7 @@ const KARTEN = [
       "Figuren an den Zunfthäusern: Schreiner (gestreiftes Hemd), Affe (Steinmetze), dunkelhäutige Figur (Tuchhändler und Schneider).",
       "Der Affe ist das Zeichen der Steinmetze, weil sie einen bestimmten Sandstein «Affe» nennen.",
       "Zähringerbrunnen: Ritter mit Speer und Schild; Bär trägt die Rüstung.",
-      "Kindlifresserbrunnen: berühmtester Brunnen. Niemand weiss, warum der Künstler ihn so schuf.",
+      "Kindlifresserbrunnen auf dem Kornhausplatz (erbaut 1545): berühmtester Brunnen. Niemand weiss, warum der Künstler ihn so schuf.",
       "Bärenjagd-Bilder unter dem Zytglogge-Bogen; Kornhausplatz.",
       "Kreuzgasse: gemalte Fenster (acht Fenster, nur sechs echt).",
       "Haus Nr. 49: Albert Einstein wohnte hier 1905.",
@@ -127,7 +127,7 @@ const KARTEN = [
     punkte: [
       "Ursula und der Bär – Berner Legende (siehe Unterricht).",
       "Das Gespenst in der Junkerngasse: Gespensterhaus Nr. 54.",
-      "Der Kindlifresser von Bern: Kindlifresserbrunnen in der Kramgasse.",
+      "Der Kindlifresser von Bern: Kindlifresserbrunnen auf dem Kornhausplatz.",
       "Marta und die Diebe: Wasserspeier am Münster erzählen die Geschichte.",
       "Der vergrabene Schatz: Fass mit Goldstücklein, Mattenenglisch-Tafel «Iehe ische ds'Issfe itme ide ludge-icklischte idne irve-ibegre!» (= Hier ist das Fass mit den Goldstücklein nicht vergraben).",
     ],
@@ -214,7 +214,7 @@ const FRAGEN = [
   { thema: "matte", frage: "Wie kamen die Leute vor dem Bau der Brücke über die Aare?", antwort: "Mit Fähren", falsch: ["Zu Fuss durchs Wasser", "Mit Seilbahnen", "Mit Zügen"], akzeptiert: ["fähren", "faehren", "fähre", "mit fähren", "mit der fähre"] },
 
   // ----- Legenden --------------------------------------------------------
-  { thema: "legenden", frage: "Wo steht der Kindlifresser von Bern?", antwort: "Auf dem Kindlifresserbrunnen in der Kramgasse", falsch: ["Im Bärengraben", "Auf dem Münster", "In der Matte"], freitext: false },
+  { thema: "legenden", frage: "Wo steht der Kindlifresser von Bern?", antwort: "Auf dem Kindlifresserbrunnen auf dem Kornhausplatz", falsch: ["Im Bärengraben", "Auf dem Münster", "In der Matte"], freitext: false },
   { thema: "legenden", frage: "Was erzählen die Wasserspeier am Münster?", antwort: "Martas Geschichte", falsch: ["Ursulas Geschichte", "Die Geschichte der Bärenjagd", "Die Geschichte von Napoleon"], akzeptiert: ["marta", "martas geschichte", "marta und die diebe"] },
   { thema: "legenden", frage: "Was ist in der Legende im Fass vergraben?", antwort: "Goldstücke", falsch: ["Schokolade", "Zolleinnahmen", "Kanonenkugeln"], akzeptiert: ["gold", "goldstücke", "goldstücklein", "goldstuecke", "schatz", "goldschatz"] },
   { thema: "legenden", frage: "In welcher Sprache steht die Tafel zum vergrabenen Schatz?", antwort: "Mattenenglisch", falsch: ["Latein", "Französisch", "Englisch"], akzeptiert: ["mattenenglisch", "matteenglisch"] },
