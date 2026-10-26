@@ -106,3 +106,11 @@ images/
 Kein Build-Schritt, keine weiteren Abhängigkeiten. Für die Kartenansichten ist
 eine Internetverbindung nötig (siehe oben), alles andere läuft lokal im
 Browser.
+
+## Stadt-Bern-Quiz (Kahoot-ähnlich)
+
+`spiele/kahoot-stadt-bern.html` — Quiz mit Zeitbalken, Tempo-Punkten,
+Serien-Bonus, 1–4 Spielern (reihum am selben Gerät) und Ergebnis mit
+Übungsliste. Fragen und Fakten stehen in `spiele/kahoot-data.js`.
+Jeder Lernfakt hat eine ID; `node tools/test-kahoot/check.js` prüft, dass
+**jeder Fakt von mindestens einer Frage abgedeckt** ist.
