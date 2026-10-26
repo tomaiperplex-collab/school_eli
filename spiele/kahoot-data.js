@@ -183,6 +183,12 @@ const BERN_FAKTEN = [
   ["sc4", "legenden", "Die Tafel belebt das Interesse an der vom Aussterben bedrohten Sprache Mattenenglisch und an der Schatz-Legende."],
   // ----- Karte der Altstadt -----
   ["c1", "aufbau", "Karte der Altstadt: 1 Hauptbahnhof, 2 Bärenpark, 3 Nydegghöfli, 4 Junkerngasse, 5 Zytglogge, 6 Kindlifresserbrunnen, 7 Blutturm, 8 Münster, 9 Mattequartier."],
+  // ----- Ursula und der Bär (Erzählung, Kurzfassung) -----
+  ["ur1", "legenden", "Die Bärin Ursula lebte über viele Jahre im Berner Bärengraben."],
+  ["ur2", "legenden", "Ursula brachte zahlreiche Junge zur Welt."],
+  ["ur3", "legenden", "Ihr Sohn Fredy wurde 1977 von Menschen aufgezogen."],
+  ["ur4", "legenden", "Fredy wurde später in Urs umbenannt."],
+  ["ur5", "legenden", "Seine Geschichte ist im Naturmuseum Solothurn dokumentiert und mit historischen Bildern illustriert."],
 ].map(([id, thema, text]) => ({ id, thema, text }));
 
 // --- Hilfsfunktionen zum Schreiben der Fragen ---------------------------------
@@ -363,4 +369,12 @@ const BERN_FRAGEN = [
   mc("aufbau", "Welche Nummer hat der Blutturm auf der Karte?", "7", ["2", "6", "9"], "Der Blutturm hat die Nummer 7 (Karte: 1–9).", ["c1"]),
   mc("aufbau", "Was trägt auf der Karte die Nummer 6?", "Der Kindlifresserbrunnen", ["Die Zytglogge", "Der Bärenpark", "Das Münster"], "6 = Kindlifresserbrunnen, 5 = Zytglogge – beide beim Kornhausplatz.", ["c1"]),
   mc("aufbau", "Wo liegt auf der Karte das Mattequartier, wo der Bärenpark?", "Mattequartier = 9, Bärenpark = 2", ["Mattequartier = 2, Bärenpark = 9", "Mattequartier = 3, Bärenpark = 4", "Mattequartier = 1, Bärenpark = 8"], "9 = Mattequartier, 2 = Bärenpark, 3 = Nydegghöfli, 4 = Junkerngasse, 1 = Hauptbahnhof.", ["c1"]),
+  // ===== Ursula und der Bär (Erzählung) =======================================
+  mc("legenden", "Wo lebte die Bärin Ursula über viele Jahre?", "Im Berner Bärengraben", ["Im Bärenpark am Aareufer", "Im Mattequartier", "Beim Blutturm"], "Ursula lebte über viele Jahre im Bärengraben.", ["ur1"]),
+  tf("legenden", "Die Bärin Ursula lebte nur kurz im Bärengraben.", false, "Falsch: Ursula lebte über viele Jahre im Berner Bärengraben.", ["ur1"]),
+  mc("legenden", "Was tat Ursula im Bärengraben?", "Sie brachte zahlreiche Junge zur Welt", ["Sie schlug die Stundenglocke", "Sie bewachte das Stadttor", "Sie überbrachte Briefe"], "Ursula hatte viele Junge.", ["ur2"]),
+  mc("legenden", "Wie heisst Ursulas Sohn, der von Menschen aufgezogen wurde?", "Fredy", ["Berchtold", "Hans", "Kasper"], "Fredy wurde später in Urs umbenannt.", ["ur3", "ur4"]),
+  mc("legenden", "In welchem Jahr wurde Fredy von Menschen aufgezogen?", "1977", ["1942", "1905", "2009"], "1977 wurde Ursulas Sohn Fredy von Menschen aufgezogen.", ["ur3"]),
+  mc("legenden", "Wie wurde Fredy später umbenannt?", "In Urs", ["In Ursula", "In Bruno", "In Berni"], "Fredy wurde später in Urs umbenannt.", ["ur4"]),
+  mc("legenden", "Wo ist die Geschichte von Ursulas Sohn dokumentiert?", "Im Naturmuseum Solothurn, mit historischen Bildern", ["Im Berner Münster", "In der Zytglogge", "Im Rathaus Bern"], "Die Geschichte ist im Naturmuseum Solothurn dokumentiert und mit historischen Bildern illustriert.", ["ur5"]),
 ];

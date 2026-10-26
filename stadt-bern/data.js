@@ -125,7 +125,7 @@ const KARTEN = [
     thema: "legenden",
     titel: "Legenden & Geschichten",
     punkte: [
-      "Ursula und der Bär – Berner Legende (siehe Unterricht).",
+      "Ursula und der Bär: Die Bärin Ursula lebte über viele Jahre im Berner Bärengraben und brachte zahlreiche Junge zur Welt. Ihr Sohn Fredy wurde 1977 von Menschen aufgezogen und später in Urs umbenannt. Seine Geschichte ist im Naturmuseum Solothurn dokumentiert (mit historischen Bildern).",
       "Das Gespenst in der Junkerngasse: Gespensterhaus Nr. 54.",
       "Der Kindlifresser von Bern: Kindlifresserbrunnen auf dem Kornhausplatz.",
       "Marta und die Diebe: Wasserspeier am Münster erzählen die Geschichte.",
