@@ -23,7 +23,7 @@ const BERN_THEMEN = {
   junkerngasse: { label: "Junkerngasse", farbe: "#6c757d", symbol: "🎩" },
   kramgasse: { label: "Kramgasse, Kornhausplatz & Brunnen", farbe: "#e07a5f", symbol: "⛲" },
   matte: { label: "Mattequartier", farbe: "#2a9d5c", symbol: "🌊" },
-  legenden: { label: "Legenden", farbe: "#9d4edd", symbol: "👻" },
+  legenden: { label: "Legenden & Blutturm", farbe: "#9d4edd", symbol: "👻" },
 };
 
 const BERN_FAKTEN = [
@@ -158,6 +158,31 @@ const BERN_FAKTEN = [
   ["l4", "legenden", "Marta und die Diebe: Die Wasserspeier am Münster erzählen Martas Geschichte."],
   ["l5", "legenden", "Der vergrabene Schatz: ein Fass mit Goldstücklein."],
   ["l6", "legenden", "Es sind fünf Legenden/Geschichten: Ursula und der Bär, das Gespenst, der Kindlifresser, Marta und die Diebe, der vergrabene Schatz."],
+  // ----- Anmerkungen zu den Geschichten (Ursula, Gespenst, Kindlifresser, Blutturm, Marta, Schatz) -----
+  ["u1", "legenden", "Der Bärenpark ist eine der beliebtesten Attraktionen in Bern."],
+  ["u2", "legenden", "Historische Aufzeichnungen belegen einen Bärengraben im frühen 16. Jahrhundert."],
+  ["u3", "legenden", "Er diente einem Bären, der als Kriegstrophäe nach Bern gebracht worden war."],
+  ["u4", "legenden", "Seit 2009 leben die Berner Bären nicht mehr im Bärengraben, sondern in einem Park am Aareufer."],
+  ["u5", "legenden", "Viele Berner Legenden sind nur fragmentarisch überliefert (es gibt viele Versionen)."],
+  ["s1", "legenden", "1942 wurde ein Film mit dem Titel «Das Gespensterhaus» gedreht."],
+  ["s2", "legenden", "Der Film beruhte auf der Legende von einem Jungen, der im Haus in der Junkerngasse ermordet wurde."],
+  ["s3", "legenden", "Die Legende lebt bis heute weiter, weil das Haus leer steht."],
+  ["kf1", "legenden", "Der Kindlifresserbrunnen wurde im Jahr 1545 erbaut."],
+  ["kf2", "legenden", "Der Kindlifresserbrunnen steht auf dem Kornhausplatz."],
+  ["kf3", "legenden", "Es gibt verschiedene Deutungen der Figur; eine Theorie: Sie stellt Kronos dar, den griechischen Gott, der seine eigenen Kinder gefressen hat."],
+  ["b1", "legenden", "Der Blutturm wurde 1468–1470 als Teil der historischen Stadtmauer erbaut."],
+  ["b2", "legenden", "Die Gerüchte über Folter, Hexenexekutionen und Enthauptungen im Blutturm sind nicht durch Tatsachen belegt."],
+  ["b3", "legenden", "Ab 1806 nutzte das Anatomische Institut der Universität Bern den Turm eine Zeit lang, um Skelette zu bleichen."],
+  ["b4", "legenden", "Heute steht der Blutturm leer und wird ab und zu für Veranstaltungen, Feste oder Sitzungen genutzt."],
+  ["b5", "legenden", "Der Blutturm steht am Flussufer bei der Lorrainebrücke, gegenüber dem Botanischen Garten, auf der Nordwestseite der Altstadt."],
+  ["mt1", "legenden", "Bis 2007 war die Turmwartwohnung auf der ersten Galerie des Münsters bewohnt."],
+  ["mt2", "legenden", "Seit der Restaurierung der Turmspitze befindet sich das Turmwartbüro in der Wohnung; die Räume werden für Veranstaltungen vermietet."],
+  ["sc1", "legenden", "Vor dem Haus in der Matte, das einst von einem Goldschmied bewohnt wurde, ist eine Tafel in den Boden eingelassen."],
+  ["sc2", "legenden", "Gerücht: Ein Fass mit Goldstückchen wurde während der Besetzung der Stadt durch Napoleons Truppen irgendwo vergraben."],
+  ["sc3", "legenden", "Die Tafel wurde erst vor ein paar Jahren von einem Bewohner des Quartiers angebracht."],
+  ["sc4", "legenden", "Die Tafel belebt das Interesse an der vom Aussterben bedrohten Sprache Mattenenglisch und an der Schatz-Legende."],
+  // ----- Karte der Altstadt -----
+  ["c1", "aufbau", "Karte der Altstadt: 1 Hauptbahnhof, 2 Bärenpark, 3 Nydegghöfli, 4 Junkerngasse, 5 Zytglogge, 6 Kindlifresserbrunnen, 7 Blutturm, 8 Münster, 9 Mattequartier."],
 ].map(([id, thema, text]) => ({ id, thema, text }));
 
 // --- Hilfsfunktionen zum Schreiben der Fragen ---------------------------------
@@ -306,4 +331,36 @@ const BERN_FRAGEN = [
   mc("legenden", "Wessen Geschichte erzählen die Wasserspeier am Münster?", "Martas Geschichte (Marta und die Diebe)", ["Ursulas Geschichte", "Susannas Geschichte", "Elisabeths Geschichte"], "Die Wasserspeier erzählen Martas Geschichte.", ["l4"]),
   mc("legenden", "Welche Legende gehört zum Fass mit den Goldstücklein?", "Der vergrabene Schatz", ["Das Gespenst in der Junkerngasse", "Der Kindlifresser von Bern", "Ursula und der Bär"], "Das Fass mit den Goldstücklein ist der vergrabene Schatz.", ["l5"]),
   mc("legenden", "Wie viele Legenden und Geschichten stehen in den Lernzielen?", "Fünf", ["Drei", "Sieben", "Zehn"], "Ursula und der Bär, das Gespenst, der Kindlifresser, Marta und die Diebe, der vergrabene Schatz.", ["l6"]),
+  // ===== Anmerkungen zu den Geschichten (Ursula & Co.) =======================
+  tf("legenden", "Der Bärenpark ist eine der beliebtesten Attraktionen in Bern.", true, "Richtig – und dort leben die Berner Bären heute.", ["u1"]),
+  mc("legenden", "Aus welcher Zeit gibt es historische Aufzeichnungen über einen Bärengraben?", "Aus dem frühen 16. Jahrhundert", ["Aus dem frühen 12. Jahrhundert", "Aus dem späten 18. Jahrhundert", "Aus dem 20. Jahrhundert"], "Der Bärengraben ist seit dem frühen 16. Jahrhundert belegt.", ["u2"]),
+  mc("legenden", "Für wen diente der Bärengraben ursprünglich als Zuhause?", "Für einen Bären, der als Kriegstrophäe nach Bern gebracht worden war", ["Für einen Zirkusbären", "Für den Bären vom Zähringerbrunnen", "Für Bären aus der Bärenjagd-Legende"], "Der Bär war eine Kriegstrophäe.", ["u3"]),
+  mc("legenden", "Seit wann leben die Berner Bären im Park am Aareufer?", "Seit 2009", ["Seit 1191", "Seit 1905", "Seit 1999"], "Seit 2009 nicht mehr im Bärengraben, sondern im Bärenpark.", ["u4"]),
+  tf("legenden", "Alle Berner Legenden sind genau und vollständig überliefert.", false, "Falsch: Viele Berner Legenden sind nur fragmentarisch überliefert, in vielen Versionen.", ["u5"]),
+  mc("legenden", "Welche Legende erklärt, warum Bern «Bern» heisst?", "Berchtold V. erlegte auf der Jagd einen Bären (Ursula und der Bär)", ["Der Kindlifresser frass einen Bären", "Marta vertrieb einen Bären", "Ein Bär vergrub das Goldfass"], "Die Stadt wurde nach dem ersten Tier benannt, das der Gründer auf der Jagd erlegte.", ["g4", "l1"]),
+  mc("legenden", "In welchem Jahr wurde der Film «Das Gespensterhaus» gedreht?", "1942", ["1905", "1545", "1806"], "Der Film von 1942 beruhte auf der Gespenster-Legende.", ["s1"]),
+  mc("legenden", "Worauf beruhte der Film «Das Gespensterhaus»?", "Auf der Legende von einem Jungen, der im Haus in der Junkerngasse ermordet wurde", ["Auf der Legende vom Kindlifresser", "Auf der Legende von Marta und den Dieben", "Auf der Geschichte der Zytglogge"], "Das Haus steht an der Junkerngasse.", ["s2"]),
+  mc("legenden", "Warum lebt die Legende vom Gespensterhaus bis heute weiter?", "Weil das Haus leer steht", ["Weil es ein Museum ist", "Weil die Zytglogge daneben steht", "Weil es jede Nacht brennt"], "Das leere Haus nährt die Legende.", ["s3"]),
+  mc("legenden", "Wann wurde der Kindlifresserbrunnen erbaut?", "1545", ["1405", "1256", "1893"], "Der Brunnen wurde 1545 erbaut.", ["kf1"]),
+  mc("legenden", "Auf welchem Platz steht der Kindlifresserbrunnen?", "Auf dem Kornhausplatz", ["Auf dem Bärenplatz", "Auf der Münsterplattform", "Im Mattequartier"], "Der Kindlifresserbrunnen steht auf dem Kornhausplatz.", ["kf2"]),
+  mc("legenden", "Wen soll der Kindlifresser nach einer Theorie darstellen?", "Kronos, den griechischen Gott, der seine eigenen Kinder frass", ["Hans von Thann", "Berchtold V. von Zähringen", "Napoleon"], "Es gibt verschiedene Deutungen; das ist eine Theorie.", ["kf3"]),
+  tf("legenden", "Es gibt nur eine einzige Deutung, was die Figur des Kindlifressers darstellt.", false, "Falsch: Es gibt verschiedene Interpretationen.", ["kf3"]),
+  mc("legenden", "Wann wurde der Blutturm erbaut?", "1468–1470", ["1421–1590", "1256–1461", "1191–1405"], "Er wurde 1468–1470 als Teil der Stadtmauer gebaut.", ["b1"]),
+  tf("legenden", "Der Blutturm wurde als Teil der historischen Stadtmauer erbaut.", true, "Richtig: Teil der Stadtmauer Berns.", ["b1"]),
+  tf("legenden", "Die Gerüchte über Folter und Hexenexekutionen im Blutturm sind durch Tatsachen belegt.", false, "Falsch: Sie sind nicht durch dokumentierte Tatsachen belegt.", ["b2"]),
+  mc("legenden", "Wozu nutzte die Universität Bern den Blutturm ab 1806 eine Zeit lang?", "Um Skelette zu bleichen", ["Um Getreide zu lagern", "Als Frauengefängnis", "Um Glocken zu giessen"], "Das Anatomische Institut bleichte dort Skelette.", ["b3"]),
+  mc("legenden", "Wofür wird der leerstehende Blutturm heute ab und zu genutzt?", "Für Veranstaltungen, Feste oder Sitzungen", ["Als Gefängnis", "Als Schokoladenfabrik", "Als Hafen"], "Sonst steht der Turm leer.", ["b4"]),
+  mc("legenden", "Wo steht der Blutturm?", "Am Flussufer bei der Lorrainebrücke, gegenüber dem Botanischen Garten", ["Neben der Zytglogge", "Auf der Münsterplattform", "Im Mattequartier"], "Er steht auf der Nordwestseite der Altstadt.", ["b5"]),
+  mc("legenden", "Bis wann war die Turmwartwohnung auf der ersten Galerie des Münsters bewohnt?", "Bis 2007", ["Bis 2009", "Bis 1942", "Bis 1893"], "Bis 2007 wohnte dort der Turmwart.", ["mt1"]),
+  mc("legenden", "Was befindet sich seit der Restaurierung der Turmspitze in der früheren Turmwartwohnung?", "Das Turmwartbüro; die Räume werden vermietet", ["Eine Glockengiesserei", "Ein Bärenmuseum", "Eine Schokoladenfabrik"], "Die Räume werden für Veranstaltungen vermietet.", ["mt2"]),
+  mc("legenden", "Was ist vor dem früheren Haus des Goldschmieds in der Matte in den Boden eingelassen?", "Eine Tafel", ["Ein Brunnen", "Eine Glocke", "Ein Fass"], "Die Tafel ist auf Mattenenglisch geschrieben.", ["sc1"]),
+  mc("legenden", "Wann soll das Fass mit den Goldstückchen vergraben worden sein?", "Während der Besetzung durch Napoleons Truppen", ["Beim Stadtbrand von 1405", "Beim Bau des Münsters", "Bei der Gründung Berns"], "Das ist ein Gerücht – wo das Fass liegt, weiss niemand.", ["sc2"]),
+  tf("legenden", "Die Mattenenglisch-Tafel hängt schon seit dem Mittelalter dort.", false, "Falsch: Ein Bewohner des Quartiers hat sie erst vor ein paar Jahren angebracht.", ["sc3"]),
+  tf("legenden", "Mattenenglisch ist eine vom Aussterben bedrohte Sprache.", true, "Richtig – die Tafel soll das Interesse an der Sprache und am Schatz-Gerücht beleben.", ["sc4"]),
+
+  // ===== Karte der Altstadt (Nummern der Karte) ===============================
+  mc("aufbau", "Welche Nummer hat das Münster auf der Karte der Altstadt?", "8", ["3", "5", "9"], "Karte: 1 Hauptbahnhof, 2 Bärenpark, 3 Nydegghöfli, 4 Junkerngasse, 5 Zytglogge, 6 Kindlifresserbrunnen, 7 Blutturm, 8 Münster, 9 Mattequartier.", ["c1"]),
+  mc("aufbau", "Welche Nummer hat der Blutturm auf der Karte?", "7", ["2", "6", "9"], "Der Blutturm hat die Nummer 7 (Karte: 1–9).", ["c1"]),
+  mc("aufbau", "Was trägt auf der Karte die Nummer 6?", "Der Kindlifresserbrunnen", ["Die Zytglogge", "Der Bärenpark", "Das Münster"], "6 = Kindlifresserbrunnen, 5 = Zytglogge – beide beim Kornhausplatz.", ["c1"]),
+  mc("aufbau", "Wo liegt auf der Karte das Mattequartier, wo der Bärenpark?", "Mattequartier = 9, Bärenpark = 2", ["Mattequartier = 2, Bärenpark = 9", "Mattequartier = 3, Bärenpark = 4", "Mattequartier = 1, Bärenpark = 8"], "9 = Mattequartier, 2 = Bärenpark, 3 = Nydegghöfli, 4 = Junkerngasse, 1 = Hauptbahnhof.", ["c1"]),
 ];
