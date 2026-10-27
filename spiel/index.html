@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="../shared/shell.css" />
 <!-- ?v=N an style.css/vokabeln.js/game.js/app.js hochzählen, wenn eine Datei
      geändert wird (GitHub-Pages-Cache); in sw.js die CACHE-Version mitziehen. -->
-<link rel="stylesheet" href="style.css?v=5" />
+<link rel="stylesheet" href="style.css?v=6" />
 </head>
 <body>
 
@@ -84,6 +84,19 @@
     <label class="feld">Modell
       <input id="api-model" type="text" autocomplete="off" />
     </label>
+    <h3>🗣️ Aussprache-Korrektur (Audio-KI)</h3>
+    <p class="hinweis">Claude kann nur Text lesen. Damit die <b>echte Aussprache</b> bewertet wird, geht die
+    Aufnahme (nach dem Tippen aufs 🎤, max. 10 Sekunden) an Google Gemini. Dafür einen kostenlosen Key unter
+    aistudio.google.com/apikey erstellen. Die Aufnahme verlässt das Gerät — nur mit Einverständnis der Eltern
+    und nur auf eigenen Geräten nutzen. Ohne Key wird nur die Browser-Spracherkennung benutzt (ohne Aussprache-Feedback).</p>
+    <label class="feld">Gemini-Key
+      <input id="gemini-key" type="password" autocomplete="off" placeholder="AIza…" />
+    </label>
+    <label class="feld">Gemini-Modell
+      <input id="gemini-model" type="text" autocomplete="off" />
+    </label>
+    <button id="gemini-test" class="big-btn zweit">Gemini-Key testen</button>
+    <p id="gemini-status" class="hinweis"></p>
     <label class="schalter"><input id="stimme-an" type="checkbox" checked /> 🔊 Französische Stimme an</label>
     <button id="key-test" class="big-btn">Verbindung testen</button>
     <p id="key-status" class="hinweis"></p>
@@ -98,8 +111,9 @@
   <p>Erstellt zur Prüfungsvorbereitung · Fortschritt bleibt im Browser</p>
 </footer>
 
-<script src="vokabeln.js?v=5"></script>
-<script src="game.js?v=5"></script>
-<script src="app.js?v=5"></script>
+<script src="vokabeln.js?v=6"></script>
+<script src="game.js?v=6"></script>
+<script src="aussprache.js?v=6"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

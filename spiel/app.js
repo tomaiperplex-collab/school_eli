@@ -7,6 +7,8 @@ const LS = {
   key: "spiel.apiKey",
   model: "spiel.model",
   stimme: "spiel.stimme",
+  gKey: "spiel.geminiKey",
+  gModel: "spiel.geminiModel",
   punkte: "spiel.punkte.v1",
   best: "spiel.best.v1",
 };
@@ -26,6 +28,7 @@ const el = {
   vokFilter: $("vok-filter"), vokListe: $("vok-liste"),
   key: $("api-key"), model: $("api-model"), stimme: $("stimme-an"), keyStatus: $("key-status"),
   keyTest: $("key-test"), install: $("install-btn"),
+  gKey: $("gemini-key"), gModel: $("gemini-model"), gTest: $("gemini-test"), gStatus: $("gemini-status"),
 };
 
 const state = {
@@ -85,6 +88,30 @@ function blase(art, fr, de, korrektur) {
     div.appendChild(k);
   }
   el.chat.appendChild(div);
+  el.chat.scrollTop = el.chat.scrollHeight;
+  return div;
+}
+
+function zeigeAussprache(blasenDiv, f) {
+  const box = document.createElement("div");
+  box.className = "blase-aussprache";
+  const note = Math.max(1, Math.min(5, Math.round(Number(f.note) || 1)));
+  const kopf = document.createElement("p");
+  kopf.className = "aussprache-kopf";
+  kopf.textContent = `🗣️ Aussprache: ${"⭐".repeat(note)}${"☆".repeat(5 - note)}`;
+  box.appendChild(kopf);
+  const zeile = (text) => { const p = document.createElement("p"); p.textContent = text; box.appendChild(p); };
+  if (f.lob) zeile("👍 " + f.lob);
+  if (f.transkription) zeile(`👂 Ich habe gehört: «${f.transkription}»`);
+  (f.tipps || []).slice(0, 3).forEach((t) => zeile("💡 " + t));
+  if (f.verbessert && note < 5) {
+    const b = document.createElement("button");
+    b.className = "chip";
+    b.textContent = `🔊 So klingt es richtig: ${f.verbessert}`;
+    b.addEventListener("click", () => sprich(f.verbessert));
+    box.appendChild(b);
+  }
+  blasenDiv.appendChild(box);
   el.chat.scrollTop = el.chat.scrollHeight;
 }
 
@@ -272,11 +299,12 @@ function nameInFrage(frage) {
   return state.verdaechtige.findIndex((s) => /c'est/.test(q) && q.includes(normalisiere(s.name)));
 }
 
-async function sendeFrage(text) {
+async function sendeFrage(text, aussprache) {
   text = text.trim();
   if (!text || state.vorbei || state.wartet) return;
   el.eingabe.value = "";
-  blase("kind", text);
+  const kindBlase = blase("kind", text);
+  if (aussprache) zeigeAussprache(kindBlase, aussprache);
 
   // «Est-ce que c'est Léa ?» = Verdacht auf eine Person
   const idx = nameInFrage(text);
@@ -361,7 +389,49 @@ const MIKRO_FEHLER = {
   "aborted": "",
 };
 
+const MIKRO_NAMEN = {
+  NotAllowedError: "🎤 Mikrofon nicht erlaubt — in der Adressleiste auf das Schloss tippen → Mikrofon → Zulassen, dann Seite neu laden. (Nur über https:// oder localhost möglich.)",
+  NotFoundError: "🎤 Kein Mikrofon gefunden.",
+  NotReadableError: "🎤 Das Mikrofon wird gerade von einer anderen App benutzt.",
+  NotSupportedError: "🎤 Dieser Browser kann nicht aufnehmen — bitte Chrome oder Firefox nutzen.",
+};
+
+// Echte Aussprache-Analyse: aufnehmen (Tippen = Start, nochmal Tippen = Stopp),
+// Audio an Gemini schicken, gemeinte Frage an den Zeugen, Feedback zeigen.
+async function mikroAufnahme(key) {
+  if (Aufnahme.aktiv()) { Aufnahme.stop(); return; }
+  if (window.speechSynthesis) speechSynthesis.cancel();
+  const ziel = el.eingabe.value.trim();
+  try {
+    await Aufnahme.start(10000);
+  } catch (e) {
+    el.status.textContent = MIKRO_NAMEN[e.name] || `Mikrofon-Fehler: ${e.name || e.message}`;
+    return;
+  }
+  el.mic.classList.add("hoert");
+  el.status.textContent = "🔴 Ich höre zu … tippe nochmal aufs Mikrofon, wenn du fertig bist.";
+  const blob = await Aufnahme.fertig;
+  el.mic.classList.remove("hoert");
+  el.status.textContent = "🎧 Ich höre mir deine Aussprache an …";
+  el.mic.disabled = true;
+  try {
+    const { base64, sekunden } = await blobZuWavBase64(blob);
+    if (sekunden < 0.4) { el.status.textContent = "🎤 Das war zu kurz — nochmal versuchen."; return; }
+    const f = await pruefeAussprache(base64, ziel, key, lsGet(LS.gModel) || GEMINI_STANDARD_MODEL);
+    if (f.verstaendlich === false) { systemMeldung("🎤 Ich habe nichts Verständliches gehört. Sprich näher am Mikrofon und nochmal.", "schlecht"); el.status.textContent = ""; return; }
+    const frage = (f.gemeint || f.transkription || ziel || "").trim();
+    renderStatus();
+    if (frage) await sendeFrage(frage, f);
+  } catch (e) {
+    el.status.textContent = `⚠️ Aussprache-Analyse nicht möglich (${e.message}). Du kannst die Frage auch tippen.`;
+  } finally {
+    el.mic.disabled = false;
+  }
+}
+
 function mikro() {
+  const gKey = cleanKey(lsGet(LS.gKey));
+  if (gKey) { mikroAufnahme(gKey); return; }
   if (!SR) { el.status.textContent = "Spracheingabe geht in diesem Browser nicht — bitte die Google-Chrome-App nutzen. Tipp: Im Eingabefeld das Mikrofon der Tastatur (Gboard) antippen und Sprache Französisch wählen — das geht in jedem Browser."; return; }
   if (erkenner) { erkenner.stop(); return; }
   if (window.speechSynthesis) speechSynthesis.cancel();
@@ -428,11 +498,22 @@ el.accuse.addEventListener("click", () => { if (state.vorbei) return; state.ankl
 el.neu.addEventListener("click", neueRunde);
 el.vokFilter.addEventListener("change", renderVokabeln);
 el.keyTest.addEventListener("click", testeKey);
+el.gKey.addEventListener("change", () => { el.gKey.value = cleanKey(el.gKey.value); lsSet(LS.gKey, el.gKey.value); });
+el.gModel.addEventListener("change", () => lsSet(LS.gModel, el.gModel.value.trim()));
+el.gTest.addEventListener("click", async () => {
+  el.gKey.value = cleanKey(el.gKey.value); lsSet(LS.gKey, el.gKey.value); lsSet(LS.gModel, el.gModel.value.trim());
+  if (!el.gKey.value) { el.gStatus.textContent = "Kein Key eingetragen."; return; }
+  el.gStatus.textContent = "Teste …";
+  try { await testeGeminiKey(el.gKey.value, el.gModel.value.trim()); el.gStatus.textContent = "✅ Gemini-Key funktioniert — das Mikrofon bewertet jetzt die Aussprache."; }
+  catch (e) { el.gStatus.textContent = `⚠️ Fehler: ${e.message}`; }
+});
 el.key.addEventListener("change", () => { el.key.value = cleanKey(el.key.value); lsSet(LS.key, el.key.value); });
 el.model.addEventListener("change", () => lsSet(LS.model, el.model.value.trim()));
 el.stimme.addEventListener("change", () => lsSet(LS.stimme, el.stimme.checked ? "1" : "0"));
 
 el.key.value = lsGet(LS.key);
+el.gKey.value = lsGet(LS.gKey);
+el.gModel.value = lsGet(LS.gModel) || GEMINI_STANDARD_MODEL;
 el.model.value = lsGet(LS.model) || STANDARD_MODEL;
 el.stimme.checked = lsGet(LS.stimme, "1") === "1";
 Object.entries(KATEGORIEN).forEach(([k, v]) => el.vokFilter.add(new Option(v, k)));
