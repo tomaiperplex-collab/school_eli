@@ -139,8 +139,37 @@ function starteUebung() {
   naechsteFrage();
 }
 
+// Aufgabe ziehen: Themen mit `generator` erzeugen jedes Mal eine neue
+// Kombination (nie dieselbe Frage zweimal hintereinander). Alle anderen Themen
+// werden wie ein Kartenstapel durchgemischt — jede Aufgabe kommt einmal dran,
+// bevor sich eine wiederholt.
+const staplel = {};
+function ziehAufgabe(thema) {
+  const letzte = state.aufgabe && state.aufgabe.frage;
+  if (thema.generator) {
+    let a;
+    for (let i = 0; i < 8; i++) {
+      a = thema.generator();
+      if (a.frage !== letzte) break;
+    }
+    return a;
+  }
+  let stapel = staplel[thema.id];
+  if (!stapel || !stapel.length) {
+    stapel = thema.aufgaben.slice();
+    for (let i = stapel.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [stapel[i], stapel[j]] = [stapel[j], stapel[i]];
+    }
+    // Nach dem Neumischen nicht gleich dieselbe Frage wie zuletzt
+    if (stapel.length > 1 && stapel[stapel.length - 1].frage === letzte) stapel.unshift(stapel.pop());
+    staplel[thema.id] = stapel;
+  }
+  return stapel.pop();
+}
+
 function naechsteFrage() {
-  state.aufgabe = mischeOptionen(zufallsElement(state.thema.aufgaben));
+  state.aufgabe = mischeOptionen(ziehAufgabe(state.thema));
   el.frageText.textContent = state.aufgabe.frage;
   el.feedback.textContent = "";
   el.feedback.className = "feedback";

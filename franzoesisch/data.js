@@ -639,3 +639,159 @@ const FRANZOESISCH_THEMEN = [
     ],
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Generatoren: Grammatik-Themen erzeugen bei jeder Frage eine NEUE Aufgabe aus
+// zufälligen Kombinationen (Subjekt × Tätigkeit × Fragewort …), damit es nicht
+// immer dieselben Sätze sind. Die feste `aufgaben`-Liste bleibt als Grundstock
+// (Anzeige im Fortschritt); die App nimmt, falls vorhanden, `generator`.
+// ---------------------------------------------------------------------------
+function zufall(liste) { return liste[Math.floor(Math.random() * liste.length)]; }
+
+// Subjekt-Gruppen: [Subjekt-Texte, Form-Index 0..5 = 1.Sg, 2.Sg, 3.Sg, 1.Pl, 2.Pl, 3.Pl]
+const SUBJEKTE = [
+  ["je", 0], ["tu", 1], ["il", 2], ["elle", 2], ["on", 2],
+  ["Marie", 2], ["mon frère", 2], ["ma sœur", 2], ["le détective", 2],
+  ["nous", 3], ["Marie et moi", 3], ["mon frère et moi", 3],
+  ["vous", 4], ["Marie et toi", 4], ["toi et ton frère", 4],
+  ["ils", 5], ["elles", 5], ["mes amis", 5], ["les voleurs", 5], ["Marie et Tom", 5],
+];
+const FORMEN = {
+  faire: ["fais", "fais", "fait", "faisons", "faites", "font"],
+  etre: ["suis", "es", "est", "sommes", "êtes", "sont"],
+  avoir: ["ai", "as", "a", "avons", "avez", "ont"],
+};
+
+function subjektText(sub, verb) {
+  // je + Vokal → j' (nur bei avoir: j'ai)
+  if (sub === "je" && verb === "avoir") return "j'";
+  return sub + " ";
+}
+
+function formFrage(verb, nachsatz) {
+  const [sub, idx] = zufall(SUBJEKTE);
+  const richtig = FORMEN[verb][idx];
+  const falsch = waehleZufaellig([...new Set(FORMEN[verb])].filter((f) => f !== richtig), 2);
+  const text = subjektText(sub, verb);
+  return {
+    typ: "mc",
+    frage: `${text}___ ${nachsatz}`.replace(/^(.)/, (c) => c.toUpperCase()) + ` (${verb === "etre" ? "être" : verb})`,
+    optionen: [richtig, ...falsch],
+    richtig: 0,
+  };
+}
+
+const SPORT_NOMEN = [
+  // [Nomen mit Artikel, Teilartikel, deutsch]
+  ["le sport", "du", "Sport"], ["le tennis", "du", "Tennis"], ["le ski", "du", "Ski"],
+  ["le vélo", "du", "Velo"], ["le théâtre", "du", "Theater"], ["le football", "du", "Fussball"],
+  ["le judo", "du", "Judo"], ["le yoga", "du", "Yoga"],
+  ["la musique", "de la", "Musik"], ["la gymnastique", "de la", "Gymnastik"],
+  ["la natation", "de la", "Schwimmen"], ["la danse", "de la", "Tanzen"],
+  ["la peinture", "de la", "Malen"], ["la guitare", "de la", "Gitarre"],
+  ["l'athlétisme (m)", "de l'", "Leichtathletik"], ["l'escalade (f)", "de l'", "Klettern"],
+  ["l'équitation (f)", "de l'", "Reiten"],
+];
+
+function generiereFaire() {
+  const art = Math.random();
+  if (art < 0.45) return formFrage("faire", zufall(["du sport.", "de la musique.", "une excursion.", "du tennis.", "du ski.", "de la danse.", "un voyage.", "de la gymnastique."]));
+  const [sub, idx] = zufall(SUBJEKTE);
+  const [nomen, teil, de] = zufall(SPORT_NOMEN);
+  const form = FORMEN.faire[idx];
+  const nomenOhne = nomen.replace(/\s*\(.\)$/, "").replace(/^(le|la|l') ?/, "");
+  const praefix = teil === "de l'" ? "de l'" : teil + " ";
+  if (art < 0.8) {
+    const alle = ["du", "de la", "de l'"];
+    return {
+      typ: "mc",
+      frage: `${sub.charAt(0).toUpperCase() + sub.slice(1)} ${form} ___ ${nomenOhne}. (${nomen})`,
+      optionen: [teil, ...alle.filter((x) => x !== teil)],
+      richtig: 0,
+    };
+  }
+  const richtigSatz = `${sub.charAt(0).toUpperCase() + sub.slice(1)} ${form} ${praefix}${nomenOhne}.`;
+  const falschForm = zufall(FORMEN.faire.filter((f) => f !== form));
+  const falschArt = zufall(["du", "de la", "de l'"].filter((x) => x !== teil));
+  return {
+    typ: "mc",
+    frage: `Welcher Satz ist richtig? (${de})`,
+    optionen: [
+      richtigSatz,
+      `${sub.charAt(0).toUpperCase() + sub.slice(1)} ${falschForm} ${praefix}${nomenOhne}.`,
+      `${sub.charAt(0).toUpperCase() + sub.slice(1)} ${form} ${falschArt === "de l'" ? "de l'" : falschArt + " "}${nomenOhne}.`,
+    ],
+    richtig: 0,
+  };
+}
+
+function generiereDuDeLa() {
+  const [nomen, teil, de] = zufall(SPORT_NOMEN);
+  const [sub, idx] = zufall(SUBJEKTE);
+  const form = FORMEN.faire[idx];
+  const nomenOhne = nomen.replace(/\s*\(.\)$/, "").replace(/^(le|la|l') ?/, "");
+  const alle = ["du", "de la", "de l'"];
+  const r = Math.random();
+  if (r < 0.7) {
+    return {
+      typ: "mc",
+      frage: `${sub.charAt(0).toUpperCase() + sub.slice(1)} ${form} ___ ${nomenOhne}. (${nomen})`,
+      optionen: [teil, ...alle.filter((x) => x !== teil)],
+      richtig: 0,
+    };
+  }
+  const praefix = teil === "de l'" ? "de l'" : teil + " ";
+  const falsch = alle.filter((x) => x !== teil).map((x) => `Je fais ${x === "de l'" ? x : x + " "}${nomenOhne}.`);
+  return {
+    typ: "mc",
+    frage: `Wie heisst „Ich mache ${de}“?`,
+    optionen: [`Je fais ${praefix}${nomenOhne}.`, ...falsch],
+    richtig: 0,
+  };
+}
+
+// [Fragewort, Satzrest, deutsche Frage]
+const FRAGEN_DATEN = [
+  ["Où", "tu habites", "Wo wohnst du?"], ["Où", "tu vas en vacances", "Wohin gehst du in die Ferien?"],
+  ["Où", "tu fais du sport", "Wo machst du Sport?"], ["Où", "tu travailles", "Wo arbeitest du?"],
+  ["Où", "tu as rendez-vous", "Wo hast du Treffpunkt?"],
+  ["Quand", "tu as ton anniversaire", "Wann hast du Geburtstag?"], ["Quand", "tu fais du sport", "Wann machst du Sport?"],
+  ["Quand", "tu pars en vacances", "Wann gehst du in die Ferien?"], ["Quand", "tu as école", "Wann hast du Schule?"],
+  ["Quand", "tu voyages", "Wann reist du?"],
+  ["Comment", "tu t'appelles", "Wie heisst du?"], ["Comment", "tu voyages", "Wie reist du?"],
+  ["Comment", "tu vas", "Wie geht es dir?"], ["Comment", "tu trouves ce livre", "Wie findest du dieses Buch?"],
+  ["Qu'", "tu fais comme hobby", "Was machst du als Hobby?"], ["Qu'", "tu aimes", "Was magst du?"],
+  ["Qu'", "tu manges", "Was isst du?"], ["Qu'", "tu cherches", "Was suchst du?"],
+];
+const FRAGE_WOERTER = ["Où", "Quand", "Comment", "Qu'"];
+
+function generiereFragen() {
+  const [wort, rest, de] = zufall(FRAGEN_DATEN);
+  const voll = (w) => (w === "Qu'" ? `Qu'est-ce que ${rest} ?` : `${w} est-ce que ${rest} ?`);
+  if (Math.random() < 0.5) {
+    const lueck = wort === "Qu'"
+      ? `___est-ce que ${rest} ?`
+      : `___ est-ce que ${rest} ?`;
+    return {
+      typ: "mc",
+      frage: `${lueck}  (${de})`,
+      optionen: [wort, ...waehleZufaellig(FRAGE_WOERTER, 2, wort)],
+      richtig: 0,
+    };
+  }
+  const falsch = waehleZufaellig(FRAGE_WOERTER, 2, wort).map(voll);
+  return { typ: "mc", frage: `Wie heisst „${de.replace(/\?$/, "")}“?`, optionen: [voll(wort), ...falsch], richtig: 0 };
+}
+
+const ETRE_NACHSAETZE = ["à l'école.", "fatigué(e).", "content(e).", "en Suisse.", "à la gare.", "à la maison.", "au magasin."];
+const AVOIR_NACHSAETZE = ["une question.", "un chien.", "une montre.", "un grand sac.", "les cheveux blonds.", "une moustache noire.", "des lunettes."];
+function generiereEtreAvoir() {
+  return Math.random() < 0.5
+    ? formFrage("etre", zufall(ETRE_NACHSAETZE))
+    : formFrage("avoir", zufall(AVOIR_NACHSAETZE));
+}
+
+FRANZOESISCH_THEMEN.find((t) => t.id === "faire").generator = generiereFaire;
+FRANZOESISCH_THEMEN.find((t) => t.id === "du-de-la").generator = generiereDuDeLa;
+FRANZOESISCH_THEMEN.find((t) => t.id === "questions").generator = generiereFragen;
+FRANZOESISCH_THEMEN.find((t) => t.id === "etre-avoir").generator = generiereEtreAvoir;
