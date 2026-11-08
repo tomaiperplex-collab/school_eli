@@ -540,4 +540,102 @@ const FRANZOESISCH_THEMEN = [
       ["Wie heisst „Was machst du als Hobby?“", "Qu'est-ce que tu fais comme hobby?", ["Quoi est-ce que tu fais comme hobby?", "Où est-ce que tu fais comme hobby?"]],
     ]),
   },
+  {
+    id: "cr6-u2-sport",
+    icon: "⛷️",
+    name: "Ça roule 6 · U2: Sport & Jahreszeiten",
+    theorie: `
+      <p>Wortschatz aus <strong>Ça roule 6, Unité 2</strong> («Salut les Romands»).</p>
+      <p class="theorie-beispiel">🔎 <em>Il fait du tennis.</em> ·
+      <em>Elle fait de l'athlétisme.</em> · <em>Est-ce que tu fais de la
+      gymnastique ?</em></p>
+      <p>Mit <em>faire</em> gilt: <em>le</em> → <strong>du</strong>,
+      <em>la</em> → <strong>de la</strong>, vor Vokal
+      (<em>l'athlétisme</em>) → <strong>de l'</strong>.
+      Jahreszeiten: <em>au printemps</em>, aber <em>en été</em>,
+      <em>en automne</em>, <em>en hiver</em>.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["l'athlétisme", "die Leichtathletik"], ["le tennis", "das Tennis"],
+        ["la gymnastique", "das Turnen, das Kunstturnen"],
+        ["le ski", "der Ski, das Skifahren"], ["le sport", "der Sport"],
+        ["l'anniversaire", "der Geburtstag"], ["le printemps", "der Frühling"],
+        ["l'été", "der Sommer"], ["l'automne", "der Herbst"],
+        ["l'hiver", "der Winter"], ["faire", "machen"],
+      ]),
+      ...formAufgaben([
+        ["Il fait ___ tennis.", "du", ["de la", "de l'"]],
+        ["Elle fait ___ athlétisme.", "de l'", ["du", "de la"]],
+        ["Est-ce que tu fais ___ gymnastique ?", "de la", ["du", "de l'"]],
+        ["Nous faisons ___ ski.", "du", ["de la", "de l'"]],
+        ["___ printemps, je vais à Paris.", "Au", ["En", "Dans"]],
+        ["___ hiver, je fais du ski.", "En", ["Au", "À"]],
+        ["Ils ___ une excursion. (faire)", "font", ["fait", "faites"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u2-mois",
+    icon: "📅",
+    name: "Ça roule 6 · U2: Monate",
+    theorie: `
+      <p>Die Monate sind im Französischen <strong>männlich</strong> und
+      werden klein geschrieben:</p>
+      <p class="theorie-beispiel">🔎 <em>janvier, février, mars, avril, mai,
+      juin, juillet, août, septembre, octobre, novembre, décembre</em></p>
+      <p><em>En janvier, il fait froid.</em> · <em>Aujourd'hui, c'est le
+      premier mai.</em> (<em>premier</em> / <em>première</em> = erster / erste)
+      · <em>le mois</em> = der Monat, <em>la saison</em> = die Jahreszeit.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["janvier", "Januar"], ["février", "Februar"], ["mars", "März"],
+        ["avril", "April"], ["mai", "Mai"], ["juin", "Juni"],
+        ["juillet", "Juli"], ["août", "August"], ["septembre", "September"],
+        ["octobre", "Oktober"], ["novembre", "November"],
+        ["décembre", "Dezember"], ["le mois", "der Monat"],
+        ["la saison", "die Jahreszeit"], ["premier", "erster"],
+      ]),
+      ...formAufgaben([
+        ["Aujourd'hui, c'est le ___ mai. (erster)", "premier", ["première", "un"]],
+        ["Noël est au mois de ___.", "décembre", ["novembre", "septembre"]],
+        ["En ___, c'est le printemps. (März)", "mars", ["mai", "août"]],
+        ["Welcher Monat kommt nach „juin“?", "juillet", ["août", "mai"]],
+        ["Welcher Monat kommt vor „septembre“?", "août", ["octobre", "juillet"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u2-voyage",
+    icon: "🚆",
+    name: "Ça roule 6 · U2: Reisen & Ferien",
+    theorie: `
+      <p>Wortschatz zum Thema Reisen (Unité 2):</p>
+      <p class="theorie-beispiel">🔎 <em>Nous avons rendez-vous à la gare.</em> ·
+      <em>En été, nous allons à la mer.</em> · <em>J'aime voyager en
+      train.</em></p>
+      <p><em>les vacances</em> steht immer in der Mehrzahl.
+      <em>toujours</em> = immer:
+      <em>En vacances, nous allons toujours chez ma grand-mère.</em></p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["le voyage", "die Reise"], ["la mer", "das Meer"],
+        ["la montagne", "der Berg"], ["l'excursion", "der Ausflug"],
+        ["la gare", "der Bahnhof"], ["les vacances", "die Ferien"],
+        ["voyager", "reisen"], ["toujours", "immer"],
+      ]),
+      ...formAufgaben([
+        ["Nous allons en ___ à la mer.", "vacances", ["gare", "montagne"]],
+        ["J'aime ___ en train.", "voyager", ["voyage", "toujours"]],
+        ["Nous avons rendez-vous à la ___.", "gare", ["mer", "saison"]],
+        ["Nous faisons du ski à la ___.", "montagne", ["mer", "gare"]],
+        ["En vacances, nous allons ___ chez ma grand-mère. (immer)", "toujours", ["aujourd'hui", "tout à coup"]],
+        ["Welcher Artikel? ___ gare", "la", ["le", "les"]],
+        ["Welcher Artikel? ___ vacances", "les", ["la", "le"]],
+        ["Welcher Artikel? ___ excursion", "l'", ["le", "les"]],
+      ]),
+    ],
+  },
 ];
