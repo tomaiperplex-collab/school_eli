@@ -358,4 +358,107 @@ const FRANZOESISCH_THEMEN = [
       ["Wie heisst „Sie (Mz.) haben eine Katze“?", "Ils ont un chat.", ["Ils sont un chat.", "Ils ai un chat."]],
     ]),
   },
+  {
+    id: "cr6-u1-detektiv",
+    icon: "🕵️",
+    name: "Ça roule 6 · U1: Detektiv & Dieb",
+    theorie: `
+      <p>Wortschatz aus <strong>Ça roule 6, Unité 1</strong>: die Jagd nach dem Dieb.</p>
+      <p class="theorie-beispiel">🔎 <em>La police arrive tout de suite.</em>
+      · <em>Le voleur porte un grand sac.</em> · <em>Tout à coup, Raphaela crie.</em></p>
+      <p>Merke: <em>le voleur</em> (Dieb) → <em>la voleuse</em> (Diebin);
+      <em>le/la détective</em> bleibt gleich. <em>téléphoner à</em> braucht
+      ein <strong>à</strong>: <em>Elle téléphone à la police.</em></p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["la chasse", "die Jagd, der Fang"], ["la montre", "die Uhr"],
+        ["le détective", "der Detektiv"], ["le voleur", "der Dieb"],
+        ["la voleuse", "die Diebin"], ["la police", "die Polizei"],
+        ["avoir", "haben"], ["voler", "stehlen"], ["crier", "rufen, schreien"],
+        ["téléphoner à", "anrufen"], ["aujourd'hui", "heute"],
+        ["tout à coup", "plötzlich"],
+      ]),
+      ...formAufgaben([
+        ["Le détective ___ le voleur. (chercher)", "cherche", ["cherchent", "cherches"]],
+        ["Elle téléphone ___ la police.", "à", ["de", "au"]],
+        ["L'homme ___ une montre. (voler)", "vole", ["voles", "volent"]],
+        ["«Non!», ___ la fille. (crier)", "crie", ["cries", "crient"]],
+        ["J'___ une question. (avoir)", "ai", ["suis", "as"]],
+        ["___, Raphaela crie. (plötzlich)", "Tout à coup", ["Aujourd'hui", "Tout de suite"]],
+        ["Il est quelle heure? Regarde ta ___.", "montre", ["chasse", "police"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u1-aussehen",
+    icon: "🧔",
+    name: "Ça roule 6 · U1: Aussehen & Kleidung",
+    theorie: `
+      <p>So beschreibst du eine Person (Unité 1):</p>
+      <p class="theorie-beispiel">🔎 <em>Il a une moustache noire.</em> ·
+      <em>Elle a les cheveux blonds.</em> · <em>Il porte des lunettes.</em></p>
+      <p><strong>Adjektive:</strong> männlich / weiblich: <em>blond/blonde</em>,
+      <em>brun/brune</em>, <em>long/longue</em>, <em>court/courte</em>;
+      <em>mince</em> bleibt gleich. Bei <em>les cheveux</em> (Mehrzahl) kommt
+      ein <strong>-s</strong>: <em>les cheveux blonds</em>.</p>
+      <p><em>les cheveux</em>, <em>les yeux</em>, <em>les lunettes</em>,
+      <em>les chaussures</em> stehen immer in der Mehrzahl.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["la moustache", "der Schnauz"], ["les cheveux", "die Haare"],
+        ["les lunettes", "die Brille"], ["les lunettes de soleil", "die Sonnenbrille"],
+        ["le chapeau", "der Hut"], ["les chaussures", "die Schuhe"],
+        ["le nez", "die Nase"], ["les yeux", "die Augen"],
+        ["blond", "blond"], ["brun", "braun"], ["mince", "dünn, schlank"],
+        ["long", "lang"], ["court", "kurz"], ["l'objet", "das Objekt"],
+      ]),
+      ...formAufgaben([
+        ["Elle a les cheveux ___. (lang)", "longs", ["long", "longue"]],
+        ["Il a les cheveux ___. (braun)", "bruns", ["brune", "brunes"]],
+        ["Elle a les cheveux ___. (kurz)", "courts", ["court", "courte"]],
+        ["Le voleur est ___. (schlank)", "mince", ["minces", "mincent"]],
+        ["Il porte un ___ sur la tête.", "chapeau", ["nez", "yeux"]],
+        ["Elle porte des ___ aux pieds.", "chaussures", ["lunettes", "cheveux"]],
+        ["Il a une moustache ___. (schwarz, weiblich: la moustache)", "noire", ["noir", "noirs"]],
+        ["Welcher Artikel? ___ lunettes", "les", ["le", "la"]],
+        ["Welcher Artikel? ___ nez", "le", ["la", "les"]],
+        ["Welcher Artikel? ___ moustache", "la", ["le", "les"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u1-orientierung",
+    icon: "🧭",
+    name: "Ça roule 6 · U1: Wo? Links, rechts, vor, hinter",
+    theorie: `
+      <p>Orte und Wege beschreiben (Unité 1):</p>
+      <p class="theorie-beispiel">🔎 <em>D'abord, tu tournes à droite.</em> ·
+      <em>Le voleur est à gauche de la maison.</em> ·
+      <em>Raphaela est devant le magasin.</em></p>
+      <p><em>à droite (de)</em> = nach rechts / rechts von,
+      <em>à gauche (de)</em> = nach links / links von,
+      <em>sous</em> = unter, <em>devant</em> = vor, <em>derrière</em> = hinter.
+      Bei <em>tourner</em> und <em>traverser</em>: <em>vous tournez</em>,
+      <em>il traverse</em>.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["tourner", "drehen, abbiegen"], ["traverser", "überqueren"],
+        ["à droite (de)", "nach rechts, rechts von"],
+        ["à gauche (de)", "nach links, links von"],
+        ["sous", "unter"], ["devant", "vor"], ["derrière", "hinter"],
+      ]),
+      ...formAufgaben([
+        ["Vous ___ à gauche. (tourner)", "tournez", ["tournes", "tournent"]],
+        ["Il ___ le grand pont. (traverser)", "traverse", ["traversons", "traversent"]],
+        ["Ils trouvent le chapeau ___ un banc. (unter)", "sous", ["devant", "derrière"]],
+        ["Raphaela est ___ le magasin. (vor)", "devant", ["sous", "derrière"]],
+        ["___ le chapeau, il y a un papier. (Hinter)", "Derrière", ["Devant", "Sous"]],
+        ["Le voleur est ___ de la maison. (links)", "à gauche", ["à droite", "sous"]],
+        ["D'abord, tu tournes ___. (nach rechts)", "à droite", ["à gauche", "devant"]],
+      ]),
+    ],
+  },
 ];
