@@ -461,4 +461,83 @@ const FRANZOESISCH_THEMEN = [
       ]),
     ],
   },
+  {
+    id: "faire",
+    icon: "🛠️",
+    name: "Grammatik: faire (machen)",
+    theorie: `
+      <p>Das Verb <strong>faire</strong> bedeutet „machen“.</p>
+      <p class="theorie-beispiel">🔎 je <em>fais</em>, tu <em>fais</em>,
+      il/elle/on <em>fait</em>, nous <em>faisons</em>, vous <em>faites</em>,
+      ils/elles <em>font</em></p>
+      <p>Damit sagst du, was du in der Freizeit machst:
+      <em>Je fais du sport.</em></p>
+    `,
+    aufgaben: formAufgaben([
+      ["faire: je ___", "fais", ["fait", "faisons"]],
+      ["faire: tu ___", "fais", ["fait", "faites"]],
+      ["faire: il ___", "fait", ["fais", "font"]],
+      ["faire: elle ___", "fait", ["faites", "fais"]],
+      ["faire: on ___", "fait", ["font", "faisons"]],
+      ["faire: nous ___", "faisons", ["faites", "font"]],
+      ["faire: vous ___", "faites", ["faisons", "font"]],
+      ["faire: ils ___", "font", ["faites", "fait"]],
+      ["faire: elles ___", "font", ["faisons", "fais"]],
+      ["Wie heisst „Ich mache Sport“?", "Je fais du sport.", ["Je fait du sport.", "Je faisons du sport."]],
+      ["Wie heisst „Wir machen Musik“?", "Nous faisons de la musique.", ["Nous faites de la musique.", "Nous font de la musique."]],
+      ["Wie heisst „Sie (Mz.) machen Sport“?", "Ils font du sport.", ["Ils faisons du sport.", "Ils fait du sport."]],
+    ]),
+  },
+  {
+    id: "du-de-la",
+    icon: "🎵",
+    name: "Grammatik: du · de la",
+    theorie: `
+      <p>Wenn du mit <em>faire</em> sagst, <strong>was</strong> du machst,
+      brauchst du <em>de</em> + Artikel:</p>
+      <p class="theorie-beispiel">🔎 de + le = <strong>du</strong>:
+      <em>le sport → Je fais du sport.</em><br>
+      de + la = <strong>de la</strong>:
+      <em>la musique → Je fais de la musique.</em></p>
+      <p>Folgt ein <em>le</em>, verschmelzen <em>de</em> und <em>le</em> zu
+      <strong>du</strong>.</p>
+    `,
+    aufgaben: formAufgaben([
+      ["Je fais ___ sport. (le sport)", "du", ["de la", "de le"]],
+      ["Je fais ___ musique. (la musique)", "de la", ["du", "de le"]],
+      ["Tu fais ___ théâtre. (le théâtre)", "du", ["de la", "des"]],
+      ["Elle fait ___ natation. (la natation)", "de la", ["du", "de le"]],
+      ["Nous faisons ___ vélo. (le vélo)", "du", ["de la", "de le"]],
+      ["Il fait ___ danse. (la danse)", "de la", ["du", "de le"]],
+      ["Ils font ___ football. (le football)", "du", ["de la", "de le"]],
+      ["Vous faites ___ gymnastique. (la gymnastique)", "de la", ["du", "de le"]],
+      ["Wie heisst „Ich mache Musik“?", "Je fais de la musique.", ["Je fais du musique.", "Je fais la musique."]],
+      ["Wie heisst „Ich mache Sport“?", "Je fais du sport.", ["Je fais de la sport.", "Je fais le sport."]],
+    ]),
+  },
+  {
+    id: "questions",
+    icon: "❓",
+    name: "Grammatik: Les questions",
+    theorie: `
+      <p>Fragewörter: <em>Où ?</em> (wo), <em>Quand ?</em> (wann),
+      <em>Quoi ?</em> (was), <em>Comment ?</em> (wie). Mit
+      <strong>est-ce que</strong> bildest du ganze Fragesätze:</p>
+      <p class="theorie-beispiel">🔎 <em>Où est-ce que tu habites ?</em><br>
+      <em>Quand est-ce que tu as ton anniversaire ?</em><br>
+      <em>Qu'est-ce que tu fais comme hobby ?</em><br>
+      <em>Comment est-ce que tu t'appelles ?</em></p>
+      <p><em>Quoi</em> wird vor <em>est-ce que</em> zu <strong>Qu'</strong>.</p>
+    `,
+    aufgaben: formAufgaben([
+      ["___ est-ce que tu habites? (wo)", "Où", ["Quand", "Comment"]],
+      ["___ est-ce que tu as ton anniversaire? (wann)", "Quand", ["Où", "Qu'"]],
+      ["___-ce que tu fais comme hobby? (was)", "Qu'est", ["Quoi est", "Où est"]],
+      ["___ est-ce que tu t'appelles? (wie)", "Comment", ["Où", "Quand"]],
+      ["Wie heisst „Wo wohnst du?“", "Où est-ce que tu habites?", ["Quand est-ce que tu habites?", "Comment est-ce que tu habites?"]],
+      ["Wie heisst „Wann hast du Geburtstag?“", "Quand est-ce que tu as ton anniversaire?", ["Où est-ce que tu as ton anniversaire?", "Qu'est-ce que tu as ton anniversaire?"]],
+      ["Wie heisst „Wie heisst du?“", "Comment est-ce que tu t'appelles?", ["Quand est-ce que tu t'appelles?", "Où est-ce que tu t'appelles?"]],
+      ["Wie heisst „Was machst du als Hobby?“", "Qu'est-ce que tu fais comme hobby?", ["Quoi est-ce que tu fais comme hobby?", "Où est-ce que tu fais comme hobby?"]],
+    ]),
+  },
 ];
