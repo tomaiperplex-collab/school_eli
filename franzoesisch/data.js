@@ -358,4 +358,284 @@ const FRANZOESISCH_THEMEN = [
       ["Wie heisst „Sie (Mz.) haben eine Katze“?", "Ils ont un chat.", ["Ils sont un chat.", "Ils ai un chat."]],
     ]),
   },
+  {
+    id: "cr6-u1-detektiv",
+    icon: "🕵️",
+    name: "Ça roule 6 · U1: Detektiv & Dieb",
+    theorie: `
+      <p>Wortschatz aus <strong>Ça roule 6, Unité 1</strong>: die Jagd nach dem Dieb.</p>
+      <p class="theorie-beispiel">🔎 <em>La police arrive tout de suite.</em>
+      · <em>Le voleur porte un grand sac.</em> · <em>Tout à coup, Raphaela crie.</em></p>
+      <p>Merke: <em>le voleur</em> (Dieb) → <em>la voleuse</em> (Diebin);
+      <em>le/la détective</em> bleibt gleich. <em>téléphoner à</em> braucht
+      ein <strong>à</strong>: <em>Elle téléphone à la police.</em></p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["la chasse", "die Jagd, der Fang"], ["la montre", "die Uhr"],
+        ["le détective", "der Detektiv"], ["le voleur", "der Dieb"],
+        ["la voleuse", "die Diebin"], ["la police", "die Polizei"],
+        ["avoir", "haben"], ["voler", "stehlen"], ["crier", "rufen, schreien"],
+        ["téléphoner à", "anrufen"], ["aujourd'hui", "heute"],
+        ["tout à coup", "plötzlich"],
+      ]),
+      ...formAufgaben([
+        ["Le détective ___ le voleur. (chercher)", "cherche", ["cherchent", "cherches"]],
+        ["Elle téléphone ___ la police.", "à", ["de", "au"]],
+        ["L'homme ___ une montre. (voler)", "vole", ["voles", "volent"]],
+        ["«Non!», ___ la fille. (crier)", "crie", ["cries", "crient"]],
+        ["J'___ une question. (avoir)", "ai", ["suis", "as"]],
+        ["___, Raphaela crie. (plötzlich)", "Tout à coup", ["Aujourd'hui", "Tout de suite"]],
+        ["Il est quelle heure? Regarde ta ___.", "montre", ["chasse", "police"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u1-aussehen",
+    icon: "🧔",
+    name: "Ça roule 6 · U1: Aussehen & Kleidung",
+    theorie: `
+      <p>So beschreibst du eine Person (Unité 1):</p>
+      <p class="theorie-beispiel">🔎 <em>Il a une moustache noire.</em> ·
+      <em>Elle a les cheveux blonds.</em> · <em>Il porte des lunettes.</em></p>
+      <p><strong>Adjektive:</strong> männlich / weiblich: <em>blond/blonde</em>,
+      <em>brun/brune</em>, <em>long/longue</em>, <em>court/courte</em>;
+      <em>mince</em> bleibt gleich. Bei <em>les cheveux</em> (Mehrzahl) kommt
+      ein <strong>-s</strong>: <em>les cheveux blonds</em>.</p>
+      <p><em>les cheveux</em>, <em>les yeux</em>, <em>les lunettes</em>,
+      <em>les chaussures</em> stehen immer in der Mehrzahl.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["la moustache", "der Schnauz"], ["les cheveux", "die Haare"],
+        ["les lunettes", "die Brille"], ["les lunettes de soleil", "die Sonnenbrille"],
+        ["le chapeau", "der Hut"], ["les chaussures", "die Schuhe"],
+        ["le nez", "die Nase"], ["les yeux", "die Augen"],
+        ["blond", "blond"], ["brun", "braun"], ["mince", "dünn, schlank"],
+        ["long", "lang"], ["court", "kurz"], ["l'objet", "das Objekt"],
+      ]),
+      ...formAufgaben([
+        ["Elle a les cheveux ___. (lang)", "longs", ["long", "longue"]],
+        ["Il a les cheveux ___. (braun)", "bruns", ["brune", "brunes"]],
+        ["Elle a les cheveux ___. (kurz)", "courts", ["court", "courte"]],
+        ["Le voleur est ___. (schlank)", "mince", ["minces", "mincent"]],
+        ["Il porte un ___ sur la tête.", "chapeau", ["nez", "yeux"]],
+        ["Elle porte des ___ aux pieds.", "chaussures", ["lunettes", "cheveux"]],
+        ["Il a une moustache ___. (schwarz, weiblich: la moustache)", "noire", ["noir", "noirs"]],
+        ["Welcher Artikel? ___ lunettes", "les", ["le", "la"]],
+        ["Welcher Artikel? ___ nez", "le", ["la", "les"]],
+        ["Welcher Artikel? ___ moustache", "la", ["le", "les"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u1-orientierung",
+    icon: "🧭",
+    name: "Ça roule 6 · U1: Wo? Links, rechts, vor, hinter",
+    theorie: `
+      <p>Orte und Wege beschreiben (Unité 1):</p>
+      <p class="theorie-beispiel">🔎 <em>D'abord, tu tournes à droite.</em> ·
+      <em>Le voleur est à gauche de la maison.</em> ·
+      <em>Raphaela est devant le magasin.</em></p>
+      <p><em>à droite (de)</em> = nach rechts / rechts von,
+      <em>à gauche (de)</em> = nach links / links von,
+      <em>sous</em> = unter, <em>devant</em> = vor, <em>derrière</em> = hinter.
+      Bei <em>tourner</em> und <em>traverser</em>: <em>vous tournez</em>,
+      <em>il traverse</em>.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["tourner", "drehen, abbiegen"], ["traverser", "überqueren"],
+        ["à droite (de)", "nach rechts, rechts von"],
+        ["à gauche (de)", "nach links, links von"],
+        ["sous", "unter"], ["devant", "vor"], ["derrière", "hinter"],
+      ]),
+      ...formAufgaben([
+        ["Vous ___ à gauche. (tourner)", "tournez", ["tournes", "tournent"]],
+        ["Il ___ le grand pont. (traverser)", "traverse", ["traversons", "traversent"]],
+        ["Ils trouvent le chapeau ___ un banc. (unter)", "sous", ["devant", "derrière"]],
+        ["Raphaela est ___ le magasin. (vor)", "devant", ["sous", "derrière"]],
+        ["___ le chapeau, il y a un papier. (Hinter)", "Derrière", ["Devant", "Sous"]],
+        ["Le voleur est ___ de la maison. (links)", "à gauche", ["à droite", "sous"]],
+        ["D'abord, tu tournes ___. (nach rechts)", "à droite", ["à gauche", "devant"]],
+      ]),
+    ],
+  },
+  {
+    id: "faire",
+    icon: "🛠️",
+    name: "Grammatik: faire (machen)",
+    theorie: `
+      <p>Das Verb <strong>faire</strong> bedeutet „machen“.</p>
+      <p class="theorie-beispiel">🔎 je <em>fais</em>, tu <em>fais</em>,
+      il/elle/on <em>fait</em>, nous <em>faisons</em>, vous <em>faites</em>,
+      ils/elles <em>font</em></p>
+      <p>Damit sagst du, was du in der Freizeit machst:
+      <em>Je fais du sport.</em></p>
+    `,
+    aufgaben: formAufgaben([
+      ["faire: je ___", "fais", ["fait", "faisons"]],
+      ["faire: tu ___", "fais", ["fait", "faites"]],
+      ["faire: il ___", "fait", ["fais", "font"]],
+      ["faire: elle ___", "fait", ["faites", "fais"]],
+      ["faire: on ___", "fait", ["font", "faisons"]],
+      ["faire: nous ___", "faisons", ["faites", "font"]],
+      ["faire: vous ___", "faites", ["faisons", "font"]],
+      ["faire: ils ___", "font", ["faites", "fait"]],
+      ["faire: elles ___", "font", ["faisons", "fais"]],
+      ["Wie heisst „Ich mache Sport“?", "Je fais du sport.", ["Je fait du sport.", "Je faisons du sport."]],
+      ["Wie heisst „Wir machen Musik“?", "Nous faisons de la musique.", ["Nous faites de la musique.", "Nous font de la musique."]],
+      ["Wie heisst „Sie (Mz.) machen Sport“?", "Ils font du sport.", ["Ils faisons du sport.", "Ils fait du sport."]],
+    ]),
+  },
+  {
+    id: "du-de-la",
+    icon: "🎵",
+    name: "Grammatik: du · de la",
+    theorie: `
+      <p>Wenn du mit <em>faire</em> sagst, <strong>was</strong> du machst,
+      brauchst du <em>de</em> + Artikel:</p>
+      <p class="theorie-beispiel">🔎 de + le = <strong>du</strong>:
+      <em>le sport → Je fais du sport.</em><br>
+      de + la = <strong>de la</strong>:
+      <em>la musique → Je fais de la musique.</em></p>
+      <p>Folgt ein <em>le</em>, verschmelzen <em>de</em> und <em>le</em> zu
+      <strong>du</strong>.</p>
+    `,
+    aufgaben: formAufgaben([
+      ["Je fais ___ sport. (le sport)", "du", ["de la", "de le"]],
+      ["Je fais ___ musique. (la musique)", "de la", ["du", "de le"]],
+      ["Tu fais ___ théâtre. (le théâtre)", "du", ["de la", "des"]],
+      ["Elle fait ___ natation. (la natation)", "de la", ["du", "de le"]],
+      ["Nous faisons ___ vélo. (le vélo)", "du", ["de la", "de le"]],
+      ["Il fait ___ danse. (la danse)", "de la", ["du", "de le"]],
+      ["Ils font ___ football. (le football)", "du", ["de la", "de le"]],
+      ["Vous faites ___ gymnastique. (la gymnastique)", "de la", ["du", "de le"]],
+      ["Wie heisst „Ich mache Musik“?", "Je fais de la musique.", ["Je fais du musique.", "Je fais la musique."]],
+      ["Wie heisst „Ich mache Sport“?", "Je fais du sport.", ["Je fais de la sport.", "Je fais le sport."]],
+    ]),
+  },
+  {
+    id: "questions",
+    icon: "❓",
+    name: "Grammatik: Les questions",
+    theorie: `
+      <p>Fragewörter: <em>Où ?</em> (wo), <em>Quand ?</em> (wann),
+      <em>Quoi ?</em> (was), <em>Comment ?</em> (wie). Mit
+      <strong>est-ce que</strong> bildest du ganze Fragesätze:</p>
+      <p class="theorie-beispiel">🔎 <em>Où est-ce que tu habites ?</em><br>
+      <em>Quand est-ce que tu as ton anniversaire ?</em><br>
+      <em>Qu'est-ce que tu fais comme hobby ?</em><br>
+      <em>Comment est-ce que tu t'appelles ?</em></p>
+      <p><em>Quoi</em> wird vor <em>est-ce que</em> zu <strong>Qu'</strong>.</p>
+    `,
+    aufgaben: formAufgaben([
+      ["___ est-ce que tu habites? (wo)", "Où", ["Quand", "Comment"]],
+      ["___ est-ce que tu as ton anniversaire? (wann)", "Quand", ["Où", "Qu'"]],
+      ["___-ce que tu fais comme hobby? (was)", "Qu'est", ["Quoi est", "Où est"]],
+      ["___ est-ce que tu t'appelles? (wie)", "Comment", ["Où", "Quand"]],
+      ["Wie heisst „Wo wohnst du?“", "Où est-ce que tu habites?", ["Quand est-ce que tu habites?", "Comment est-ce que tu habites?"]],
+      ["Wie heisst „Wann hast du Geburtstag?“", "Quand est-ce que tu as ton anniversaire?", ["Où est-ce que tu as ton anniversaire?", "Qu'est-ce que tu as ton anniversaire?"]],
+      ["Wie heisst „Wie heisst du?“", "Comment est-ce que tu t'appelles?", ["Quand est-ce que tu t'appelles?", "Où est-ce que tu t'appelles?"]],
+      ["Wie heisst „Was machst du als Hobby?“", "Qu'est-ce que tu fais comme hobby?", ["Quoi est-ce que tu fais comme hobby?", "Où est-ce que tu fais comme hobby?"]],
+    ]),
+  },
+  {
+    id: "cr6-u2-sport",
+    icon: "⛷️",
+    name: "Ça roule 6 · U2: Sport & Jahreszeiten",
+    theorie: `
+      <p>Wortschatz aus <strong>Ça roule 6, Unité 2</strong> («Salut les Romands»).</p>
+      <p class="theorie-beispiel">🔎 <em>Il fait du tennis.</em> ·
+      <em>Elle fait de l'athlétisme.</em> · <em>Est-ce que tu fais de la
+      gymnastique ?</em></p>
+      <p>Mit <em>faire</em> gilt: <em>le</em> → <strong>du</strong>,
+      <em>la</em> → <strong>de la</strong>, vor Vokal
+      (<em>l'athlétisme</em>) → <strong>de l'</strong>.
+      Jahreszeiten: <em>au printemps</em>, aber <em>en été</em>,
+      <em>en automne</em>, <em>en hiver</em>.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["l'athlétisme", "die Leichtathletik"], ["le tennis", "das Tennis"],
+        ["la gymnastique", "das Turnen, das Kunstturnen"],
+        ["le ski", "der Ski, das Skifahren"], ["le sport", "der Sport"],
+        ["l'anniversaire", "der Geburtstag"], ["le printemps", "der Frühling"],
+        ["l'été", "der Sommer"], ["l'automne", "der Herbst"],
+        ["l'hiver", "der Winter"], ["faire", "machen"],
+      ]),
+      ...formAufgaben([
+        ["Il fait ___ tennis.", "du", ["de la", "de l'"]],
+        ["Elle fait ___ athlétisme.", "de l'", ["du", "de la"]],
+        ["Est-ce que tu fais ___ gymnastique ?", "de la", ["du", "de l'"]],
+        ["Nous faisons ___ ski.", "du", ["de la", "de l'"]],
+        ["___ printemps, je vais à Paris.", "Au", ["En", "Dans"]],
+        ["___ hiver, je fais du ski.", "En", ["Au", "À"]],
+        ["Ils ___ une excursion. (faire)", "font", ["fait", "faites"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u2-mois",
+    icon: "📅",
+    name: "Ça roule 6 · U2: Monate",
+    theorie: `
+      <p>Die Monate sind im Französischen <strong>männlich</strong> und
+      werden klein geschrieben:</p>
+      <p class="theorie-beispiel">🔎 <em>janvier, février, mars, avril, mai,
+      juin, juillet, août, septembre, octobre, novembre, décembre</em></p>
+      <p><em>En janvier, il fait froid.</em> · <em>Aujourd'hui, c'est le
+      premier mai.</em> (<em>premier</em> / <em>première</em> = erster / erste)
+      · <em>le mois</em> = der Monat, <em>la saison</em> = die Jahreszeit.</p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["janvier", "Januar"], ["février", "Februar"], ["mars", "März"],
+        ["avril", "April"], ["mai", "Mai"], ["juin", "Juni"],
+        ["juillet", "Juli"], ["août", "August"], ["septembre", "September"],
+        ["octobre", "Oktober"], ["novembre", "November"],
+        ["décembre", "Dezember"], ["le mois", "der Monat"],
+        ["la saison", "die Jahreszeit"], ["premier", "erster"],
+      ]),
+      ...formAufgaben([
+        ["Aujourd'hui, c'est le ___ mai. (erster)", "premier", ["première", "un"]],
+        ["Noël est au mois de ___.", "décembre", ["novembre", "septembre"]],
+        ["En ___, c'est le printemps. (März)", "mars", ["mai", "août"]],
+        ["Welcher Monat kommt nach „juin“?", "juillet", ["août", "mai"]],
+        ["Welcher Monat kommt vor „septembre“?", "août", ["octobre", "juillet"]],
+      ]),
+    ],
+  },
+  {
+    id: "cr6-u2-voyage",
+    icon: "🚆",
+    name: "Ça roule 6 · U2: Reisen & Ferien",
+    theorie: `
+      <p>Wortschatz zum Thema Reisen (Unité 2):</p>
+      <p class="theorie-beispiel">🔎 <em>Nous avons rendez-vous à la gare.</em> ·
+      <em>En été, nous allons à la mer.</em> · <em>J'aime voyager en
+      train.</em></p>
+      <p><em>les vacances</em> steht immer in der Mehrzahl.
+      <em>toujours</em> = immer:
+      <em>En vacances, nous allons toujours chez ma grand-mère.</em></p>
+    `,
+    aufgaben: [
+      ...vokabelAufgaben([
+        ["le voyage", "die Reise"], ["la mer", "das Meer"],
+        ["la montagne", "der Berg"], ["l'excursion", "der Ausflug"],
+        ["la gare", "der Bahnhof"], ["les vacances", "die Ferien"],
+        ["voyager", "reisen"], ["toujours", "immer"],
+      ]),
+      ...formAufgaben([
+        ["Nous allons en ___ à la mer.", "vacances", ["gare", "montagne"]],
+        ["J'aime ___ en train.", "voyager", ["voyage", "toujours"]],
+        ["Nous avons rendez-vous à la ___.", "gare", ["mer", "saison"]],
+        ["Nous faisons du ski à la ___.", "montagne", ["mer", "gare"]],
+        ["En vacances, nous allons ___ chez ma grand-mère. (immer)", "toujours", ["aujourd'hui", "tout à coup"]],
+        ["Welcher Artikel? ___ gare", "la", ["le", "les"]],
+        ["Welcher Artikel? ___ vacances", "les", ["la", "le"]],
+        ["Welcher Artikel? ___ excursion", "l'", ["le", "les"]],
+      ]),
+    ],
+  },
 ];
