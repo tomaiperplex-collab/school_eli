@@ -14,7 +14,7 @@ def zl(n=1, los=None):
 def tabelle(paare, richtung):
     rows = ""
     for fr, de in paare:
-        a, b = (fr, L(de)) if richtung == "fd" else (de, L(fr))
+        a, b = (fr, L(de))
         rows += f'<tr><td>{e(a)}</td><td class="w">{b}</td></tr>'
     return f'<table class="vok">{rows}</table>'
 
